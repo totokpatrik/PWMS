@@ -1,0 +1,22 @@
+﻿name: PWMS
+
+services:
+  template:
+    build:
+      context: ./../../
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      OTEL_DOTNET_EXPERIMENTAL_ASPNETCORE_ENABLE_GRPC_INSTRUMENTATION: 1
+    ports:
+      - "0.0.0.0:8080:8080"
+      - "0.0.0.0:8081:8081"
+    networks:
+      - pwms-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
