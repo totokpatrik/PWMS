@@ -45,10 +45,11 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{secrets.SSH_KEY}}" > ~/.ssh/pwms
         chmod 600 ~/.ssh/pwms
+        sudo apt-get install sshpass
         
     - name: Deploy to server
       run: |
-        ssh -i '~/.ssh/pwms' ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} <<'ENDSSH'
+        sshpass -p '${{secrets.SSH_PASS}}' ssh -v -o StrictHostKeyChecking=no -i '~/.ssh/pwms' ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} <<'ENDSSH'
         cd ${{secrets.APP_PATH}}
         git pull
         ENDSSH
