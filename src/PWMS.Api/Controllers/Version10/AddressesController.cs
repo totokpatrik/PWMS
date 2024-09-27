@@ -8,5 +8,7 @@ public class AddressesController : BaseController
 {
     protected AddressesController(ISender sender) : base(sender) { }
 
+    [HttpGet]
+
 
 }
