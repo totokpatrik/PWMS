@@ -24,24 +24,17 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      
-  push_to_registry:
-    name: push docker image to hub
-    runs-on: ubuntu-latest
-    steps:
-      - name: check repository
-        uses: actions/checkout@v4
 
-      - name: login to docker registry
-        uses: docker/login-action@v3
-        with:
-          username: ${{secrets.DOCKERHUB_USERNAME}}
-          password: ${{secrets.DOCKERHUB_TOKEN}}
+    - name: login to docker registry
+      uses: docker/login-action@v3
+      with:
+        username: ${{secrets.DOCKERHUB_USERNAME}}
+        password: ${{secrets.DOCKERHUB_TOKEN}}
 
-      - name: build and push docker image to registry
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          dockerfile: ./src/PWMS.Api/Dockerfile
-          push: true
-          tags: jtojoj/pwms.api:latest
+    - name: build and push docker image to registry
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./src/PWMS.Api/Dockerfile
+        push: true
+        tags: jtojoj/pwms.api:latest
