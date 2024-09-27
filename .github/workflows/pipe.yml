@@ -38,3 +38,18 @@ jobs:
         file: ./src/PWMS.Api/Dockerfile
         push: true
         tags: jtojoj/pwms.api:latest
+
+    - name: Set up SSH key
+      run: |
+        env
+        mkdir -p ~/.ssh
+        echo "${{secrets.SSH_KEY}}" > ~/.ssh/pwms
+        chmod 600 ~/.ssh/pwms
+        
+    - name: Deploy to server
+      run: |
+        ssh -i '~/.ssh/pwms' {{secrets.SSH_USER}}@{{secrets.SSH_HOST}} <<'ENDSSH'
+        cd {{secrets.APP_PATH}}
+        git pull
+        ENDSSH
+          
