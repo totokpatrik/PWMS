@@ -38,3 +38,24 @@ jobs:
         file: ./src/PWMS.Api/Dockerfile
         push: true
         tags: jtojoj/pwms.api:latest
+        
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up SSH key
+      run: |
+        env
+        mkdir -p ~/.ssh
+        echo "${{secrets.SSH_KEY}}" > ~/.ssh/pwms
+        chmod 600 ~/.ssh/pwms
+        sudo apt-get install sshpass
+        
+    - name: Deploy to server
+      run: |
+        sshpass -p '${{secrets.SSH_PASS}}' ssh -v -o StrictHostKeyChecking=no -i '~/.ssh/pwms' ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} <<'ENDSSH'
+        cd ${{secrets.APP_PATH}}
+        git pull
+        ENDSSH
+          
