@@ -48,8 +48,8 @@ jobs:
         
     - name: Deploy to server
       run: |
-        ssh -i '~/.ssh/pwms' {{secrets.SSH_USER}}@{{secrets.SSH_HOST}} <<'ENDSSH'
-        cd {{secrets.APP_PATH}}
+        ssh -i '~/.ssh/pwms' ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} <<'ENDSSH'
+        cd ${{secrets.APP_PATH}}
         git pull
         ENDSSH
           
