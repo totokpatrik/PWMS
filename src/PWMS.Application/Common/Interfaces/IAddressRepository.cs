@@ -1,6 +1,7 @@
 ﻿using PWMS.Application.Common.Paging;
 using PWMS.Application.Models;
 using PWMS.Domain.Models;
+using PWMS.Domain.Models.ValueObjects;
 
 namespace PWMS.Application.Common.Interfaces;
 
