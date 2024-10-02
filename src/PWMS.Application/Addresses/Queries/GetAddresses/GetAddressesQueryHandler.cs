@@ -1,21 +1,32 @@
-﻿using PWMS.Application.Common.CQRS;
-using PWMS.Application.Common.Exceptions;
-using PWMS.Application.Common.Interfaces;
+﻿using PWMS.Application.Abstractions.Queries;
+using PWMS.Application.Abstractions.Repositories;
+using PWMS.Domain.Addresses.Entities;
+using Microsoft.EntityFrameworkCore;
+using PWMS.Application.Addresses.Models;
+using PWMS.Application.Abstractions.Paging;
+using Microsoft.EntityFrameworkCore.Metadata;
+using AutoMapper;
 
 namespace PWMS.Application.Addresses.Queries.GetAddresses;
 
-public class GetAddressesQueryHandler(IAddressRepository _addressRepository)
-    : IQueryHandler<GetAddressesQuery, GetAddressesResult>
+public class GetAddressesQueryHandler
+    : QueryHandler<GetAddressesQuery, PaginatedResult<AddressDto>>
 {
-    public async Task<GetAddressesResult> Handle(GetAddressesQuery query, CancellationToken cancellationToken)
+    private readonly IRepository<Address> _addressRepository;
+
+    public GetAddressesQueryHandler(IMapper mapper, IRepository<Address> addressRepository) : base(mapper)
     {
-        var addresses = await _addressRepository.GetAsync(query.PaginationRequest, cancellationToken);
+        _addressRepository = addressRepository;
+    }
 
-        if (addresses.Data.Count() == 0)
-        {
-            throw new NotFoundException("Address list not found");
-        }
+    protected override async Task<PaginatedResult<AddressDto>> HandleAsync(GetAddressesQuery request)
+    {
+        var addressQuery = _addressRepository.GetAll();
 
-        return new GetAddressesResult(addresses);
+        var addresses = await addressQuery
+            .OrderBy(a => a.Name)
+            .ToListAsync();
+
+        return Mapper.Map<PaginatedResult<AddressDto>>(addresses);
     }
 }
