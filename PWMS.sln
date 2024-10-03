@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PWMS.Domain.Tests", "tests\PWMS.Domain.Tests\PWMS.Domain.Tests.csproj", "{BE4805E6-3C20-4BDF-8BD0-203EA9CFA4C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PWMS.Arch.Tests", "tests\PWMS.Arch.Tests\PWMS.Arch.Tests.csproj", "{C88A3CC0-F398-4927-BAD4-D1C146CBAAB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{BE4805E6-3C20-4BDF-8BD0-203EA9CFA4C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE4805E6-3C20-4BDF-8BD0-203EA9CFA4C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE4805E6-3C20-4BDF-8BD0-203EA9CFA4C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C88A3CC0-F398-4927-BAD4-D1C146CBAAB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C88A3CC0-F398-4927-BAD4-D1C146CBAAB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C88A3CC0-F398-4927-BAD4-D1C146CBAAB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C88A3CC0-F398-4927-BAD4-D1C146CBAAB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{E6D9A2AF-5B28-4257-B551-A287D0447C0B} = {0214B63C-3A11-46AF-805F-6AE3E2668245}
 		{E8D16441-1DCB-45E5-9BA1-EDAC09A911A3} = {0214B63C-3A11-46AF-805F-6AE3E2668245}
 		{BE4805E6-3C20-4BDF-8BD0-203EA9CFA4C1} = {30F87F60-736D-4DF3-AB52-16509946F367}
+		{C88A3CC0-F398-4927-BAD4-D1C146CBAAB3} = {30F87F60-736D-4DF3-AB52-16509946F367}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C294E2AF-3936-4919-9B15-80A0C7CA7B20}
