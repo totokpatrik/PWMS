@@ -10,8 +10,11 @@ builder.Services
     .AddApplicationServices(builder.Configuration)
     .AddInfrastructureServices(builder.Configuration);
 
+
 var app = builder.Build();
 
 // Configure the HTTP request piepeline
+app.UseApiServices();
+
 
 app.Run();

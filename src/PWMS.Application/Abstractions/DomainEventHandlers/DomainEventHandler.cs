@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace PWMS.Application.Abstractions.DomainEventHandlers;
 
-public abstract class DomainEventHandler<T> : INotificationHandler<T> where T : DomainEvent
+public abstract class DomainEventHandler<T> : INotificationHandler<T> where T : IDomainEvent
 {
     protected readonly ILogger<DomainEventHandler<T>> Logger;
 

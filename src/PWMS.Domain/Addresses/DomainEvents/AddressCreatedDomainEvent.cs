@@ -3,4 +3,4 @@ using PWMS.Domain.Abstractions.Entities;
 
 namespace PWMS.Domain.Addresses.DomainEvents;
 
-public sealed record AddressCreatedDomainEvent(string Name) : DomainEvent;
+public sealed record AddressCreatedDomainEvent(string Name) : IDomainEvent;

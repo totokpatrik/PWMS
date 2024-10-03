@@ -1,7 +1,8 @@
-﻿namespace PWMS.Domain.Abstractions.Entities;
+﻿namespace PWMS.Application.Abstractions.Models;
 
-public interface IEntity
+public abstract class BaseDto
 {
+    public Guid Id { get; set; } = Guid.NewGuid();
     public DateTime? CreatedAt { get; set; }
     public string? CreatedBy { get; set; }
     public DateTime? LastModified { get; set; }

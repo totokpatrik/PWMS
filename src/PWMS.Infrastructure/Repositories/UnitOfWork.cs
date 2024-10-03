@@ -35,7 +35,7 @@ namespace PWMS.Infrastructure.Repositories
 
         private async Task DispatchEventsAsync()
         {
-            var processedDomainEvents = new List<DomainEvent>();
+            var processedDomainEvents = new List<IDomainEvent>();
             var unprocessedDomainEvents = GetDomainEvents();
             // this is needed incase another DomainEvent is published from a DomainEventHandler
             while (unprocessedDomainEvents.Any())
@@ -50,7 +50,7 @@ namespace PWMS.Infrastructure.Repositories
             ClearDomainEvents();
         }
 
-        private List<DomainEvent> GetDomainEvents()
+        private List<IDomainEvent> GetDomainEvents()
         {
             var aggregateRoots = GetTrackedAggregateRoots();
             return aggregateRoots
@@ -67,7 +67,7 @@ namespace PWMS.Infrastructure.Repositories
                 .ToList();
         }
 
-        private async Task DispatchDomainEventsAsync(List<DomainEvent> domainEvents)
+        private async Task DispatchDomainEventsAsync(List<IDomainEvent> domainEvents)
         {
             foreach (var domainEvent in domainEvents)
             {

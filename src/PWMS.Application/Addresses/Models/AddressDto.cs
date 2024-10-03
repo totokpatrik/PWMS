@@ -1,10 +1,10 @@
-﻿using PWMS.Domain.Addresses.Entities;
+﻿using PWMS.Application.Abstractions.Models;
+using PWMS.Domain.Addresses.Entities;
 
 namespace PWMS.Application.Addresses.Models;
 
-public sealed class AddressDto 
+public sealed class AddressDto : BaseDto
 {
-    public Guid Id { get; set; }
     public string Name { get; set; } = default!;
 
 }

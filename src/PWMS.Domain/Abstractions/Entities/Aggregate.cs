@@ -2,7 +2,7 @@
 
 namespace PWMS.Domain.Abstractions.Entities;
 
-public abstract class Aggregate : Entity, IAggregate
+public abstract class Aggregate : Entity
 {
     protected Aggregate() : this(Guid.NewGuid()) { }
 
@@ -11,10 +11,10 @@ public abstract class Aggregate : Entity, IAggregate
         Id = id;
     }
 
-    private readonly List<DomainEvent> _domainEvents = new List<DomainEvent>();
-    public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+    private readonly List<IDomainEvent> _domainEvents = new List<IDomainEvent>();
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(DomainEvent eventItem)
+    public void AddDomainEvent(IDomainEvent eventItem)
     {
         _domainEvents.Add(eventItem);
     }
@@ -22,10 +22,5 @@ public abstract class Aggregate : Entity, IAggregate
     public void ClearDomainEvents()
     {
         _domainEvents.Clear();
-    }
-
-    IDomainEvent[] IAggregate.ClearDomainEvents()
-    {
-        throw new NotImplementedException();
     }
 }

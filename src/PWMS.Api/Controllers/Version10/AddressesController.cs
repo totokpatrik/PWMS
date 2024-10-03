@@ -14,22 +14,24 @@ namespace PWMS.Api.Controllers.Version10;
 [Route("api/v{version:apiVersion}/addresses")]
 public class AddressesController : BaseController
 {
-    protected AddressesController(ISender sender) : base(sender) { }
+    public AddressesController(IMediator mediator) : base(mediator)
+    {
+    }
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(AddressDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(Guid id)
     {
-        var forecast = await Sender.Send(new GetAddressQuery(id));
+        var forecast = await Mediator.Send(new GetAddressQuery(id));
         return Ok(forecast);
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(PaginatedResult<AddressDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginatedList<AddressDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromQuery] PaginationRequest paginationRequest)
     {
-        var result = await Sender.Send(new GetAddressesQuery(paginationRequest));
+        var result = await Mediator.Send(new GetAddressesQuery(paginationRequest));
         return Ok(result);
     }
 
@@ -39,7 +41,7 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Post([FromBody] AddressCreateDto address)
     {
-        var id = await Sender.Send(new CreateAddressCommand(
+        var id = await Mediator.Send(new CreateAddressCommand(
             address.Name,
             address.EmailAddress,
             address.AddressLine,
@@ -55,7 +57,7 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(Envelope), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Put(Guid id, [FromBody] AddressUpdateDto address)
     {
-        await Sender.Send(new UpdateAddressCommand(
+        await Mediator.Send(new UpdateAddressCommand(
             id,
             address.Name,
             address.EmailAddress,
@@ -71,7 +73,7 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(Envelope), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await Sender.Send(new DeleteAddressCommand(id));
+        await Mediator.Send(new DeleteAddressCommand(id));
         return NoContent();
     }
 }

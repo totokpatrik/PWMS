@@ -1,0 +1,18 @@
+name: pwms
+
+services:
+  pwmsdb:
+    image: postgres
+    container_name: pwmsdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Admin1234!
+      - POSTGRES_DB=PWMS
+    restart: always
+    ports:
+        - "5432:5432"
+    volumes:
+      - postgres_pwms:/var/lib/postgresql/data/ 
+
+volumes:
+  postgres_pwms:

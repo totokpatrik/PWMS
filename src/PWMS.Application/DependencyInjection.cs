@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PWMS.Application.Abstractions.Behaviors;
 using System.Reflection;
@@ -16,6 +17,8 @@ public static class DependencyInjection
             cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
             cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
+
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         return services;
     }

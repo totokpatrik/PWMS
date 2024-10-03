@@ -5,4 +5,4 @@ using PWMS.Application.Addresses.Models;
 namespace PWMS.Application.Addresses.Queries.GetAddresses;
 
 public record GetAddressesQuery(PaginationRequest PaginationRequest)
-    : Query<PaginatedResult<AddressDto>>;
+    : Query<PaginatedList<AddressDto>>;

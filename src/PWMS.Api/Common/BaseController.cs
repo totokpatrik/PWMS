@@ -4,8 +4,9 @@ namespace PWMS.Api.Common;
 
 [ApiController]
 [Produces("application/json")]
-public class BaseController : ControllerBase
+public abstract class BaseController : ControllerBase
 {
-    protected BaseController(ISender sender) => Sender = sender;
-    protected ISender Sender { get; }
+    protected BaseController(IMediator mediator) => Mediator = mediator;
+
+    protected IMediator Mediator { get; }
 }
