@@ -1,13 +1,10 @@
-﻿using PWMS.Application.Abstractions.Queries;
-using PWMS.Application.Abstractions.Repositories;
-using PWMS.Domain.Addresses.Entities;
-using Microsoft.EntityFrameworkCore;
-using PWMS.Application.Addresses.Models;
-using PWMS.Application.Abstractions.Paging;
-using Microsoft.EntityFrameworkCore.Metadata;
-using AutoMapper;
-using PWMS.Application.Abstractions.Mapping;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using PWMS.Application.Abstractions.Mapping;
+using PWMS.Application.Abstractions.Paging;
+using PWMS.Application.Abstractions.Queries;
+using PWMS.Application.Addresses.Models;
+using PWMS.Application.Addresses.Repositories;
 
 namespace PWMS.Application.Addresses.Queries.GetAddresses;
 
@@ -15,9 +12,9 @@ public class GetAddressesQueryHandler
     : QueryHandler<GetAddressesQuery, PaginatedList<AddressDto>>
 {
     private readonly IMapper _mapper;
-    private readonly IRepository<Address> _addressRepository;
+    private readonly IAddressRepository _addressRepository;
 
-    public GetAddressesQueryHandler(IMapper mapper, IRepository<Address> addressRepository) : base(mapper)
+    public GetAddressesQueryHandler(IMapper mapper, IAddressRepository addressRepository) : base(mapper)
     {
         _mapper = mapper;
         _addressRepository = addressRepository;

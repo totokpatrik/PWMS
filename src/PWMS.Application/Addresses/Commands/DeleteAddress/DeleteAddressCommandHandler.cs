@@ -1,30 +1,31 @@
-﻿using PWMS.Application.Abstractions.Commands;
-using PWMS.Application.Abstractions.Repositories;
+﻿using MediatR;
+using PWMS.Application.Addresses.Repositories;
+using PWMS.Application.Addresses.Specifications;
 using PWMS.Domain.Abstractions.Guards;
-using PWMS.Domain.Addresses.Entities;
 
 namespace PWMS.Application.Addresses.Commands.DeleteAddress;
 
-public sealed class DeleteAddressCommandHandler : CommandHandler<DeleteAddressCommand>
+public sealed class DeleteAddressCommandHandler : IRequestHandler<DeleteAddressCommand>
 {
-    private readonly IRepository<Address> _addressRepository;
+    private readonly IAddressRepository _addressRepository;
 
-    public DeleteAddressCommandHandler(
-        IUnitOfWork unitOfWork,
-        IRepository<Address> addressRepository
-        ) : base(unitOfWork)
+    public DeleteAddressCommandHandler(IAddressRepository addressRepository)
     {
         _addressRepository = addressRepository;
     }
 
-    protected override async Task HandleAsync(DeleteAddressCommand request)
+    public async Task Handle(DeleteAddressCommand request, CancellationToken cancellationToken)
     {
-        var address = await _addressRepository.GetByIdAsync(request.Id);
+        var address = await _addressRepository
+            .FirstOrDefaultAsync(new AddressByIdSpecification(request.Id), cancellationToken)
+            .ConfigureAwait(false);
 
         address = Guard.Against.NotFound(address);
 
-        _addressRepository.Delete(address);
+        await _addressRepository
+            .DeleteAsync(address, cancellationToken);
 
-        await UnitOfWork.CommitAsync();
+        await _addressRepository
+            .SaveChangesAsync(cancellationToken);
     }
 }

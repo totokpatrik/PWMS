@@ -1,4 +1,4 @@
-﻿using PWMS.Application.Abstractions.Repositories;
+﻿using Ardalis.Specification;
 using PWMS.Arch.Tests.Extensions;
 
 namespace PWMS.Arch.Tests;
@@ -30,19 +30,20 @@ public class CleanArchitectureTests : BaseTests
     public void CleanArchitecture_Repositories_OnlyInInfrastructure()
     {
         AllTypes.That().HaveNameEndingWith("Repository")
+        .And().AreClasses()
         .Should().ResideInNamespaceStartingWith("PWMS.Infrastructure")
         .AssertIsSuccessful();
 
         AllTypes.That().HaveNameEndingWith("Repository")
             .And().AreClasses()
-            .Should().ImplementInterface(typeof(IRepository<>))
+            .Should().ImplementInterface(typeof(IRepositoryBase<>))
             .AssertIsSuccessful();
     }
 
     [Fact]
     public void CleanArchitecture_Repositories_ShouldEndWithRepository()
     {
-        AllTypes.That().Inherit(typeof(IRepository<>))
+        AllTypes.That().Inherit(typeof(IRepositoryBase<>))
             .Should().HaveNameEndingWith("Repository")
             .AssertIsSuccessful();
     }

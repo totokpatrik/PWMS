@@ -1,5 +1,5 @@
-﻿using PWMS.Application.Abstractions.Commands;
+﻿using MediatR;
 
 namespace PWMS.Application.Addresses.Commands.DeleteAddress;
 
-public sealed record DeleteAddressCommand(Guid Id) : Command;
+public sealed record DeleteAddressCommand(Guid Id) : IRequest;

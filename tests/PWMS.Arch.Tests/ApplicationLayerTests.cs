@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using MediatR;
 using PWMS.Application.Abstractions.Commands;
-using PWMS.Application.Abstractions.Models;
 using PWMS.Application.Abstractions.Queries;
 using PWMS.Arch.Tests.Extensions;
 
@@ -28,11 +28,11 @@ public class ApplicationLayerTests : BaseTests
     [Fact]
     public void ApplicationLayer_Cqrs_CommandsEndWithCommand()
     {
-        AllTypes.That().Inherit(typeof(CommandBase<>))
+        AllTypes.That().Inherit(typeof(ICommand<>))
         .Should().HaveNameEndingWith("Command")
         .AssertIsSuccessful();
 
-        AllTypes.That().Inherit(typeof(CreateCommand))
+        AllTypes.That().Inherit(typeof(ICommand))
         .Should().HaveNameEndingWith("Command")
         .AssertIsSuccessful();
     }
@@ -64,11 +64,7 @@ public class ApplicationLayerTests : BaseTests
     [Fact]
     public void ApplicationLayer_Cqrs_CommandHandlersEndWithCommandHandler()
     {
-        AllTypes.That().Inherit(typeof(CommandHandler<>))
-        .Should().HaveNameEndingWith("CommandHandler")
-        .AssertIsSuccessful();
-
-        AllTypes.That().Inherit(typeof(CreateCommandHandler<>))
+        AllTypes.That().Inherit(typeof(IRequestHandler<>))
         .Should().HaveNameEndingWith("CommandHandler")
         .AssertIsSuccessful();
     }

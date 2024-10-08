@@ -1,21 +1,25 @@
 ﻿using AutoMapper;
 using PWMS.Application.Abstractions.Queries;
-using PWMS.Application.Abstractions.Repositories;
 using PWMS.Application.Addresses.Models;
+using PWMS.Application.Addresses.Repositories;
 using PWMS.Domain.Abstractions.Guards;
-using PWMS.Domain.Addresses.Entities;
 
 namespace PWMS.Application.Addresses.Queries.GetAddress;
 
-public sealed class GetAddressQueryHandler : QueryHandler<GetAddressQuery, AddressDto>
+public sealed class GetAddressQueryHandler : IQueryHandler<GetAddressQuery, AddressDto>
 {
-    private readonly IRepository<Address> _addressRepository;
+    private readonly IAddressRepository _addressRepository;
 
     public GetAddressQueryHandler(
         IMapper mapper,
-        IRepository<Address> addressRepository) : base(mapper)
+        IAddressRepository addressRepository)
     {
         _addressRepository = addressRepository;
+    }
+
+    public Task<AddressDto> Handle(GetAddressQuery request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     protected override async Task<AddressDto> HandleAsync(GetAddressQuery request)

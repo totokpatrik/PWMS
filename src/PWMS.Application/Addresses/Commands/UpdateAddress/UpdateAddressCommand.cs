@@ -1,4 +1,4 @@
-﻿using PWMS.Application.Abstractions.Commands;
+﻿using MediatR;
 
 namespace PWMS.Application.Addresses.Commands.UpdateAddress;
 
@@ -10,4 +10,4 @@ public sealed record UpdateAddressCommand(
     string Country,
     string State,
     string ZipCode
-    ) : Command;
+    ) : IRequest;

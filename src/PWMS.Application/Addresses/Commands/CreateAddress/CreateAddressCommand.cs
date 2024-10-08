@@ -9,4 +9,4 @@ public sealed record CreateAddressCommand(
     string Country,
     string State,
     string ZipCode)
-    : CreateCommand;
+    : ICommand<Guid>;

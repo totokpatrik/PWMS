@@ -1,20 +1,19 @@
-﻿using PWMS.Application.Abstractions.Commands;
-using PWMS.Application.Abstractions.Repositories;
+﻿using MediatR;
+using PWMS.Application.Addresses.Repositories;
 using PWMS.Domain.Addresses.Entities;
 
 namespace PWMS.Application.Addresses.Commands.CreateAddress;
 
-public sealed class CreateAddressCommandHandler : CreateCommandHandler<CreateAddressCommand>
+public sealed class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand, Guid>
 {
-    private readonly IRepository<Address> _addressRepository;
-    public CreateAddressCommandHandler(
-        IUnitOfWork unitOfWork,
-        IRepository<Address> addressRepository
-        ) : base(unitOfWork)
+    private readonly IAddressRepository _addressRepository;
+
+    public CreateAddressCommandHandler(IAddressRepository repository)
     {
-        _addressRepository = addressRepository;
+        _addressRepository = repository;
     }
-    protected override async Task<Guid> HandleAsync(CreateAddressCommand request)
+
+    public async Task<Guid> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
     {
         var created = Address.Create(
             request.Name,
@@ -24,8 +23,13 @@ public sealed class CreateAddressCommandHandler : CreateCommandHandler<CreateAdd
             request.State,
             request.ZipCode);
 
-        _addressRepository.Insert(created);
-        await UnitOfWork.CommitAsync();
+        await _addressRepository
+            .AddAsync(created, cancellationToken)
+            .ConfigureAwait(false);
+
+        await _addressRepository
+            .SaveChangesAsync(cancellationToken)
+            .ConfigureAwait(false);
 
         return created.Id;
     }

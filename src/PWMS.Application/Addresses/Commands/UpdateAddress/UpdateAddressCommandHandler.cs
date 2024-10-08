@@ -1,22 +1,19 @@
-﻿using PWMS.Application.Abstractions.Commands;
-using PWMS.Application.Abstractions.Repositories;
+﻿using MediatR;
+using PWMS.Application.Addresses.Repositories;
+using PWMS.Application.Addresses.Specifications;
 using PWMS.Domain.Abstractions.Guards;
-using PWMS.Domain.Addresses.Entities;
 
 namespace PWMS.Application.Addresses.Commands.UpdateAddress;
 
-public sealed class UpdateAddressCommandHandler : CommandHandler<UpdateAddressCommand>
+public sealed class UpdateAddressCommandHandler : IRequestHandler<UpdateAddressCommand>
 {
-    private readonly IRepository<Address> _addressRepository;
+    private readonly IAddressRepository _addressRepository;
 
-    public UpdateAddressCommandHandler(
-        IUnitOfWork unitOfWork,
-        IRepository<Address> addressRepository
-        ) : base(unitOfWork)
+    public UpdateAddressCommandHandler(IAddressRepository addressRepository)
     {
         _addressRepository = addressRepository;
     }
-
+    /*
     protected async override Task HandleAsync(UpdateAddressCommand request)
     {
         var address = await _addressRepository.GetByIdAsync(request.Id);
@@ -30,5 +27,23 @@ public sealed class UpdateAddressCommandHandler : CommandHandler<UpdateAddressCo
             request.ZipCode);
 
         await UnitOfWork.CommitAsync();
+    }*/
+    public async Task Handle(UpdateAddressCommand request, CancellationToken cancellationToken)
+    {
+        var address = await _addressRepository
+            .SingleOrDefaultAsync(new AddressByIdSpecification(request.Id));
+
+        address = Guard.Against.NotFound(address);
+
+        address.Update(
+            request.Name,
+            request.EmailAddress,
+            request.AddressLine,
+            request.Country,
+            request.State,
+            request.ZipCode);
+
+        await _addressRepository
+            .SaveChangesAsync(cancellationToken);
     }
 }
