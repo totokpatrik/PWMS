@@ -1,6 +1,7 @@
-﻿using PWMS.Domain.Abstractions.DomainEvents;
-using PWMS.Domain.Abstractions.Entities;
+﻿using System;
 
 namespace PWMS.Domain.Addresses.DomainEvents;
 
-public sealed record AddressCreatedDomainEvent(string Name) : IDomainEvent;
+public class AddressCreatedDomainEvent(
+    Guid id,
+    string addressLine) : AddressBaseEvent(id, addressLine);

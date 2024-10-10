@@ -1,12 +1,13 @@
-﻿using PWMS.Application.Abstractions.Commands;
+﻿using Ardalis.Result;
+using MediatR;
+using System.ComponentModel.DataAnnotations;
 
 namespace PWMS.Application.Addresses.Commands.CreateAddress;
 
-public sealed record CreateAddressCommand(
-    string Name,
-    string EmailAddress,
-    string AddressLine,
-    string Country,
-    string State,
-    string ZipCode)
-    : CreateCommand;
+public class CreateAddressCommand : IRequest<Result<CreateAddressResponse>>
+{
+    [Required]
+    [MaxLength(100)]
+    [DataType(DataType.Text)]
+    public string AddressLine { get; set; }
+}

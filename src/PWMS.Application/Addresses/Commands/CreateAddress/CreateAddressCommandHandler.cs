@@ -1,32 +1,33 @@
-﻿using PWMS.Application.Abstractions.Commands;
-using PWMS.Application.Abstractions.Repositories;
-using PWMS.Domain.Addresses.Entities;
+﻿using Ardalis.Result;
+using MediatR;
+using PWMS.Application.Addresses.Repositories;
+using PWMS.Core.SharedKernel;
+using PWMS.Domain.Addresses.Factories;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PWMS.Application.Addresses.Commands.CreateAddress;
 
-public sealed class CreateAddressCommandHandler : CreateCommandHandler<CreateAddressCommand>
+public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand, Result<CreateAddressResponse>>
 {
-    private readonly IRepository<Address> _addressRepository;
-    public CreateAddressCommandHandler(
-        IUnitOfWork unitOfWork,
-        IRepository<Address> addressRepository
-        ) : base(unitOfWork)
+    private readonly IAddressRepository _addressRepository;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public CreateAddressCommandHandler(IAddressRepository addressRepository, IUnitOfWork unitOfWork)
     {
         _addressRepository = addressRepository;
+        _unitOfWork = unitOfWork;
     }
-    protected override async Task<Guid> HandleAsync(CreateAddressCommand request)
+
+    public async Task<Result<CreateAddressResponse>> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
     {
-        var created = Address.Create(
-            request.Name,
-            request.EmailAddress,
-            request.AddressLine,
-            request.Country,
-            request.State,
-            request.ZipCode);
+        var address = AddressFactory.Create(request.AddressLine);
 
-        _addressRepository.Insert(created);
-        await UnitOfWork.CommitAsync();
+        _addressRepository.Add(address);
 
-        return created.Id;
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result<CreateAddressResponse>.Success(
+            new CreateAddressResponse(address.Id), "Successfully created.");
     }
 }
