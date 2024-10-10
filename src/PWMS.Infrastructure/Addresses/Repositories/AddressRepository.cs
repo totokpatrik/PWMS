@@ -6,7 +6,7 @@ using System;
 
 namespace PWMS.Infrastructure.Addresses.Repositories;
 
-internal class AddressRepository(ApplicationDbContext context) : BaseRepository<Address, Guid>(context), IAddressRepository
+public class AddressRepository(ApplicationDbContext context) : BaseRepository<Address, Guid>(context), IAddressRepository
 {
 
 }

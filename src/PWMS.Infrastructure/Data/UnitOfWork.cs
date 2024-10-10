@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PWMS.Infrastructure.Data;
 
-internal sealed class UnitOfWork(
+public sealed class UnitOfWork(
     ApplicationDbContext applicationDbContext,
     IEventStoreRepository eventStoreRepository,
     IMediator mediator,

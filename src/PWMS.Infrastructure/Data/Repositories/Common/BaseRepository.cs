@@ -12,7 +12,7 @@ namespace PWMS.Infrastructure.Data.Repositories.Common;
 /// </summary>
 /// <typeparam name="TEntity">The type of the entity.</typeparam>
 /// <typeparam name="Tkey">The type of the entity's key.</typeparam>
-internal abstract class BaseRepository<TEntity, Tkey>(ApplicationDbContext context) : IBaseRepository<TEntity, Tkey>
+public abstract class BaseRepository<TEntity, Tkey>(ApplicationDbContext context) : IBaseRepository<TEntity, Tkey>
     where TEntity : class, IEntity<Tkey>
     where Tkey : IEquatable<Tkey>
 {

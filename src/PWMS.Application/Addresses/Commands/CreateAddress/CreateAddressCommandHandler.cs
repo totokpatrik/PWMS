@@ -1,4 +1,6 @@
 ﻿using Ardalis.Result;
+using Ardalis.Result.FluentValidation;
+using FluentValidation;
 using MediatR;
 using PWMS.Application.Addresses.Repositories;
 using PWMS.Core.SharedKernel;
@@ -9,11 +11,19 @@ using System.Threading.Tasks;
 namespace PWMS.Application.Addresses.Commands.CreateAddress;
 
 public class CreateAddressCommandHandler(
+    IValidator<CreateAddressCommand> validator,
     IAddressRepository addressRepository,
     IUnitOfWork unitOfWork) : IRequestHandler<CreateAddressCommand, Result<CreateAddressResponse>>
 {
     public async Task<Result<CreateAddressResponse>> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
     {
+        // Validating the request.
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            // Return the result with validation errors.
+            return Result<CreateAddressResponse>.Invalid(validationResult.AsErrors());
+        }
 
         // Creating an instance of the address entity.
         var address = AddressFactory.Create(
