@@ -65,6 +65,33 @@ public class AddressControllerTests : IAsyncLifetime
         response.Result.Id.Should().NotBeEmpty();
     }
 
+    [Fact]
+    public async Task Should_ReturnsHttpStatus400BadRequest_When_Post_InvalidRequest()
+    {
+        // Arrange
+        await using var webApplicationFactory = InitializeWebAppFactory();
+        using var httpClient = webApplicationFactory.CreateClient(CreateClientOptions());
+
+        var command = new Faker<CreateAddressCommand>().Generate();
+        var commandAsJsonString = command.ToJson();
+
+        // Act
+        using var jsonContent = new StringContent(commandAsJsonString, Encoding.UTF8, MediaTypeNames.Application.Json);
+        using var act = await httpClient.PostAsync(Endpoint, jsonContent);
+
+        // Assert (HTTP)
+        act.Should().NotBeNull();
+        act.IsSuccessStatusCode.Should().BeFalse();
+        act.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        // Assert (HTTP Content Response)
+        var response = (await act.Content.ReadAsStringAsync()).FromJson<ApiResponse<CreateAddressResponse>>();
+        response.Should().NotBeNull();
+        response.Success.Should().BeFalse();
+        response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        response.Result.Should().BeNull();
+        response.Errors.Should().NotBeNullOrEmpty().And.OnlyHaveUniqueItems();
+    }
 
     #endregion
 
