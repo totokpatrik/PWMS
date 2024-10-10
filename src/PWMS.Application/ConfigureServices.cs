@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using PWMS.Application.Behaviors;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
@@ -14,14 +16,10 @@ public static class ConfigureServices
     /// <param name="services">The service collection.</param>
     public static IServiceCollection AddCommandHandlers(this IServiceCollection services)
     {
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
-
-            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
-            cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
-        });
-
-        return services;
+        var assembly = Assembly.GetExecutingAssembly();
+        return services
+            .AddValidatorsFromAssembly(assembly)
+            .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly)
+            .AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>)));
     }
 }
