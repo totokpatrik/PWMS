@@ -18,7 +18,6 @@ using PWMS.Core;
 using PWMS.Core.Extensions;
 using PWMS.Infrastructure;
 using Shop.PublicApi.Extensions;
-using StackExchange.Profiling;
 using System.Globalization;
 using System.IO.Compression;
 
@@ -69,18 +68,6 @@ builder.Services
 
 builder.Services.AddDefaultCorrelationId();
 
-// MiniProfiler for .NET
-// https://miniprofiler.com/dotnet/
-builder.Services.AddMiniProfiler(options =>
-{
-    // Route: /profiler/results-index
-    options.RouteBasePath = "/profiler";
-    options.ColorScheme = ColorScheme.Dark;
-    options.EnableServerTimingHeader = true;
-    options.TrackConnectionOpenClose = true;
-    options.EnableDebugMode = builder.Environment.IsDevelopment();
-}).AddEntityFramework();
-
 // Validating the services added in the ASP.NET Core DI.
 builder.Host.UseDefaultServiceProvider((context, serviceProviderOptions) =>
 {
@@ -110,7 +97,6 @@ app.UseSwaggerUI();
 app.UseResponseCompression();
 app.UseHttpsRedirection();
 app.UseSecureHeadersMiddleware();
-app.UseMiniProfiler();
 app.UseCorrelationId();
 app.UseAuthentication();
 app.UseAuthorization();
