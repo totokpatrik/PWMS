@@ -8,26 +8,25 @@ using System.Threading.Tasks;
 
 namespace PWMS.Application.Addresses.Commands.CreateAddress;
 
-public class CreateAddressCommandHandler : IRequestHandler<CreateAddressCommand, Result<CreateAddressResponse>>
+public class CreateAddressCommandHandler(
+    IAddressRepository addressRepository,
+    IUnitOfWork unitOfWork) : IRequestHandler<CreateAddressCommand, Result<CreateAddressResponse>>
 {
-    private readonly IAddressRepository _addressRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public CreateAddressCommandHandler(IAddressRepository addressRepository, IUnitOfWork unitOfWork)
-    {
-        _addressRepository = addressRepository;
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<Result<CreateAddressResponse>> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
     {
-        var address = AddressFactory.Create(request.AddressLine);
 
-        _addressRepository.Add(address);
+        // Creating an instance of the address entity.
+        var address = AddressFactory.Create(
+            request.AddressLine);
 
-        await _unitOfWork.SaveChangesAsync();
+        // Adding the entity to the repository.
+        addressRepository.Add(address);
 
+        // Saving changes to the database and triggering events.
+        await unitOfWork.SaveChangesAsync();
+
+        // Returning the ID and success message.
         return Result<CreateAddressResponse>.Success(
-            new CreateAddressResponse(address.Id), "Successfully created.");
+            new CreateAddressResponse(address.Id), "Successfully registered!");
     }
 }

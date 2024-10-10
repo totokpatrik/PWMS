@@ -6,5 +6,4 @@ namespace PWMS.Application.Addresses.Repositories;
 
 public interface IAddressRepository : IBaseRepository<Address, Guid>
 {
-
 }
