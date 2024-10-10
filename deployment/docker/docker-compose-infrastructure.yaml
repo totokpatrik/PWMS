@@ -2,7 +2,7 @@ name: pwms
 
 services:
   pwmsdb:
-    image: postgres
+    image: postgres:latest
     container_name: pwmsdb
     environment:
       - POSTGRES_USER=postgres

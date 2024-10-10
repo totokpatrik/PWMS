@@ -21,5 +21,5 @@ public class BaseEvent : INotification
     /// <summary>
     /// Gets the date and time when the event occurred.
     /// </summary>
-    public DateTime OccurredOn { get; private init; } = DateTime.Now;
+    public DateTime OccurredOn { get; private init; } = DateTime.UtcNow;
 }
