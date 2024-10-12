@@ -14,11 +14,13 @@ using PWMS.Application.Addresses.Commands.CreateAddress;
 using PWMS.Core.Extensions;
 using PWMS.Infrastructure.Data.Context;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit.Abstractions;
 using Xunit.Categories;
 
 namespace PWMS.IntegrationTests.Controllers.v1;
@@ -30,6 +32,13 @@ public class AddressControllerTests : IAsyncLifetime
     private const string Endpoint = "/api/addresses";
     private readonly SqliteConnection _eventStoreDbContextSqlite = new(ConnectionString);
     private readonly SqliteConnection _applicationDbContextSqlite = new(ConnectionString);
+
+    private readonly ITestOutputHelper output;
+
+    public AddressControllerTests(ITestOutputHelper output)
+    {
+        this.output = output;
+    }
 
     #region POST: /api/addresses/
 
@@ -63,6 +72,41 @@ public class AddressControllerTests : IAsyncLifetime
         response.Errors.Should().BeEmpty();
         response.Result.Should().NotBeNull();
         response.Result.Id.Should().NotBeEmpty();
+    }
+    [Theory]
+    [InlineData(101)]
+    [InlineData(200)]
+    public async Task Should_ReturnsHttpStatus400BadRequest_When_Post_InvalidRequest_Too_Long(int numberOfCharacters)
+    {
+        // Arrange
+        await using var webApplicationFactory = InitializeWebAppFactory();
+        using var httpClient = webApplicationFactory.CreateClient(CreateClientOptions());
+
+        var command = new Faker<CreateAddressCommand>()
+            .RuleFor(command => command.AddressLine, faker => faker.Random.String(numberOfCharacters))
+            .Generate();
+
+        var commandAsJsonString = command.ToJson();
+
+        // Act
+        using var jsonContent = new StringContent(commandAsJsonString, Encoding.UTF8, MediaTypeNames.Application.Json);
+        using var act = await httpClient.PostAsync(Endpoint, jsonContent);
+
+        // Assert (HTTP)
+        act.Should().NotBeNull();
+        act.IsSuccessStatusCode.Should().BeFalse();
+        act.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        // Assert (HTTP Content Response)
+        var response = (await act.Content.ReadAsStringAsync()).FromJson<ApiResponse<CreateAddressResponse>>();
+        response.Should().NotBeNull();
+        response.Success.Should().BeFalse();
+        response.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        response.Result.Should().BeNull();
+        response.Errors.Should().NotBeNullOrEmpty().And.OnlyHaveUniqueItems();
+        response.Errors.FirstOrDefault().Message.Should().Be($"The length of 'AddressLine' must be 100 characters or fewer. You entered {numberOfCharacters} characters.");
+
+        output.WriteLine(response.Errors.FirstOrDefault().Message);
     }
 
     [Fact]
