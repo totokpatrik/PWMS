@@ -61,7 +61,7 @@ builder.Services.AddControllers()
 builder.Services
     .ConfigureAppSettings()
     .AddInfrastructure()
-    .AddCommandHandlers()
+    .AddApplicationServices()
     .AddApplicationDbContext()
     .AddRepositories()
     .AddHealthChecks(builder.Configuration);

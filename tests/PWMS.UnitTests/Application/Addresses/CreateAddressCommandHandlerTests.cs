@@ -30,7 +30,6 @@ public class CreateAddressCommandHandlerTests(EfSqliteFixture fixture) : IClassF
             Substitute.For<ILogger<UnitOfWork>>());
 
         var hanlder = new CreateAddressCommandHandler(
-            _validator,
             new AddressRepository(fixture.Context),
             unitOfWork);
 
@@ -59,7 +58,6 @@ public class CreateAddressCommandHandlerTests(EfSqliteFixture fixture) : IClassF
             Substitute.For<ILogger<UnitOfWork>>());
 
         var hanlder = new CreateAddressCommandHandler(
-            _validator,
             new AddressRepository(fixture.Context),
             unitOfWork);
 
@@ -77,7 +75,6 @@ public class CreateAddressCommandHandlerTests(EfSqliteFixture fixture) : IClassF
     {
         // Arrange
         var hanlder = new CreateAddressCommandHandler(
-            _validator,
             Substitute.For<IAddressRepository>(),
             Substitute.For<IUnitOfWork>());
 
