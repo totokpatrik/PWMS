@@ -1,7 +1,7 @@
 ﻿using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
 
-namespace My.Nkz.NewApp.Persistence.PostgreSQL;
+namespace PWMS.Persistence.PortgreSQL.Data;
 
 public class ApplicationDbContextFactory : IDbContextFactory<ApplicationDbContext>
 {

@@ -1,6 +1,6 @@
 ﻿namespace PWMS.Persistence.PortgreSQL.Configuration;
 
-internal sealed record PostgresConnection
+public sealed record PostgresConnection
 {
     [NotNull]
     public string? ConnectionString { get; init; }

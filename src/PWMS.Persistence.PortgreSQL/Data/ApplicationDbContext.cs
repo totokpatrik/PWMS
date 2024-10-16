@@ -4,7 +4,7 @@ using PWMS.Domain.Addresses.Entities;
 using PWMS.Domain.Common;
 using PWMS.Persistence.PortgreSQL.Extensions;
 
-namespace My.Nkz.NewApp.Persistence.PostgreSQL;
+namespace PWMS.Persistence.PortgreSQL.Data;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {

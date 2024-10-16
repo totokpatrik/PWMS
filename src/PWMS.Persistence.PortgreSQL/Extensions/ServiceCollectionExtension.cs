@@ -3,7 +3,6 @@ namespace PWMS.Persistence.PortgreSQL.Extensions;
 using Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using My.Nkz.NewApp.Persistence.PostgreSQL;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
 using PWMS.Persistence.PortgreSQL.Data;
