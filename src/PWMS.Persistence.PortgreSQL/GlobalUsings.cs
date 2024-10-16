@@ -1,0 +1,16 @@
+﻿global using Ardalis.Specification;
+global using Ardalis.Specification.EntityFrameworkCore;
+global using FluentValidation;
+global using MediatR;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.ChangeTracking;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
+global using Microsoft.Extensions.Options;
+global using Npgsql;
+global using OpenTelemetry.Trace;
+global using System;
+global using System.Diagnostics.CodeAnalysis;
+global using System.Reflection;

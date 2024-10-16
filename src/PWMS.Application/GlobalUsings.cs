@@ -1,0 +1,14 @@
+﻿global using Ardalis.Specification;
+global using FluentResults;
+global using FluentValidation;
+global using FluentValidation.Results;
+global using Mapster;
+global using MapsterMapper;
+global using MediatR;
+global using MediatR.Pipeline;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
+global using Microsoft.Extensions.Logging;
+global using System.Diagnostics;
+global using System.Reflection;

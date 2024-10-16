@@ -1,9 +1,5 @@
-﻿using PWMS.Core.SharedKernel;
-using PWMS.Domain.Addresses.Aggregates;
-using System;
+﻿using PWMS.Domain.Addresses.Entities;
 
 namespace PWMS.Application.Addresses.Repositories;
 
-public interface IAddressRepository : IBaseRepository<Address, Guid>
-{
-}
+public interface IAddressRepository : IRepositoryBase<Address>;
