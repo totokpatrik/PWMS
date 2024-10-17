@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using PWMS.Presentation.Rest.Middleware;
 
 namespace PWMS.Presentation.Rest.Extensions;
@@ -9,11 +8,6 @@ public static class ApplicationBuilderExtension
     public static IApplicationBuilder UseRestPresentation(
         this WebApplication app, IWebHostEnvironment env)
     {
-        if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
-
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {

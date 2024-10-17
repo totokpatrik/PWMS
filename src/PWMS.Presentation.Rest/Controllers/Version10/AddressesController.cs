@@ -1,9 +1,9 @@
-﻿using Asp.Versioning;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using PWMS.Application.Addresses.Commands.Create;
+﻿using PWMS.Application.Addresses.Commands.Create;
+using PWMS.Application.Addresses.Commands.Delete;
+using PWMS.Application.Addresses.Commands.Update;
+using PWMS.Application.Addresses.Models;
 using PWMS.Presentation.Rest.Models.Result;
+using System.ComponentModel.DataAnnotations;
 
 namespace PWMS.Presentation.Rest.Controllers.Version10;
 
@@ -25,6 +25,32 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResultDto<Guid>>> Create(
     [FromBody] CreateAddressCommand command,
+    CancellationToken cancellationToken)
+    => (await Mediator.Send(command, cancellationToken)).ToResultDto();
+
+    /// <summary>
+    /// Updates address.
+    /// </summary>
+    [HttpPut]
+    [ProducesResponseType(typeof(ResultDto<AddressDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ResultDto<AddressDto>>> Update(
+    [FromBody][Required] UpdateAddressCommand command,
+    CancellationToken cancellationToken)
+    => (await Mediator.Send(command, cancellationToken)).ToResultDto();
+
+    /// <summary>
+    /// Deletes address.
+    /// </summary>
+    [HttpDelete]
+    [ProducesResponseType(typeof(ResultDto<Guid>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ResultDto<Guid>>> Delete(
+    [FromBody][Required] DeleteAddressCommand command,
     CancellationToken cancellationToken)
     => (await Mediator.Send(command, cancellationToken)).ToResultDto();
 }

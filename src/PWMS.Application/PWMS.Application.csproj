@@ -21,4 +21,9 @@
     <ProjectReference Include="..\PWMS.Domain\PWMS.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Addresses\Queries\GetById\" />
+    <Folder Include="Addresses\Queries\Get\" />
+  </ItemGroup>
+
 </Project>

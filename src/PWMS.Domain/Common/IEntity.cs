@@ -8,7 +8,5 @@ public interface IEntity
 
     void AddDomainEvent(INotification domainEvent);
 
-    void RemoveDomainEvent(INotification domainEvent);
-
     void ClearDomainEvents();
 }

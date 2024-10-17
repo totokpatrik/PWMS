@@ -7,9 +7,6 @@ public static class ContainerFactory
     private const string PostgresUsername = "postgres";
     private const string PostgresPassword = "postgres";
 
-    private const string RabbitMqUsername = "rabbitmq";
-    private const string RabbitMqPassword = "rabbitmq";
-
     public static IContainer Create<T>() where T : IContainer
     {
         var type = typeof(T);
@@ -25,10 +22,10 @@ public static class ContainerFactory
             .WithUsername(PostgresUsername)
             .WithPassword(PostgresPassword)
             .WithDatabase(Database)
-            .WithImage("postgres:17")
-            .WithPortBinding(5432, 5432)
+            .WithImage("postgres:latest")
+            .WithPortBinding(5433, 5432)
             .WithAutoRemove(true)
             .WithCleanUp(true)
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted($"pg_isready -d {Database}"))
             .Build();
 }

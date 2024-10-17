@@ -8,6 +8,12 @@ public class Address : BaseAuditableEntity<Guid, string>, IAggregateRoot
 
     public string AddressLine { get; set; }
 
+    public Address(Guid id, string addressLine) : base(id)
+    {
+        AddressLine = addressLine;
+
+        AddCreateDomainEvent();
+    }
     public Address(string addressLine) : base(Guid.NewGuid())
     {
         AddressLine = addressLine;
