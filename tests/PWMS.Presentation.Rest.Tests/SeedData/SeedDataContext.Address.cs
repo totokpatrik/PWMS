@@ -7,7 +7,7 @@ internal sealed partial class SeedDataContext
     {
         get
         {
-            yield return new Address("TestAddress1");
+            yield return new Address(Guid.Parse("4B178375-845F-4D84-9E5B-31A14F097AA1"), "TestAddress1");
             yield return new Address("TestAddress2");
             yield return new Address("TestAddress3");
             yield return new Address("TestAddress4");

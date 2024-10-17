@@ -2,6 +2,8 @@
 using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Addresses.Models;
+using PWMS.Application.Addresses.Queries.Get;
+using PWMS.Application.Common.Paging;
 using PWMS.Presentation.Rest.Models.Result;
 using System.ComponentModel.DataAnnotations;
 
@@ -53,4 +55,18 @@ public class AddressesController : BaseController
     [FromBody][Required] DeleteAddressCommand command,
     CancellationToken cancellationToken)
     => (await Mediator.Send(command, cancellationToken)).ToResultDto();
+
+    /// <summary>
+    /// Gets the paginated address list.
+    /// </summary>
+    [HttpPost]
+    [Route("page")]
+    [ProducesResponseType(typeof(ResultDto<CollectionViewModel<AddressDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ResultDto<CollectionViewModel<AddressDto>>>> Page(
+    [FromBody] PageContext<AddressFilter> pageContext,
+    CancellationToken cancellationToken)
+    => (await Mediator.Send(GetAddressQuery.Create(pageContext), cancellationToken)).ToResultDto();
 }
