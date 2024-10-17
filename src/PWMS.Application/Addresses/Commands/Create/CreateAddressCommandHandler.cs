@@ -1,0 +1,22 @@
+﻿using PWMS.Application.Addresses.Repositories;
+using PWMS.Common.Extensions;
+using PWMS.Domain.Addresses.Entities;
+
+namespace PWMS.Application.Addresses.Commands.Create;
+
+public sealed class CreateAddressCommandHandler(IAddressRepository addressRepository) : IRequestHandler<CreateAddressCommand, Result<Guid>>
+{
+    private readonly IAddressRepository _addressRepository = addressRepository.ThrowIfNull();
+    public async Task<Result<Guid>> Handle(CreateAddressCommand request, CancellationToken cancellationToken)
+    {
+        var entity = new Address(request.AddressLine);
+
+        await _addressRepository
+            .AddAsync(entity, cancellationToken);
+
+        await _addressRepository
+            .SaveChangesAsync(cancellationToken);
+
+        return Result.Ok(entity.Id);
+    }
+}
