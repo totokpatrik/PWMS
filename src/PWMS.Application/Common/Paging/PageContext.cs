@@ -1,4 +1,6 @@
 ﻿namespace PWMS.Application.Common.Paging;
+
+using Castle.DynamicLinqQueryBuilder;
 using System.Numerics;
 
 public sealed record PageContext<T> : IPageContext<T>,
@@ -8,26 +10,22 @@ public sealed record PageContext<T> : IPageContext<T>,
     public PageContext(
         int pageIndex,
         int pageSize,
-        T? filter = null,
-        IEnumerable<SortDescriptor>? listSort = null,
-        IEnumerable<GroupDescriptor>? listGroup = null)
+        QueryBuilderFilterRule? filter = null,
+        IEnumerable<SortDescriptor>? listSort = null)
     {
         PageIndex = pageIndex;
         PageSize = pageSize;
-        Filter = filter ?? new T();
+        Filter = filter ?? new QueryBuilderFilterRule();
         ListSort = listSort ?? Enumerable.Empty<SortDescriptor>();
-        ListGroup = listGroup ?? Enumerable.Empty<GroupDescriptor>();
     }
 
     public int PageIndex { get; private set; }
 
     public int PageSize { get; }
 
-    public T Filter { get; }
+    public QueryBuilderFilterRule Filter { get; }
 
     public IEnumerable<SortDescriptor> ListSort { get; }
-
-    public IEnumerable<GroupDescriptor> ListGroup { get; }
 
     public bool IsValid() => PageIndex > 0 && PageSize > 0;
 

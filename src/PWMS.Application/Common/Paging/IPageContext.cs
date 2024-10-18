@@ -1,4 +1,6 @@
-﻿namespace PWMS.Application.Common.Paging;
+﻿using Castle.DynamicLinqQueryBuilder;
+
+namespace PWMS.Application.Common.Paging;
 
 public interface IPageContext<out T>
 {
@@ -6,11 +8,9 @@ public interface IPageContext<out T>
 
     int PageSize { get; }
 
-    T Filter { get; }
+    QueryBuilderFilterRule Filter { get; }
 
     IEnumerable<SortDescriptor> ListSort { get; }
-
-    IEnumerable<GroupDescriptor> ListGroup { get; }
 
     bool IsValid();
 }

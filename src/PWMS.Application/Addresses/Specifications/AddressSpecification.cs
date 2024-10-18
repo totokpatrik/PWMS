@@ -2,13 +2,8 @@
 using PWMS.Application.Common.Filters;
 using PWMS.Application.Common.Paging;
 using PWMS.Domain.Addresses.Entities;
-using System;
 using System.Collections.Frozen;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PWMS.Application.Addresses.Specifications;
 
@@ -41,7 +36,7 @@ internal sealed class AddressSpecification : Specification<Address>
 
         var specificationBuilder = specification.Query;
 
-        Filter(specificationBuilder, pageContext.Filter);
+        //Filter(specificationBuilder, pageContext.Filter);
         specification.Sort(specificationBuilder, pageContext.ListSort);
 
         if (pageContext.PageIndex != 0)

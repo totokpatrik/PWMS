@@ -44,7 +44,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PWMS.Application.Tests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PWMS.Presentation.Rest.Tests", "tests\PWMS.Presentation.Rest.Tests\PWMS.Presentation.Rest.Tests.csproj", "{0A317FAB-872C-4AA9-9BAC-F3B1A9879A42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PWMS.Domain.Tests", "tests\PWMS.Domain.Tests\PWMS.Domain.Tests.csproj", "{3DF49C63-B79F-4876-8D14-7489EEDE73DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PWMS.Domain.Tests", "tests\PWMS.Domain.Tests\PWMS.Domain.Tests.csproj", "{3DF49C63-B79F-4876-8D14-7489EEDE73DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

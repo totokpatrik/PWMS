@@ -4,11 +4,6 @@ using PWMS.Application.Addresses.Specifications;
 using PWMS.Application.Common.Handlers;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Application.Common.Paging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PWMS.Application.Addresses.Queries.Get;
 
@@ -31,8 +26,7 @@ internal sealed class GetAddressQueryHandler
         var specification = AddressSpecification.Create(request.PageContext);
 
         var entities = await _addressRepository
-            .ListAsync(specification, cancellationToken)
-            .ConfigureAwait(false);
+            .GetAllAddresses(specification, cancellationToken, request.PageContext.Filter);
 
         var dtoAddresses = await entities
             .BuildAdapter(Mapper.Config)
