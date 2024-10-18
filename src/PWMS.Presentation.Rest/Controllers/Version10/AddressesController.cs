@@ -59,6 +59,32 @@ public class AddressesController : BaseController
     /// <summary>
     /// Gets the paginated address list.
     /// </summary>
+    /// <remarks>
+    /// Sort list directions:
+    /// 0 - None
+    /// 1 - Asc
+    /// 2 - Desc
+    /// 
+    /// Sample request:
+    ///
+    ///     {
+    ///       "pageIndex": 1,
+    ///       "pageSize": 10,
+    ///       "filter": {"condition":"AND","rules":[{"id":"1","field":"AddressLine","type":"string","input":"select","operator":"equal","value":["string"]}]}
+    ///     }
+    ///     OR
+    ///     {
+    ///       "pageIndex": 1,
+    ///       "pageSize": 10,
+    ///       "filter": {"condition":"AND","rules":[{"id":"1","field":"AddressLine","type":"string","input":"select","operator":"equal","value":["string"]}]},
+    ///       "listSort": [
+    ///         {
+    ///           "field": "AddressLine",
+    ///           "direction": 1
+    ///         }
+    ///       ]
+    ///     } 
+    /// </remarks>
     [HttpPost]
     [Route("page")]
     [ProducesResponseType(typeof(ResultDto<CollectionViewModel<AddressDto>>), StatusCodes.Status200OK)]
