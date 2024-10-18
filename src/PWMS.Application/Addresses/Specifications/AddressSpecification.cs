@@ -1,5 +1,4 @@
 ﻿using PWMS.Application.Addresses.Models;
-using PWMS.Application.Common.Filters;
 using PWMS.Application.Common.Paging;
 using PWMS.Domain.Addresses.Entities;
 using System.Collections.Frozen;
@@ -51,19 +50,6 @@ internal sealed class AddressSpecification : Specification<Address>
 
         specificationBuilder.AsNoTracking();
         return specification;
-    }
-
-    private static void Filter(ISpecificationBuilder<Address> specificationBuilder, AddressFilter filter)
-    {
-        if (filter.AddressLine.HasValue())
-        {
-            specificationBuilder.Where(x => x.AddressLine == filter.AddressLine.Value);
-        }
-
-        if (filter.Id.HasValue())
-        {
-            specificationBuilder.Where(x => x.Id == filter.Id.Value);
-        }
     }
 
     private ISpecificationBuilder<Address> Sort(ISpecificationBuilder<Address> specificationBuilder,
