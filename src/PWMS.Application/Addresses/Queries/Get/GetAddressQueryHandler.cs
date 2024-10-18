@@ -4,6 +4,7 @@ using PWMS.Application.Addresses.Specifications;
 using PWMS.Application.Common.Handlers;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Application.Common.Paging;
+using PWMS.Common.Extensions;
 
 namespace PWMS.Application.Addresses.Queries.Get;
 
@@ -18,7 +19,7 @@ internal sealed class GetAddressQueryHandler
         IMapper mapper,
         ICurrentUserService currentUserService) : base(applicationDbContext, mapper, currentUserService)
     {
-        _addressRepository = addressRepository;
+        _addressRepository = addressRepository.ThrowIfNull();
     }
 
     public async override Task<Result<CollectionViewModel<AddressDto>>> Handle(GetAddressQuery request, CancellationToken cancellationToken)

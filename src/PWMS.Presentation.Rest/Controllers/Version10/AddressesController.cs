@@ -3,6 +3,7 @@ using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Addresses.Models;
 using PWMS.Application.Addresses.Queries.Get;
+using PWMS.Application.Addresses.Queries.GetById;
 using PWMS.Application.Common.Paging;
 using PWMS.Presentation.Rest.Models.Result;
 using System.ComponentModel.DataAnnotations;
@@ -57,7 +58,7 @@ public class AddressesController : BaseController
     => (await Mediator.Send(command, cancellationToken)).ToResultDto();
 
     /// <summary>
-    /// Gets the paginated address list.
+    /// Gets addresses with pagination.
     /// </summary>
     /// <remarks>
     /// Sort list directions:
@@ -95,4 +96,16 @@ public class AddressesController : BaseController
     [FromBody] PageContext<AddressFilter> pageContext,
     CancellationToken cancellationToken)
     => (await Mediator.Send(GetAddressQuery.Create(pageContext), cancellationToken)).ToResultDto();
+
+    /// <summary>
+    /// Gets address by id.
+    /// </summary>
+    [HttpGet]
+    [Route("{id}")]
+    [ProducesResponseType(typeof(ResultDto<AddressDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ResultDto<AddressDto>>> Get(Guid id, CancellationToken cancellationToken)
+    => (await Mediator.Send(new GetAddressByIdQuery(id), cancellationToken)).ToResultDto();
 }
