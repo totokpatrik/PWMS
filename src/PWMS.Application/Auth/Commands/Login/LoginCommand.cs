@@ -1,5 +1,7 @@
-﻿namespace PWMS.Application.Auth.Commands.Login;
+﻿using Microsoft.AspNetCore.Identity;
 
-public sealed record LoginCommand(string UserName, string Password) : IRequest<Result<Guid>>
+namespace PWMS.Application.Auth.Commands.Login;
+
+public sealed record LoginCommand(string UserName, string Password) : IRequest<Result<SignInResult>>
 {
 }

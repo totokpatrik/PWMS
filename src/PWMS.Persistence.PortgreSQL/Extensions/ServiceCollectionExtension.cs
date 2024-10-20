@@ -1,12 +1,18 @@
 namespace PWMS.Persistence.PortgreSQL.Extensions;
 
 using Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
+using PWMS.Domain.Auth.Entities;
 using PWMS.Persistence.PortgreSQL.Data;
 using Serilog;
+using System.Data;
+using System.Text;
 
 public static class ServiceCollectionExtension
 {
@@ -40,6 +46,51 @@ public static class ServiceCollectionExtension
 
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+
+        return services;
+    }
+
+    public static IServiceCollection AddAuth(this IServiceCollection services,
+    IConfiguration configuration)
+    {
+        var jwtConfiguration = configuration.GetSection(JwtConfigurationSection.SectionName).Get<JwtDetails>();
+        ArgumentNullException.ThrowIfNull(jwtConfiguration);
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.IncludeErrorDetails = true;
+            options.RequireHttpsMetadata = false;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateIssuerSigningKey = false,
+                ValidAudience = jwtConfiguration.Audience,
+                ValidIssuer = jwtConfiguration.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfiguration.Secret))
+            };
+        });
+
+        services.AddAuthorizationBuilder();
+
+        services.AddIdentityCore<User>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddSignInManager()
+                .AddTokenProvider<DataProtectorTokenProvider<User>>(jwtConfiguration.Provider)
+                .AddApiEndpoints();
+
+        // maybe load from config also
+        services.Configure<DataProtectionTokenProviderOptions>(opt =>
+        {
+            opt.TokenLifespan = TimeSpan.FromHours(1);
+        });
 
         return services;
     }

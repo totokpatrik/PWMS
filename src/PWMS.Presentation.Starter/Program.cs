@@ -26,6 +26,7 @@ builder.Services
     .AddLogging(configuration)
     .AddOptions()
     .AddNgpSqlPersistence(configuration)
+    .AddAuth(configuration)
     .AddApplication()
     .AddCoreInfrastructure()
     .AddRestPresentation(configuration, builder.Environment)
@@ -68,6 +69,7 @@ using (var scope = app.Services.CreateScope())
 app.UseRestPresentation(environment)
     .UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRestEndpoints();

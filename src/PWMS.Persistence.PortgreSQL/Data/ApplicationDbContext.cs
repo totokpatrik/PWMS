@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
 using PWMS.Domain.Addresses.Entities;
@@ -8,7 +9,7 @@ using PWMS.Persistence.PortgreSQL.Extensions;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
 
-public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string>, IApplicationDbContext
 {
     private ICurrentUserService _currentUserService = null!;
     private IDateTime _dateTime = null!;
@@ -85,5 +86,7 @@ public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbConte
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         modelBuilder.DataTimeConfigure();
+
+        base.OnModelCreating(modelBuilder);
     }
 }
