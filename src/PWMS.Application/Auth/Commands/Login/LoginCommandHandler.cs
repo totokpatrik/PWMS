@@ -1,24 +1,27 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using PWMS.Application.Addresses.Commands.Create;
+using PWMS.Application.Common.Interfaces;
 using PWMS.Domain.Auth.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PWMS.Application.Auth.Commands.Login;
 
-public sealed class LoginCommandHandler(SignInManager<User> signInManager) : IRequestHandler<LoginCommand, Result<SignInResult>>
+public sealed class LoginCommandHandler(SignInManager<User> signInManager, UserManager<User> userManager, IApplicationDbContext dbContext) : IRequestHandler<LoginCommand, Result<SignInResult>>
 {
     private readonly SignInManager<User> _signInManager = signInManager;
+    private readonly UserManager<User> _userManager = userManager;
+    private readonly IApplicationDbContext _dbContext = dbContext;
 
     public async Task<Result<SignInResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var result = await _signInManager.PasswordSignInAsync(
-            request.UserName,
+        var user = await _userManager.FindByNameAsync(request.UserName);
+
+        if (user == null)
+        {
+            throw new AuthorizationException("Username or password is incorrect.");
+        }
+
+        var result = await _signInManager.CheckPasswordSignInAsync(
+            user,
             request.Password,
-            isPersistent: false,
             lockoutOnFailure: false);
 
         if (!result.Succeeded)

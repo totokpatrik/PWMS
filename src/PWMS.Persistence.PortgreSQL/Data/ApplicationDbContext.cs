@@ -21,7 +21,8 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
     {
     }
 
-    public void InitContext(ICurrentUserService currentUserService, IDbInitializer dbInitializer, IDateTime dateTime, IMediator mediator)
+    public void InitContext
+        (ICurrentUserService currentUserService, IDbInitializer dbInitializer, IDateTime dateTime, IMediator mediator)
     {
         _dbInitializer = dbInitializer.ThrowIfNull();
         _currentUserService = currentUserService.ThrowIfNull();
@@ -37,6 +38,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+
         var currentUser = _currentUserService.CurrentUser;
 
         UpdateEntities(currentUser);
@@ -49,7 +51,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
 
     public async Task MigrateAsync() => await AppDbContext.Database.MigrateAsync();
 
-    public async Task SeedAsync() => await _dbInitializer.SeedAsync(this);
+    public async Task SeedAsync(IServiceScope scope) => await _dbInitializer.SeedAsync(this, scope);
 
     private async Task DispatchDomainEventsAsync()
     {

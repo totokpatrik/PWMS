@@ -11,5 +11,5 @@ public interface IApplicationDbContext
 
     Task MigrateAsync();
 
-    Task SeedAsync();
+    Task SeedAsync(IServiceScope scope);
 }

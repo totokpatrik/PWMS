@@ -57,7 +57,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
         await context.MigrateAsync();
-        await context.SeedAsync();
+        await context.SeedAsync(scope);
     }
     catch (Exception ex)
     {

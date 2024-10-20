@@ -11,7 +11,6 @@ using PWMS.Common.Extensions;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Persistence.PortgreSQL.Data;
 using Serilog;
-using System.Data;
 using System.Text;
 
 public static class ServiceCollectionExtension
@@ -32,10 +31,13 @@ public static class ServiceCollectionExtension
 
         ConfigureDbContextFactory(services, configuration, optionsBuilder);
 
-        services.TryAddScoped<IDbInitializer, DbInitializer>();
+
         services.TryAddScoped<ApplicationDbContextFactory>();
 
         services.TryAddScoped<IApplicationDbContext>(p =>
+            p.GetRequiredService<ApplicationDbContextFactory>().CreateDbContext());
+
+        services.TryAddScoped<ApplicationDbContext>(p =>
             p.GetRequiredService<ApplicationDbContextFactory>().CreateDbContext());
 
         services.Scan(scan => scan
@@ -80,11 +82,13 @@ public static class ServiceCollectionExtension
         services.AddAuthorizationBuilder();
 
         services.AddIdentityCore<User>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddSignInManager()
-                .AddTokenProvider<DataProtectorTokenProvider<User>>(jwtConfiguration.Provider)
-                .AddApiEndpoints();
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddSignInManager()
+            .AddTokenProvider<DataProtectorTokenProvider<User>>(jwtConfiguration.Provider);
+
+        services.AddAuthorization();
+        services.TryAddScoped<IDbInitializer, DbInitializer>();
 
         // maybe load from config also
         services.Configure<DataProtectionTokenProviderOptions>(opt =>
