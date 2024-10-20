@@ -1,12 +1,14 @@
-﻿using PWMS.Application.Common.Interfaces;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
 using PWMS.Domain.Addresses.Entities;
+using PWMS.Domain.Auth.Entities;
 using PWMS.Domain.Common;
 using PWMS.Persistence.PortgreSQL.Extensions;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<User>, IApplicationDbContext
 {
     private ICurrentUserService _currentUserService = null!;
     private IDateTime _dateTime = null!;
