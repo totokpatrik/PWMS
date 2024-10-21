@@ -38,7 +38,7 @@ public class BaseWebApplicationFactory<TStartup> : WebApplicationFactory<TStartu
         await context.AppDbContext.Database.EnsureDeletedAsync();
 
         await context.MigrateAsync();
-        await context.SeedAsync();
+        await context.SeedAsync(scope);
     }
 
     public new async Task DisposeAsync()

@@ -31,7 +31,6 @@ public static class ServiceCollectionExtension
 
         ConfigureDbContextFactory(services, configuration, optionsBuilder);
 
-
         services.TryAddScoped<ApplicationDbContextFactory>();
 
         services.TryAddScoped<IApplicationDbContext>(p =>
@@ -111,7 +110,6 @@ public static class ServiceCollectionExtension
             .AddPooledDbContextFactory<ApplicationDbContext>(optionsAction: (provider, options) =>
             {
                 optionsBuilder?.Invoke(provider, options);
-
 
                 options.UseInternalServiceProvider(provider);
                 options.UseNpgsql(currentConfiguration.ConnectionString);

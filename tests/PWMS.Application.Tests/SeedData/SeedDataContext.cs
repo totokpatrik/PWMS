@@ -1,6 +1,7 @@
 ﻿namespace PWMS.Application.Tests.SeedData;
 
 using Application.Common.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using PWMS.Domain.Addresses.Entities;
 
 public sealed partial class SeedDataContext : IDbInitializer
@@ -9,5 +10,10 @@ public sealed partial class SeedDataContext : IDbInitializer
     {
         await context.AppDbContext.Set<Address>().AddRangeAsync(Addresses, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task SeedAsync(IApplicationDbContext applicationDbContext, IServiceScope scope, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using PWMS.Presentation.Rest.Swagger;
+using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
@@ -30,29 +31,21 @@ public static class SwaggerExtension
             });
 
         services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-        services.AddSwaggerGen(options =>
+        services.AddSwaggerGen(c =>
         {
-            options.OperationFilter<SwaggerDefaultValues>();
-
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            options.IncludeXmlComments(xmlPath);
-
-            var securitySchema = new OpenApiSecurityScheme
+            c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
-                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                Name = "Authorization",
+                Description = "Standard Authorization header using the bearer scheme, e.g. \"bearer {token} \"",
                 In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
-            };
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey
+            });
+            c.OperationFilter<SecurityRequirementsOperationFilter>();
 
-            options.AddSecurityDefinition("Bearer", securitySchema);
-
-            var securityRequirement = new OpenApiSecurityRequirement { { securitySchema, new[] { "Bearer" } } };
-
-            options.AddSecurityRequirement(securityRequirement);
+            var fileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var filePath = Path.Combine(AppContext.BaseDirectory, fileName);
+            c.IncludeXmlComments(filePath);
+            c.CustomSchemaIds(type => type.ToString());
         });
 
         return services;

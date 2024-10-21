@@ -39,7 +39,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
 
-        var currentUser = _currentUserService.CurrentUser;
+        var currentUser = _currentUserService.GetCurrentUser();
 
         UpdateEntities(currentUser);
 

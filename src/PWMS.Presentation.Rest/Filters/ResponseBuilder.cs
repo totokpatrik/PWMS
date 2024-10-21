@@ -1,5 +1,3 @@
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using My.Nkz.NewApp.Presentation.Rest.Filters.Results;
 using PWMS.Application.Common.Exceptions;
@@ -23,6 +21,7 @@ public static class ResultFactory
             ConflictException => (CreatedResult<ConflictObjectResult>(errorMessage, HttpStatusCode.Conflict), (int)HttpStatusCode.Conflict),
             PermissionDeniedException => (CreatedResult<ForbiddenObjectResult>(errorMessage, HttpStatusCode.Forbidden), (int)HttpStatusCode.Forbidden),
             BadRequestException => (CreatedResult<BadRequestObjectResult>(errorMessage, HttpStatusCode.BadRequest), (int)HttpStatusCode.BadRequest),
+            RegisterException ex => (CreatedResult<BadRequestRegistrationObjectResult>(ex.Errors), (int)HttpStatusCode.BadRequest),
             _ => (new InternalServerErrorObjectResult(new ErrorDto(errorMessage,
                             nameof(HttpStatusCode.InternalServerError))), (int)HttpStatusCode.InternalServerError)
         };

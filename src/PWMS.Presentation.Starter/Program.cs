@@ -25,10 +25,10 @@ var environment = builder.Environment;
 builder.Services
     .AddLogging(configuration)
     .AddOptions()
+    .AddCoreInfrastructure()
     .AddNgpSqlPersistence(configuration)
     .AddAuth(configuration)
     .AddApplication()
-    .AddCoreInfrastructure()
     .AddRestPresentation(configuration, builder.Environment)
     .AddHealthChecks();
 

@@ -1,33 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using PWMS.Application.Common.Interfaces;
+﻿using PWMS.Application.Auth.Repositories;
 using PWMS.Domain.Auth.Entities;
 
 namespace PWMS.Application.Auth.Commands.Login;
 
-public sealed class LoginCommandHandler(SignInManager<User> signInManager, UserManager<User> userManager, IApplicationDbContext dbContext) : IRequestHandler<LoginCommand, Result<SignInResult>>
+public sealed class LoginCommandHandler(IAuthRepository authRepository) : IRequestHandler<LoginCommand, Result<Token>>
 {
-    private readonly SignInManager<User> _signInManager = signInManager;
-    private readonly UserManager<User> _userManager = userManager;
-    private readonly IApplicationDbContext _dbContext = dbContext;
+    private readonly IAuthRepository _authRepository = authRepository.ThrowIfNull();
 
-    public async Task<Result<SignInResult>> Handle(LoginCommand request, CancellationToken cancellationToken)
+    async Task<Result<Token>> IRequestHandler<LoginCommand, Result<Token>>.Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByNameAsync(request.UserName);
-
-        if (user == null)
-        {
-            throw new AuthorizationException("Username or password is incorrect.");
-        }
-
-        var result = await _signInManager.CheckPasswordSignInAsync(
-            user,
-            request.Password,
-            lockoutOnFailure: false);
-
-        if (!result.Succeeded)
-        {
-            throw new AuthorizationException("Username or password is incorrect.");
-        }
+        var result = await _authRepository.Login(request.UserName, request.Password);
 
         return Result.Ok(result);
     }

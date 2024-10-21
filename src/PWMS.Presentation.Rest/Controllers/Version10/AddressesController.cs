@@ -1,4 +1,5 @@
-﻿using PWMS.Application.Addresses.Commands.Create;
+﻿using Microsoft.AspNetCore.Authorization;
+using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Addresses.Models;
@@ -12,6 +13,7 @@ namespace PWMS.Presentation.Rest.Controllers.Version10;
 
 [ApiVersion(VersionController.Version10)]
 [Route("api/v{version:apiVersion}/addresses")]
+[Authorize]
 public class AddressesController : BaseController
 {
     public AddressesController(IMediator mediator) : base(mediator)
@@ -22,6 +24,7 @@ public class AddressesController : BaseController
     /// Creates address.
     /// </summary>
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(typeof(ResultDto<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
