@@ -12,8 +12,9 @@ public sealed partial class SeedDataContext : IDbInitializer
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public Task SeedAsync(IApplicationDbContext applicationDbContext, IServiceScope scope, CancellationToken cancellationToken = default)
+    public async Task SeedAsync(IApplicationDbContext context, IServiceScope scope, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await context.AppDbContext.Set<Address>().AddRangeAsync(Addresses, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

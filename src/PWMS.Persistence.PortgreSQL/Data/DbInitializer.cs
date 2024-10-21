@@ -29,6 +29,6 @@ public class DbInitializer() : IDbInitializer
 
     public Task SeedAsync(IApplicationDbContext context, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }
