@@ -51,6 +51,8 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
 
     public async Task MigrateAsync() => await AppDbContext.Database.MigrateAsync();
 
+    public async Task SeedAsync() => await _dbInitializer.SeedAsync(this);
+
     public async Task SeedAsync(IServiceScope scope) => await _dbInitializer.SeedAsync(this, scope);
 
     private async Task DispatchDomainEventsAsync()

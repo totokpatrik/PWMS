@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using PWMS.Application.Addresses.Repositories;
 using PWMS.Application.Tests.Common;
 using PWMS.Common.Tests;

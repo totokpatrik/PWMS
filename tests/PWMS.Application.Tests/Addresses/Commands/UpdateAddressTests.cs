@@ -27,7 +27,7 @@ public class UpdateAddressTests : TestBase
         result.Value.AddressLine.Should().Be(updatedAddressLine);
     }
     [Fact]
-    public async Task Update_InvalidCommand_EmptyAddressLine_ShouldCreateSuccess()
+    public async Task Update_InvalidCommand_EmptyAddressLine_ShouldCreateValidationException()
     {
         // Arrange
         var command = new UpdateAddressCommand(Guid.NewGuid(), "");
