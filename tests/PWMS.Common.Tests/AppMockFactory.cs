@@ -10,9 +10,7 @@ public static class AppMockFactory
     {
         ICurrentUser currentUser = new CurrentUser
         {
-            Id = "1",
-            FirstName = "Test",
-            LastName = "Test"
+            Id = "1"
         };
 
         return MockRepositoryInstance
