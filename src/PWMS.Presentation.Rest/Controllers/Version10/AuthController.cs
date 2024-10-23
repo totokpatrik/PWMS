@@ -17,7 +17,7 @@ public class AuthController : BaseController
     /// Login.
     /// </summary>
     [HttpPost]
-    [Route("Login")]
+    [Route("login")]
     [ProducesResponseType(typeof(ResultDto<Token>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]

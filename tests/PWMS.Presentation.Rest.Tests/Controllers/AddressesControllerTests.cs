@@ -36,7 +36,7 @@ public class AddressesControllerTests
     [Fact]
     public async Task CreateTestAsync()
     {
-        var client = new RestClient(_factory.CreateClient());
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
 
         var command = new CreateAddressCommand("Test Address");
 
@@ -50,7 +50,7 @@ public class AddressesControllerTests
     [Fact]
     public async Task UpdateTestAsync()
     {
-        var client = new RestClient(_factory.CreateClient());
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
         var updatedAddressLine = "Updated test address";
 
         var command = new UpdateAddressCommand(Guid.Parse("4B178375-845F-4D84-9E5B-31A14F097AA1"), updatedAddressLine);
@@ -66,7 +66,7 @@ public class AddressesControllerTests
     [Fact]
     public async Task DeleteTestAsync()
     {
-        var client = new RestClient(_factory.CreateClient());
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
         var addressId = Guid.Parse("4B178375-845F-4D84-9E5B-31A14F097AA1");
 
 
