@@ -1,11 +1,8 @@
-﻿using PWMS.Application.Common.Paging;
+﻿namespace PWMS.Application.Common.Paging;
 
-namespace PWMS.Application.Common.Paging;
-
-public class PagingQuery<TM, TF> : IRequest<TM>
-    where TF : class, new()
+public class PagingQuery<TM> : IRequest<TM>
 {
-    protected PagingQuery(IPageContext<TF> pageContext) => PageContext = pageContext;
+    protected PagingQuery(IPageContext pageContext) => PageContext = pageContext;
 
-    public IPageContext<TF> PageContext { get; set; }
+    public IPageContext PageContext { get; set; }
 }

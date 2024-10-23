@@ -96,7 +96,7 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResultDto<CollectionViewModel<AddressDto>>>> Page(
-    [FromBody] PageContext<AddressFilter> pageContext,
+    [FromBody] PageContext pageContext,
     CancellationToken cancellationToken)
     => (await Mediator.Send(GetAddressQuery.Create(pageContext), cancellationToken)).ToResultDto();
 

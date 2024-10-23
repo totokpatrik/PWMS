@@ -1,6 +1,5 @@
 ﻿using Castle.DynamicLinqQueryBuilder;
 using FluentAssertions;
-using PWMS.Application.Addresses.Models;
 using PWMS.Application.Addresses.Queries.Get;
 using PWMS.Application.Common.Paging;
 using PWMS.Application.Tests.Common;
@@ -18,7 +17,7 @@ public class GetAddressTests : TestBase
     [InlineData(1, 1)]
     public async Task ShouldReturnAddressPage(int pageIndex, int pageSize)
     {
-        var command = new GetAddressQuery(new PageContext<AddressFilter>(pageIndex, pageSize));
+        var command = new GetAddressQuery(new PageContext(pageIndex, pageSize));
         var result = await Mediator.Send(command);
 
         result.Should().NotBeNull();
@@ -31,7 +30,7 @@ public class GetAddressTests : TestBase
     public async Task ShouldReturnAddressPageWithFilter(int pageIndex, int pageSize)
     {
         var filter = new QueryBuilderFilterRule();
-        var command = new GetAddressQuery(new PageContext<AddressFilter>(pageIndex, pageSize, filter));
+        var command = new GetAddressQuery(new PageContext(pageIndex, pageSize, filter));
 
 
         var result = await Mediator.Send(command);
@@ -45,7 +44,7 @@ public class GetAddressTests : TestBase
     [InlineData(1, 10)]
     public async Task ShouldReturnItemPageSorting(int pageIndex, int pageSize)
     {
-        var command = new GetAddressQuery(new PageContext<AddressFilter>(pageIndex, pageSize, null,
+        var command = new GetAddressQuery(new PageContext(pageIndex, pageSize, null,
             new[] { new SortDescriptor("addressLine", EnumSortDirection.Desc) }
             ));
 

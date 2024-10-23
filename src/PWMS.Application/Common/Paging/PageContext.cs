@@ -3,9 +3,8 @@
 using Castle.DynamicLinqQueryBuilder;
 using System.Numerics;
 
-public sealed record PageContext<T> : IPageContext<T>,
-    IIncrementOperators<PageContext<T>>, IDecrementOperators<PageContext<T>>
-    where T : class, new()
+public sealed record PageContext : IPageContext,
+    IIncrementOperators<PageContext>, IDecrementOperators<PageContext>
 {
     public PageContext(
         int pageIndex,
@@ -29,13 +28,13 @@ public sealed record PageContext<T> : IPageContext<T>,
 
     public bool IsValid() => PageIndex > 0 && PageSize > 0;
 
-    public static PageContext<T> operator ++(PageContext<T> obj)
+    public static PageContext operator ++(PageContext obj)
     {
         obj.PageIndex++;
         return obj;
     }
 
-    public static PageContext<T> operator --(PageContext<T> obj)
+    public static PageContext operator --(PageContext obj)
     {
         obj.PageIndex--;
         return obj;
