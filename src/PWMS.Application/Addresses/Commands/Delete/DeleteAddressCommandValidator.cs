@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PWMS.Application.Addresses.Commands.Delete;
 
-namespace PWMS.Application.Addresses.Commands.Delete
+public class DeleteAddressCommandValidator : AbstractValidator<DeleteAddressCommand>
 {
-    internal class DeleteAddressCommandValidator
+    public DeleteAddressCommandValidator()
     {
+        RuleFor(a => a.Id)
+            .NotNull();
     }
 }
