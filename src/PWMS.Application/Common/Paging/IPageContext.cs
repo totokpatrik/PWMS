@@ -12,5 +12,4 @@ public interface IPageContext
 
     IEnumerable<SortDescriptor> ListSort { get; }
 
-    bool IsValid();
 }

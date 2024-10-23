@@ -1,10 +1,8 @@
 ﻿namespace PWMS.Application.Common.Paging;
 
 using Castle.DynamicLinqQueryBuilder;
-using System.Numerics;
 
-public sealed record PageContext : IPageContext,
-    IIncrementOperators<PageContext>, IDecrementOperators<PageContext>
+public sealed record PageContext : IPageContext
 {
     public PageContext(
         int pageIndex,
@@ -25,18 +23,4 @@ public sealed record PageContext : IPageContext,
     public QueryBuilderFilterRule Filter { get; }
 
     public IEnumerable<SortDescriptor> ListSort { get; }
-
-    public bool IsValid() => PageIndex > 0 && PageSize > 0;
-
-    public static PageContext operator ++(PageContext obj)
-    {
-        obj.PageIndex++;
-        return obj;
-    }
-
-    public static PageContext operator --(PageContext obj)
-    {
-        obj.PageIndex--;
-        return obj;
-    }
 }
