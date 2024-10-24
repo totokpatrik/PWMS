@@ -3,6 +3,7 @@ using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Addresses.Models;
+using PWMS.Application.Common.Paging;
 using PWMS.Presentation.Rest.Models.Result;
 using PWMS.Presentation.Rest.Tests.Common;
 using RestSharp;
@@ -19,9 +20,13 @@ public class AddressesControllerTests
 
     public AddressesControllerTests(RestWebApplicationFactory<Program> factory) => _factory = factory;
 
-
+    private static class Get
+    {
+        public static string GetAddressByIdV1(Guid id) => $"{ApiUrlBaseV1}/{id}";
+    }
     private static class Post
     {
+        public static string GetPageToDoItem() => $"{ApiUrlBaseV1}/page";
         public static string CreateAddressV1() => $"{ApiUrlBaseV1}";
     }
     private static class Put
@@ -33,6 +38,33 @@ public class AddressesControllerTests
         public static string DeleteAddressV1() => $"{ApiUrlBaseV1}";
     }
 
+    [Fact]
+    public async Task GetPageTestAsync()
+    {
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
+
+        var command = new PageContext(1, 10);
+
+        var response = await client.PostAsync<ResultDto<CollectionViewModel<AddressDto>>>(
+            new RestRequest(Post.GetPageToDoItem()).AddJsonBody(command));
+
+        response.Should().NotBeNull();
+        response.Should().BeOfType<ResultDto<CollectionViewModel<AddressDto>>>();
+        response!.IsSuccess.Should().BeTrue();
+        response.Data.Should().NotBeNull();
+    }
+    [Fact]
+    public async Task GetByIdAsync()
+    {
+        var addreses = await GetAddresses();
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
+        var response = await client.GetAsync<ResultDto<AddressDto>>(
+            new RestRequest(Get.GetAddressByIdV1(addreses.Data.Data.First().Id)));
+
+        response.Should().NotBeNull();
+        response.Should().BeOfType<ResultDto<AddressDto>>();
+        response!.IsSuccess.Should().BeTrue();
+    }
     [Fact]
     public async Task CreateTestAsync()
     {
@@ -79,5 +111,19 @@ public class AddressesControllerTests
         response.Should().BeOfType<ResultDto<Guid>>();
         response!.IsSuccess.Should().BeTrue();
         response.Data.Should().Be(addressId);
+    }
+
+    private async Task<ResultDto<CollectionViewModel<AddressDto>>> GetAddresses()
+    {
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
+
+        var command = new PageContext(1, 100);
+
+        var response = await client.PostAsync<ResultDto<CollectionViewModel<AddressDto>>>(
+            new RestRequest(Post.GetPageToDoItem()).AddJsonBody(command));
+
+        Assert.NotNull(response);
+
+        return response;
     }
 }
