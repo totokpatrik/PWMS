@@ -1,17 +1,17 @@
 ﻿using Ardalis.Specification;
 using Castle.DynamicLinqQueryBuilder;
+using Microsoft.EntityFrameworkCore;
 using PWMS.Application.Addresses.Repositories;
+using PWMS.Application.Common.Interfaces;
 using PWMS.Domain.Addresses.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PWMS.Application.Tests.Common;
 
-public class MockAddressRepository : IAddressRepository
+public class MockAddressRepository(IApplicationDbContext dbContext, ISpecificationEvaluator specificationEvaluator) : IAddressRepository
 {
+    private readonly IApplicationDbContext _dbContext = dbContext;
+    private readonly ISpecificationEvaluator _specificationEvaluator = specificationEvaluator;
+
     public Task<Address> AddAsync(Address entity, CancellationToken cancellationToken = default)
     {
         Thread.Sleep(5000);
@@ -114,9 +114,9 @@ public class MockAddressRepository : IAddressRepository
         return Task.FromResult(0);
     }
 
-    public Task<Address> SingleOrDefaultAsync(ISingleResultSpecification<Address> specification, CancellationToken cancellationToken = default)
+    public async Task<Address> SingleOrDefaultAsync(ISingleResultSpecification<Address> specification, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(new Address(Guid.Parse("AB7D57B6-0EB1-4E7C-9147-A84B254034C4"), "Test address"));
+        return await ApplySpecification(specification).SingleOrDefaultAsync(cancellationToken);
     }
 
     public Task<TResult?> SingleOrDefaultAsync<TResult>(ISingleResultSpecification<Address, TResult> specification, CancellationToken cancellationToken = default)
@@ -132,5 +132,9 @@ public class MockAddressRepository : IAddressRepository
     public Task UpdateRangeAsync(IEnumerable<Address> entities, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
+    }
+    protected virtual IQueryable<Address> ApplySpecification(ISpecification<Address> specification, bool evaluateCriteriaOnly = false)
+    {
+        return _specificationEvaluator.GetQuery(_dbContext.Set<Address>().AsQueryable(), specification, evaluateCriteriaOnly);
     }
 }

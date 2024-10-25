@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 using PWMS.Application.Addresses.Repositories;
 using PWMS.Application.Tests.Common;
 using PWMS.Common.Tests;
-using PWMS.Persistence.PortgreSQL.Addresses.Repositories;
 
 namespace PWMS.Application.Tests;
 internal sealed class Startup
