@@ -1,4 +1,7 @@
 ﻿using FluentAssertions;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.Update;
@@ -7,6 +10,7 @@ using PWMS.Application.Common.Paging;
 using PWMS.Presentation.Rest.Models.Result;
 using PWMS.Presentation.Rest.Tests.Common;
 using RestSharp;
+using System.Net;
 
 namespace PWMS.Presentation.Rest.Tests.Controllers;
 
@@ -52,6 +56,45 @@ public class AddressesControllerTests
         response.Should().BeOfType<ResultDto<CollectionViewModel<AddressDto>>>();
         response!.IsSuccess.Should().BeTrue();
         response.Data.Should().NotBeNull();
+    }
+    [Fact]
+    public async Task GetPageTestAsync_WithSort()
+    {
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
+
+        var sortDescriptor = new SortDescriptor(field: "AddressLine", EnumSortDirection.Asc);
+        var sort = new List<SortDescriptor>();
+        sort.Add(sortDescriptor);
+
+        var command = new PageContext(1, 10, null, sort);
+
+        var response = await client.PostAsync<ResultDto<CollectionViewModel<AddressDto>>>(
+            new RestRequest(Post.GetPageToDoItem()).AddJsonBody(command));
+
+        response.Should().NotBeNull();
+        response.Should().BeOfType<ResultDto<CollectionViewModel<AddressDto>>>();
+        response!.IsSuccess.Should().BeTrue();
+        response.Data.Should().NotBeNull();
+    }
+    [Fact]
+    public async Task GetPageTestAsync_WithInvalidSort()
+    {
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
+
+        var sortDescriptor = new SortDescriptor(field: "Invalid", EnumSortDirection.Asc);
+        var sort = new List<SortDescriptor>();
+        sort.Add(sortDescriptor);
+
+        var command = new PageContext(1, 10, null, sort);
+
+        // Act
+        Func<Task> act = () => client.PostAsync<ResultDto<CollectionViewModel<AddressDto>>>(
+            new RestRequest(Post.GetPageToDoItem()).AddJsonBody(command));
+
+        // Assert
+        var exception = await Assert.ThrowsAsync<HttpRequestException>(() => act());
+        exception.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
     }
     [Fact]
     public async Task GetByIdAsync()

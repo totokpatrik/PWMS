@@ -1,7 +1,11 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using PWMS.Application.Addresses.Commands.Delete;
+using PWMS.Application.Addresses.Repositories;
 using PWMS.Application.Common.Exceptions;
 using PWMS.Application.Tests.Common;
+using PWMS.Common.Tests;
 
 namespace PWMS.Application.Tests.Addresses.Commands;
 
@@ -11,6 +15,7 @@ public class DeleteAddressTests : TestBase
     public DeleteAddressTests(QueryTestFixture fixture) : base(fixture)
     {
     }
+
     [Fact]
     public async Task Delete_ValidCommand_ShouldCreateSuccess()
     {

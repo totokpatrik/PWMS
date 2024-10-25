@@ -1,4 +1,6 @@
-﻿namespace PWMS.Common.Tests;
+﻿using PWMS.Application.Addresses.Repositories;
+
+namespace PWMS.Common.Tests;
 
 public static class AppMockFactory
 {
@@ -15,6 +17,17 @@ public static class AppMockFactory
 
         return MockRepositoryInstance
             .Of<ICurrentUserService>().First(x => x.GetCurrentUser() == currentUser);
+    }
+
+    public static IAddressRepository CreateMockAddressRepository()
+    {
+        var addressRepository = MockRepositoryInstance.Create<IAddressRepository>();
+        addressRepository
+            .Setup(x => x.AddAsync(new Domain.Addresses.Entities.Address("TestAddress"),CancellationToken.None))
+            .Callback(() => Thread.Sleep(10000));
+
+        return MockRepositoryInstance
+            .Of<IAddressRepository>().First();
     }
 
     public static IMediator CreateMediatorMock()

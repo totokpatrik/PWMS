@@ -18,16 +18,6 @@ internal sealed class AddressSpecification : Specification<Address>
     {
     }
 
-    public static Specification<Address> Create()
-    {
-        var specification = new AddressSpecification();
-
-        var specificationBuilder = specification.Query;
-
-        specificationBuilder.AsNoTracking();
-        return specification;
-    }
-
     public static Specification<Address> Create(IPageContext pageContext)
     {
         var specification = new AddressSpecification();
