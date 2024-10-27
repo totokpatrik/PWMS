@@ -18,7 +18,6 @@ public sealed class RestWebApplicationFactory<TStartup> : BaseWebApplicationFact
         {
             services
                 .Replace<IDbInitializer, SeedDataContext>()
-                .Replace<ICurrentUserService>(p => AppMockFactory.CreateCurrentUserServiceMock())
                 .Replace<IOptions<PostgresConnection>>(p =>
                     Options.Create(new PostgresConnection()
                     {
