@@ -60,6 +60,7 @@ public class AddressesController : BaseController
     CancellationToken cancellationToken)
     => (await Mediator.Send(command, cancellationToken)).ToResultDto();
 
+
     /// <summary>
     /// Gets addresses with pagination.
     /// </summary>

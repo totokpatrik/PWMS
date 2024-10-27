@@ -14,6 +14,7 @@ internal sealed class Startup
 
         services.TryAddSingleton(await ApplicationDbContextFactory.CreateAsync());
 
+
         services.TryAddScoped<IAddressRepository, MockAddressRepository>();
     }
 }

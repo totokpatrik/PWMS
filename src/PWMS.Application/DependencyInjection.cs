@@ -7,7 +7,10 @@ public static class DependencyInjection
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(), ServiceLifetime.Scoped, null, true);
         services.AddMediatR(cfg =>
-            cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+        {
+            cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
+            cfg.AddOpenRequestPreProcessor(typeof(LoggingBehaviour<>), ServiceLifetime.Transient);
+        });
 
 
         var typeAdapterConfig = TypeAdapterConfig.GlobalSettings;
@@ -19,7 +22,6 @@ public static class DependencyInjection
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-        services.AddTransient(typeof(IRequestPreProcessor<>), typeof(LoggingBehaviour<>));
 
         return services;
     }
