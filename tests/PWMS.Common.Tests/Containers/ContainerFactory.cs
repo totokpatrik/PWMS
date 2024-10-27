@@ -5,7 +5,7 @@ public static class ContainerFactory
 {
     private const string Database = "template_db";
     private const string PostgresUsername = "postgres";
-    private const string PostgresPassword = "postgres";
+    private const string PostgresPassword = "Admin1234!";
 
     public static IContainer Create<T>() where T : IContainer
     {

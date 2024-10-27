@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Version20\" />
     <Folder Include="Controllers\Version30\" />
   </ItemGroup>
 

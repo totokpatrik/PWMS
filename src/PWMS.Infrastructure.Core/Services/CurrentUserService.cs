@@ -7,9 +7,13 @@ public sealed class CurrentUserService(IHttpContextAccessor httpContextAccessor)
 {
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor.ThrowIfNull();
 
-    public ICurrentUser GetCurrentUser()
+    public ICurrentUser? GetCurrentUser()
     {
-        _httpContextAccessor.HttpContext.ThrowIfNull();
+
+        if (_httpContextAccessor.HttpContext is null)
+        {
+            return null;
+        }
 
         var username = GetSingleClaimValue("username");
         var id = GetSingleClaimValue("Id");
