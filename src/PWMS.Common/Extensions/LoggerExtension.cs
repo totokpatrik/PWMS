@@ -27,12 +27,12 @@ public static class LoggerExtension
         EventIds.LoggingRequest,
         "Request has executed: `{Request}.`");
 
-    public static void ConsumeIntegrationEvent(this ILogger logger, string message)
-        => _consumeIntegrationEvent(logger, message, null);
+    /*    public static void ConsumeIntegrationEvent(this ILogger logger, string message)
+            => _consumeIntegrationEvent(logger, message, null);
 
-    public static void RaiseIntegrationEvent(this ILogger logger, string message)
-        => _raiseIntegrationEvent(logger, message, null);
-
+        public static void RaiseIntegrationEvent(this ILogger logger, string message)
+            => _raiseIntegrationEvent(logger, message, null);
+    */
     public static void LongRunningRequest(this ILogger logger, long elapsedMilliseconds, string request)
         => _longRunningRequest(logger, elapsedMilliseconds, request, null);
 
