@@ -1,7 +1,4 @@
 ﻿using FluentAssertions;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.Update;
@@ -137,6 +134,22 @@ public class AddressesControllerTests
         response.Should().BeOfType<ResultDto<AddressDto>>();
         response!.IsSuccess.Should().BeTrue();
         response.Data.AddressLine.Should().Be(updatedAddressLine);
+    }
+    [Fact]
+    public async Task UpdateTestAsyncWithInvalidAddressLine()
+    {
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
+        var updatedAddressLine = "";
+
+        var command = new UpdateAddressCommand(Guid.Parse("4B178375-845F-4D84-9E5B-31A14F097AA1"), updatedAddressLine);
+
+        // Act
+        Func<Task> act = () => client.PutAsync<ResultDto<AddressDto>>(
+            new RestRequest(Put.UpdateAddressV1()).AddJsonBody(command));
+
+        // Assert
+        var exception = await Assert.ThrowsAsync<HttpRequestException>(() => act());
+        exception.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     [Fact]
     public async Task DeleteTestAsync()
