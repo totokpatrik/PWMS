@@ -27,8 +27,6 @@ public static class ServiceCollectionExtension
     {
         configuration.ThrowIfNull(nameof(configuration));
 
-        services.AddScoped<IValidator<PostgresConnection>, PostgresConnectionValidator>();
-
         ConfigureDbContextFactory(services, configuration, optionsBuilder);
 
         services.TryAddScoped<ApplicationDbContextFactory>();
