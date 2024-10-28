@@ -9,9 +9,6 @@ public abstract class BaseEntity<TKey> : IPkEntity<TKey>
     public TKey Id { get; }
 
     [NotMapped]
-    public bool IsNew => EqualityComparer<TKey>.Default.Equals(Id, default(TKey));
-
-    [NotMapped]
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
 
     public void AddDomainEvent(INotification domainEvent) => _domainEvents.Add(domainEvent);

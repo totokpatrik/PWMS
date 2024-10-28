@@ -4,6 +4,7 @@
 
 namespace PWMS.Persistence.PortgreSQL.Data.Migrations
 {
+    [ExcludeFromCodeCoverage]
     /// <inheritdoc />
     public partial class InitialCreate : Migration
     {

@@ -11,6 +11,7 @@ using PWMS.Persistence.PortgreSQL.Data;
 namespace PWMS.Persistence.PortgreSQL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+    [ExcludeFromCodeCoverage]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

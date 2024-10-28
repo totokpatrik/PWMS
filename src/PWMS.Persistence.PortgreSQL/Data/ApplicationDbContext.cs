@@ -29,11 +29,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
         _dateTime = dateTime.ThrowIfNull();
         _mediator = mediator.ThrowIfNull();
     }
-
-    public DbSet<Address> Addresses => Set<Address>();
-
     public DbContext AppDbContext => this;
-
     public IDbInitializer DbInitializer => _dbInitializer;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -68,11 +64,6 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
     {
         foreach (var entry in ChangeTracker.Entries<IBaseAuditableEntity<string>>())
         {
-            if (entry.Entity.IsNew)
-            {
-                entry.State = EntityState.Added;
-            }
-
             switch (entry.State)
             {
                 case EntityState.Added:
