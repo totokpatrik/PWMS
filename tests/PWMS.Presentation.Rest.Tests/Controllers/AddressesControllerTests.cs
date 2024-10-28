@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using MediatR;
 using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.Update;
@@ -15,7 +16,6 @@ namespace PWMS.Presentation.Rest.Tests.Controllers;
 public class AddressesControllerTests
 {
     private const string ApiUrlBaseV1 = "api/v1/addresses";
-    private const string ApiUrlBaseV2 = "api/v2/addresses";
 
     private readonly RestWebApplicationFactory<Program> _factory;
 
@@ -104,6 +104,16 @@ public class AddressesControllerTests
         response.Should().NotBeNull();
         response.Should().BeOfType<ResultDto<AddressDto>>();
         response!.IsSuccess.Should().BeTrue();
+    }
+    [Fact]
+    public async Task GetByIdAsync_NotFound()
+    {
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
+        var response = await client.GetAsync<ResultDto<Unit>>(
+            new RestRequest(Get.GetAddressByIdV1(Guid.NewGuid())));
+
+        response.Should().NotBeNull();
+        response!.IsSuccess.Should().BeFalse();
     }
     [Fact]
     public async Task CreateTestAsync()

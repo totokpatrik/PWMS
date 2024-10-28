@@ -10,7 +10,7 @@ public sealed class CurrentUserService(IHttpContextAccessor httpContextAccessor)
     public ICurrentUser? GetCurrentUser()
     {
 
-        if (_httpContextAccessor.HttpContext is null)
+        if (_httpContextAccessor.HttpContext is null || !_httpContextAccessor.HttpContext.User.Identity!.IsAuthenticated)
         {
             return null;
         }

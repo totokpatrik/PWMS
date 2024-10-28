@@ -1,4 +1,6 @@
-﻿namespace PWMS.Application.Common.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace PWMS.Application.Common.Exceptions;
 
 [Serializable]
 public sealed class NotFoundException : Exception
@@ -8,11 +10,13 @@ public sealed class NotFoundException : Exception
     {
     }
 
+    [ExcludeFromCodeCoverage]
     public NotFoundException(string message)
         : base(message)
     {
     }
 
+    [ExcludeFromCodeCoverage]
     public NotFoundException(string message, Exception innerException)
         : base(message, innerException)
     {

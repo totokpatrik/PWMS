@@ -13,10 +13,6 @@ public class AddressRepository : RepositoryBase<Address>, IAddressRepository
     {
         _dbContext = dbContext;
     }
-    public AddressRepository(IApplicationDbContext dbContext, ISpecificationEvaluator specificationEvaluator) : base(dbContext.AppDbContext, specificationEvaluator)
-    {
-        _dbContext = dbContext;
-    }
 
     public async Task<List<Address>> GetAllAddresses(ISpecification<Address> specification, CancellationToken cancellationToken, QueryBuilderFilterRule filter)
     {

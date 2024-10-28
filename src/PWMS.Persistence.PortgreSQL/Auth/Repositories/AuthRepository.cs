@@ -29,19 +29,6 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         _configuration = configuration;
     }
 
-    public AuthRepository(
-        IApplicationDbContext dbContext,
-        ISpecificationEvaluator specificationEvaluator,
-        UserManager<User> userManager,
-        SignInManager<User> signInManager,
-        IConfiguration configuration) : base(dbContext.AppDbContext, specificationEvaluator)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
-
-        _configuration = configuration;
-    }
-
     public async Task<Token> Login(string username, string password)
     {
         var user = await _userManager.FindByNameAsync(username);
@@ -93,11 +80,12 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         var roles = await _userManager.GetRolesAsync(user);
         claims.Add(new Claim("Id", user.Id));
         claims.Add(new Claim("Roles", ""));
+        /*
         foreach (var role in roles)
         {
             var claim = new Claim("Roles", role);
             claims.Add(claim);
-        }
+        }*/
 
         claims.AddRange(claimsDb);
 
