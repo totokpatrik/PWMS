@@ -1,11 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Application.Tests.SeedData;
 using PWMS.Common.Tests;
 using PWMS.Infrastructure.Core.Services;
 using PWMS.Persistence.PortgreSQL.Data;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace PWMS.Application.Tests.Common;
 
@@ -27,7 +25,6 @@ public static class ApplicationDbContextFactory
 
         await context.Database.EnsureCreatedAsync();
 
-        // TODO
         await context.SeedAsync();
 
         return context;

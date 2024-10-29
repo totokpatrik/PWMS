@@ -178,7 +178,6 @@ public class AddressesControllerTests
         response!.IsSuccess.Should().BeTrue();
         response.Data.Should().Be(addressId);
     }
-
     private async Task<ResultDto<CollectionViewModel<AddressDto>>> GetAddresses()
     {
         var client = new RestClient(_factory.CreateClient()).Authenticate();

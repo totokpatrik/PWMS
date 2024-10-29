@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
-using PWMS.Domain.Addresses.Entities;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Domain.Common;
 using PWMS.Persistence.PortgreSQL.Extensions;
@@ -30,7 +29,6 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
         _mediator = mediator.ThrowIfNull();
     }
     public DbContext AppDbContext => this;
-    public IDbInitializer DbInitializer => _dbInitializer;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

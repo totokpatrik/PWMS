@@ -24,4 +24,12 @@
     <ProjectReference Include="..\PWMS.Presentation.Rest\PWMS.Presentation.Rest.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.TestInternalError.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

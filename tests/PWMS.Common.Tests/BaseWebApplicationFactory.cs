@@ -10,18 +10,16 @@ using Testcontainers.PostgreSql;
 public class BaseWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>, IAsyncLifetime
     where TStartup : class
 {
-    protected const string EnvironmentName = "Test";
-
     private Dictionary<Type, IContainer> Containers { get; }
 
-    protected BaseWebApplicationFactory()
+    protected BaseWebApplicationFactory(int port)
     {
         TestcontainersSettings.ResourceReaperEnabled = false;
 
         Containers = new Dictionary<Type, IContainer>()
         {
             {
-                typeof(PostgreSqlContainer ), ContainerFactory.Create<PostgreSqlContainer >()
+                typeof(PostgreSqlContainer ), ContainerFactory.Create<PostgreSqlContainer>(port)
             }
         };
     }
