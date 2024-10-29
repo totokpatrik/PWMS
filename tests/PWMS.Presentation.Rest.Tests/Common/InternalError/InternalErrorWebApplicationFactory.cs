@@ -14,7 +14,7 @@ public sealed class InternalErrorWebApplicationFactory<TStartup> : BaseWebApplic
     private const int Port = 5434;
     private const string EnvironmentName = "TestInternalError";
 
-    public InternalErrorWebApplicationFactory() : base(Port)
+    public InternalErrorWebApplicationFactory(int port) : base(port)
     {
     }
 
