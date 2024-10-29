@@ -2,7 +2,7 @@ using PWMS.Domain.Addresses.Entities;
 using PWMS.Domain.Auth.Entities;
 
 namespace PWMS.Presentation.Rest.Tests.SeedData;
-internal sealed partial class SeedDataContext
+public sealed partial class SeedDataContext
 {
     public static IEnumerable<Address> Addresses
     {

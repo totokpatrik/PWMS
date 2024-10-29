@@ -107,8 +107,6 @@ public static class ServiceCollectionExtension
         services.AddEntityFrameworkNpgsql()
             .AddPooledDbContextFactory<ApplicationDbContext>(optionsAction: (provider, options) =>
             {
-                optionsBuilder?.Invoke(provider, options);
-
                 options.UseInternalServiceProvider(provider);
                 options.UseNpgsql(currentConfiguration.ConnectionString);
 

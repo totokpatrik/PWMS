@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Hosting;
 using PWMS.Common.Extensions;
 using Serilog;
 
@@ -20,7 +19,7 @@ public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
 
         context.HttpContext.Response.ContentType = "application/json";
 
-        var (actionResult, statusCode) = ResultFactory.CreatedResult(context, _webHostEnvironment.IsProduction());
+        var (actionResult, statusCode) = ResultFactory.CreatedResult(context);
         context.HttpContext.Response.StatusCode = statusCode;
         context.Result = actionResult;
     }

@@ -46,9 +46,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
 
     public async Task MigrateAsync() => await AppDbContext.Database.MigrateAsync();
 
-    public async Task SeedAsync() => await _dbInitializer.SeedAsync(this);
-
-    public async Task SeedAsync(IServiceScope scope) => await _dbInitializer.SeedAsync(this, scope);
+    public async Task SeedAsync(IServiceScope? scope = null) => await _dbInitializer.SeedAsync(this, scope);
 
     private async Task DispatchDomainEventsAsync()
     {
@@ -65,11 +63,11 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = currentUser?.Id?.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    entry.Entity.CreatedBy = currentUser!.Id!.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     entry.Entity.Created = _dateTime.Now;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.ModifiedBy = currentUser?.Id?.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    entry.Entity.ModifiedBy = currentUser!.Id!.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     entry.Entity.Modified = _dateTime.Now;
                     break;
             }

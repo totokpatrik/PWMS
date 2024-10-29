@@ -8,9 +8,9 @@ using System.Net;
 namespace PWMS.Presentation.Rest.Filters;
 public static class ResultFactory
 {
-    public static (IActionResult?, int) CreatedResult(ExceptionContext context, bool isProduction)
+    public static (IActionResult?, int) CreatedResult(ExceptionContext context)
     {
-        var errorMessage = isProduction ? context.Exception.Message : string.Join(";", context.Exception.Message, context.Exception.StackTrace);
+        var errorMessage = context.Exception.Message;
 
         return context.Exception switch
         {

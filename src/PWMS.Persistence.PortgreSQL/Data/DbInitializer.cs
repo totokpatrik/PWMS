@@ -1,20 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PWMS.Application.Common.Interfaces;
+using PWMS.Common.Extensions;
 using PWMS.Domain.Auth.Entities;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
 
 public class DbInitializer() : IDbInitializer
 {
-    public async Task SeedAsync(
+    public virtual async Task SeedAsync(
         IApplicationDbContext context,
-        IServiceScope scope,
+        IServiceScope? scope = null,
         CancellationToken cancellationToken = default)
     {
         // TODO seeding initial user
         if (!await context.Set<User>().AnyAsync(cancellationToken))
         {
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            scope.ThrowIfNull();
+            var userManager = scope!.ServiceProvider.GetRequiredService<UserManager<User>>();
             //Create initial user
             var user = InitialData.User;
 
@@ -25,10 +27,5 @@ public class DbInitializer() : IDbInitializer
 
             await userManager.CreateAsync(user);
         }
-    }
-
-    public Task SeedAsync(IApplicationDbContext context, CancellationToken cancellationToken = default)
-    {
-        return Task.CompletedTask;
     }
 }

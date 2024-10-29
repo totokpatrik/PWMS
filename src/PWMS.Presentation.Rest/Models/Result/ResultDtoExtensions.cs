@@ -8,16 +8,5 @@ public static class ResultDtoExtensions
         new(result.Value, result.IsSuccess, TransformErrors(result.Errors));
 
     private static IEnumerable<ErrorDto> TransformErrors(IEnumerable<IError> errors) =>
-        errors.Select(TransformError);
-
-    private static ErrorDto TransformError(IError error) => new(error.Message, TransformErrorCode(error));
-
-    private static string? TransformErrorCode(IReason error)
-    {
-        if (error.Metadata?.TryGetValue("ErrorCode", out var errorCode) != null && errorCode != null)
-        {
-            return errorCode as string;
-        }
-        return null;
-    }
+        errors.Select(e => new ErrorDto(e.Message, "asd"));
 }
