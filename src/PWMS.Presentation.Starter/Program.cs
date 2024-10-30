@@ -63,6 +63,7 @@ using (var scope = app.Services.CreateScope())
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred while migrating or initializing the database.");
+        throw;
     }
 }
 
@@ -80,7 +81,6 @@ app.MapHealthChecks("/ready", new HealthCheckOptions { Predicate = _ => false })
 
 app.MapHealthChecks("/health/info", new HealthCheckOptions
 {
-    Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
