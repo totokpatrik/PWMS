@@ -1,5 +1,6 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using PWMS.Application;
@@ -7,7 +8,6 @@ using PWMS.Application.Common.Interfaces;
 using PWMS.Infrastructure.Core;
 using PWMS.Persistence.PortgreSQL.Extensions;
 using PWMS.Presentation.Rest.Extensions;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,17 +32,21 @@ builder.Services
     .AddRestPresentation(configuration, builder.Environment)
     .AddHealthChecks();
 
-builder.Services.AddOpenTelemetry()
-    .ConfigureResource(builder => builder
-        .AddService(
-            serviceName: Assembly.GetExecutingAssembly().GetName().Name!,
-            serviceVersion: Assembly.GetExecutingAssembly().GetName().Version?.ToString(),
-            serviceInstanceId: Environment.MachineName))
-    .WithTracing(builder => builder
-        .AddAspNetCoreInstrumentation(options =>
+const string servicename = "PWMS";
+
+builder.Logging.AddOpenTelemetry(options =>
 {
-    options.RecordException = true;
-})
+    options
+        .SetResourceBuilder(
+            ResourceBuilder.CreateDefault()
+                .AddService(servicename))
+        .AddConsoleExporter();
+});
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService(servicename))
+    .WithTracing(builder => builder
+        .AddAspNetCoreInstrumentation(options => options.RecordException = true)
         .AddRestOpenTelemetry()
         .AddNgpSqlPersistenceOpenTelemetry()
         .AddOtlpExporter()

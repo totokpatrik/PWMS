@@ -17,6 +17,7 @@ public class InternalErrorTest
         public static string CreateAddressV1() => $"{ApiUrlBaseV1}";
     }
 
+
     [Fact]
     public async Task CreateTestAsync()
     {
