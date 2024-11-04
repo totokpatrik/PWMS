@@ -1,5 +1,3 @@
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using My.Nkz.NewApp.Presentation.Rest.Filters.Results;
 using PWMS.Application.Common.Exceptions;
@@ -10,19 +8,17 @@ using System.Net;
 namespace PWMS.Presentation.Rest.Filters;
 public static class ResultFactory
 {
-    public static (IActionResult?, int) CreatedResult(ExceptionContext context, bool isProduction)
+    public static (IActionResult?, int) CreatedResult(ExceptionContext context)
     {
-        var errorMessage = isProduction ? context.Exception.Message : string.Join(";", context.Exception.Message, context.Exception.StackTrace);
+        var errorMessage = context.Exception.Message;
 
         return context.Exception switch
         {
             ValidationException ex => (CreatedResult<BadRequestValidationObjectResult>(ex.Failures), (int)HttpStatusCode.BadRequest),
             NotFoundException => (CreatedResult<NotFoundObjectResult>(errorMessage, HttpStatusCode.NotFound), (int)HttpStatusCode.NotFound),
             UnauthorizedException => (CreatedResult<UnauthorizedObjectResult>(errorMessage, HttpStatusCode.Unauthorized), (int)HttpStatusCode.Unauthorized),
-            UnprocessableEntityException => (CreatedResult<UnprocessableEntityObjectResult>(errorMessage, HttpStatusCode.UnprocessableEntity), (int)HttpStatusCode.UnprocessableEntity),
-            ConflictException => (CreatedResult<ConflictObjectResult>(errorMessage, HttpStatusCode.Conflict), (int)HttpStatusCode.Conflict),
-            PermissionDeniedException => (CreatedResult<ForbiddenObjectResult>(errorMessage, HttpStatusCode.Forbidden), (int)HttpStatusCode.Forbidden),
             BadRequestException => (CreatedResult<BadRequestObjectResult>(errorMessage, HttpStatusCode.BadRequest), (int)HttpStatusCode.BadRequest),
+            RegisterException ex => (CreatedResult<BadRequestRegistrationObjectResult>(ex.Errors), (int)HttpStatusCode.BadRequest),
             _ => (new InternalServerErrorObjectResult(new ErrorDto(errorMessage,
                             nameof(HttpStatusCode.InternalServerError))), (int)HttpStatusCode.InternalServerError)
         };

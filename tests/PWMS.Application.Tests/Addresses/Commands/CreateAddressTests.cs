@@ -7,6 +7,7 @@ namespace PWMS.Application.Tests.Addresses.Commands;
 [Collection("QueryCollection")]
 public class CreateAddressTests : TestBase
 {
+
     public CreateAddressTests(QueryTestFixture fixture) : base(fixture)
     {
     }
@@ -14,7 +15,7 @@ public class CreateAddressTests : TestBase
     [Fact]
     public async Task Should_Create_Address()
     {
-        var command = new CreateAddressCommand("asd");
+        var command = new CreateAddressCommand("Test address");
         var result = await Mediator.Send(command);
 
         result.Should().NotBeNull();

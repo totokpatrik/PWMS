@@ -4,10 +4,12 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using PWMS.Presentation.Rest.Models.Result;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text.Json;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
+[ExcludeFromCodeCoverage]
 public class ErrorHandlingMiddleware
 {
     private readonly RequestDelegate _next;

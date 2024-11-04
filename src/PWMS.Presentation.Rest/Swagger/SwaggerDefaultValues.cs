@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace PWMS.Presentation.Rest.Swagger;
 
+[ExcludeFromCodeCoverage]
 public class SwaggerDefaultValues : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)

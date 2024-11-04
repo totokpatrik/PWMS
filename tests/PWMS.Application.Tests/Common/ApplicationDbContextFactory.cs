@@ -24,6 +24,7 @@ public static class ApplicationDbContextFactory
             AppMockFactory.CreateMediatorMock());
 
         await context.Database.EnsureCreatedAsync();
+
         await context.SeedAsync();
 
         return context;

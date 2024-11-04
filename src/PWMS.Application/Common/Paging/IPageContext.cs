@@ -2,7 +2,7 @@
 
 namespace PWMS.Application.Common.Paging;
 
-public interface IPageContext<out T>
+public interface IPageContext
 {
     int PageIndex { get; }
 
@@ -12,5 +12,4 @@ public interface IPageContext<out T>
 
     IEnumerable<SortDescriptor> ListSort { get; }
 
-    bool IsValid();
 }

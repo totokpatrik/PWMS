@@ -10,6 +10,13 @@ using Testcontainers.PostgreSql;
 
 public sealed class RestWebApplicationFactory<TStartup> : BaseWebApplicationFactory<TStartup> where TStartup : class
 {
+    private const int Port = 5433;
+    private const string EnvironmentName = "Test";
+
+    public RestWebApplicationFactory() : base(Port)
+    {
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         base.ConfigureWebHost(builder);
@@ -18,7 +25,6 @@ public sealed class RestWebApplicationFactory<TStartup> : BaseWebApplicationFact
         {
             services
                 .Replace<IDbInitializer, SeedDataContext>()
-                .Replace<ICurrentUserService>(p => AppMockFactory.CreateCurrentUserServiceMock())
                 .Replace<IOptions<PostgresConnection>>(p =>
                     Options.Create(new PostgresConnection()
                     {

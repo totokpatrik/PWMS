@@ -1,5 +1,4 @@
-﻿using PWMS.Application.Addresses.Models;
-using PWMS.Application.Common.Paging;
+﻿using PWMS.Application.Common.Paging;
 using PWMS.Domain.Addresses.Entities;
 using System.Collections.Frozen;
 using System.Linq.Expressions;
@@ -11,25 +10,15 @@ internal sealed class AddressSpecification : Specification<Address>
     private static readonly FrozenDictionary<string, Expression<Func<Address, object>>> SortExpressions =
         new Dictionary<string, Expression<Func<Address, object>>>
         {
-            { nameof(AddressFilter.Id), c => c.Id },
-            { nameof(AddressFilter.AddressLine), c => c.AddressLine },
+            { nameof(Address.Id), c => c.Id },
+            { nameof(Address.AddressLine), c => c.AddressLine },
         }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
     private AddressSpecification()
     {
     }
 
-    public static Specification<Address> Create()
-    {
-        var specification = new AddressSpecification();
-
-        var specificationBuilder = specification.Query;
-
-        specificationBuilder.AsNoTracking();
-        return specification;
-    }
-
-    public static Specification<Address> Create(IPageContext<AddressFilter> pageContext)
+    public static Specification<Address> Create(IPageContext pageContext)
     {
         var specification = new AddressSpecification();
 
@@ -62,7 +51,7 @@ internal sealed class AddressSpecification : Specification<Address>
             return sortDescriptors.Aggregate(specificationBuilder, Sort);
         }
 
-        return Sort(specificationBuilder, new SortDescriptor(nameof(AddressFilter.Id)));
+        return Sort(specificationBuilder, new SortDescriptor(nameof(Address.Id)));
     }
 
     private ISpecificationBuilder<Address> Sort(ISpecificationBuilder<Address> specificationBuilder,

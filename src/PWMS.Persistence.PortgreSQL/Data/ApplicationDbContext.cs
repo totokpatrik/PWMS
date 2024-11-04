@@ -1,12 +1,14 @@
-﻿using PWMS.Application.Common.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
-using PWMS.Domain.Addresses.Entities;
+using PWMS.Domain.Auth.Entities;
 using PWMS.Domain.Common;
 using PWMS.Persistence.PortgreSQL.Extensions;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<User, IdentityRole, string>, IApplicationDbContext
 {
     private ICurrentUserService _currentUserService = null!;
     private IDateTime _dateTime = null!;
@@ -18,25 +20,23 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
     }
 
-    public void InitContext(ICurrentUserService currentUserService, IDbInitializer dbInitializer, IDateTime dateTime, IMediator mediator)
+    public void InitContext
+        (ICurrentUserService currentUserService, IDbInitializer dbInitializer, IDateTime dateTime, IMediator mediator)
     {
         _dbInitializer = dbInitializer.ThrowIfNull();
         _currentUserService = currentUserService.ThrowIfNull();
         _dateTime = dateTime.ThrowIfNull();
         _mediator = mediator.ThrowIfNull();
     }
-
-    public DbSet<Address> Addresses => Set<Address>();
-
     public DbContext AppDbContext => this;
-
-    public IDbInitializer DbInitializer => _dbInitializer;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var currentUser = _currentUserService.CurrentUser;
-
-        UpdateEntities(currentUser);
+        var currentUser = _currentUserService.GetCurrentUser();
+        if (currentUser is not null)
+        {
+            UpdateEntities(currentUser);
+        }
 
         var result = await base.SaveChangesAsync(cancellationToken);
         await DispatchDomainEventsAsync();
@@ -46,7 +46,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public async Task MigrateAsync() => await AppDbContext.Database.MigrateAsync();
 
-    public async Task SeedAsync() => await _dbInitializer.SeedAsync(this);
+    public async Task SeedAsync(IServiceScope? scope = null) => await _dbInitializer.SeedAsync(this, scope);
 
     private async Task DispatchDomainEventsAsync()
     {
@@ -60,19 +60,14 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         foreach (var entry in ChangeTracker.Entries<IBaseAuditableEntity<string>>())
         {
-            if (entry.Entity.IsNew)
-            {
-                entry.State = EntityState.Added;
-            }
-
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = currentUser?.Id?.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    entry.Entity.CreatedBy = currentUser!.Id!.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     entry.Entity.Created = _dateTime.Now;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.ModifiedBy = currentUser?.Id?.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    entry.Entity.ModifiedBy = currentUser!.Id!.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     entry.Entity.Modified = _dateTime.Now;
                     break;
             }
@@ -83,5 +78,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         modelBuilder.DataTimeConfigure();
+
+        base.OnModelCreating(modelBuilder);
     }
 }

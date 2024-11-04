@@ -1,5 +1,6 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using PWMS.Application;
@@ -7,7 +8,6 @@ using PWMS.Application.Common.Interfaces;
 using PWMS.Infrastructure.Core;
 using PWMS.Persistence.PortgreSQL.Extensions;
 using PWMS.Presentation.Rest.Extensions;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,23 +25,28 @@ var environment = builder.Environment;
 builder.Services
     .AddLogging(configuration)
     .AddOptions()
-    .AddNgpSqlPersistence(configuration)
-    .AddApplication()
     .AddCoreInfrastructure()
+    .AddNgpSqlPersistence(configuration)
+    .AddAuth(configuration)
+    .AddApplication()
     .AddRestPresentation(configuration, builder.Environment)
     .AddHealthChecks();
 
-builder.Services.AddOpenTelemetry()
-    .ConfigureResource(builder => builder
-        .AddService(
-            serviceName: Assembly.GetExecutingAssembly().GetName().Name!,
-            serviceVersion: Assembly.GetExecutingAssembly().GetName().Version?.ToString(),
-            serviceInstanceId: Environment.MachineName))
-    .WithTracing(builder => builder
-        .AddAspNetCoreInstrumentation(options =>
+const string servicename = "PWMS";
+
+builder.Logging.AddOpenTelemetry(options =>
 {
-    options.RecordException = true;
-})
+    options
+        .SetResourceBuilder(
+            ResourceBuilder.CreateDefault()
+                .AddService(servicename))
+        .AddConsoleExporter();
+});
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService(servicename))
+    .WithTracing(builder => builder
+        .AddAspNetCoreInstrumentation(options => options.RecordException = true)
         .AddRestOpenTelemetry()
         .AddNgpSqlPersistenceOpenTelemetry()
         .AddOtlpExporter()
@@ -56,18 +61,20 @@ using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
         await context.MigrateAsync();
-        await context.SeedAsync();
+        await context.SeedAsync(scope);
     }
     catch (Exception ex)
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred while migrating or initializing the database.");
+        throw;
     }
 }
 
 app.UseRestPresentation(environment)
     .UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRestEndpoints();
@@ -78,7 +85,6 @@ app.MapHealthChecks("/ready", new HealthCheckOptions { Predicate = _ => false })
 
 app.MapHealthChecks("/health/info", new HealthCheckOptions
 {
-    Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 

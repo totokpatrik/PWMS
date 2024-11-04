@@ -2,11 +2,6 @@
 
 public interface ICurrentUser
 {
-    long? Id { get; }
-
-    string? FirstName { get; }
-
-    string? LastName { get; }
-
-    string? MiddleName { get; }
+    string? Id { get; }
+    string? Username { get; }
 }

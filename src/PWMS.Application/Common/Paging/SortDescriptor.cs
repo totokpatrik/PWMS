@@ -11,6 +11,4 @@ public sealed class SortDescriptor
     public string Field { get; init; }
 
     public EnumSortDirection Direction { get; init; }
-
-    public override string ToString() => $"{Field}:{Direction.ToString()}";
 }

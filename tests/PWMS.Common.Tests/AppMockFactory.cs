@@ -1,9 +1,4 @@
-﻿using MediatR;
-using Moq;
-using PWMS.Application.Common.Interfaces;
-using PWMS.Infrastructure.Core.Services;
-
-namespace PWMS.Common.Tests;
+﻿namespace PWMS.Common.Tests;
 
 public static class AppMockFactory
 {
@@ -15,14 +10,11 @@ public static class AppMockFactory
     {
         ICurrentUser currentUser = new CurrentUser
         {
-            Id = 1,
-            FirstName = "test",
-            LastName = "test",
-            MiddleName = "test"
+            Id = "1"
         };
 
         return MockRepositoryInstance
-            .Of<ICurrentUserService>().First(x => x.CurrentUser == currentUser);
+            .Of<ICurrentUserService>().First(x => x.GetCurrentUser() == currentUser);
     }
 
     public static IMediator CreateMediatorMock()

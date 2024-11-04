@@ -1,4 +1,5 @@
-﻿using PWMS.Application.Addresses.Commands.Create;
+﻿using Microsoft.AspNetCore.Authorization;
+using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Addresses.Models;
@@ -12,6 +13,7 @@ namespace PWMS.Presentation.Rest.Controllers.Version10;
 
 [ApiVersion(VersionController.Version10)]
 [Route("api/v{version:apiVersion}/addresses")]
+[Authorize]
 public class AddressesController : BaseController
 {
     public AddressesController(IMediator mediator) : base(mediator)
@@ -22,6 +24,7 @@ public class AddressesController : BaseController
     /// Creates address.
     /// </summary>
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(typeof(ResultDto<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
@@ -56,6 +59,7 @@ public class AddressesController : BaseController
     [FromBody][Required] DeleteAddressCommand command,
     CancellationToken cancellationToken)
     => (await Mediator.Send(command, cancellationToken)).ToResultDto();
+
 
     /// <summary>
     /// Gets addresses with pagination.
@@ -93,7 +97,7 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResultDto<CollectionViewModel<AddressDto>>>> Page(
-    [FromBody] PageContext<AddressFilter> pageContext,
+    [FromBody] PageContext pageContext,
     CancellationToken cancellationToken)
     => (await Mediator.Send(GetAddressQuery.Create(pageContext), cancellationToken)).ToResultDto();
 

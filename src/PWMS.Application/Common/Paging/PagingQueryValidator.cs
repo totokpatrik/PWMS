@@ -1,7 +1,7 @@
 ﻿namespace PWMS.Application.Common.Paging;
 
-public class PagingQueryValidator<T, TCM, TF> : AbstractValidator<T>
-    where T : PagingQuery<TCM, TF> where TF : class, new()
+public class PagingQueryValidator<T, TCM> : AbstractValidator<T>
+    where T : PagingQuery<TCM>
 {
     protected PagingQueryValidator()
     {

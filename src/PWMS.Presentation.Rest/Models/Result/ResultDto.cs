@@ -1,4 +1,3 @@
-using MediatR;
 using System.Net;
 using System.Text.Json.Serialization;
 
@@ -36,11 +35,4 @@ public sealed record ResultDto<T> : ResultDtoBase
     }
 
     public T Data { get; init; }
-
-    public void Deconstruct(out T Data, out bool IsSuccess, out IEnumerable<ErrorDto> Errors)
-    {
-        Data = this.Data;
-        IsSuccess = this.IsSuccess;
-        Errors = this.Errors;
-    }
 }

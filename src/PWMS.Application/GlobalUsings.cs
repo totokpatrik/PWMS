@@ -11,5 +11,6 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.Extensions.Logging;
 global using PWMS.Application.Common.Exceptions;
+global using PWMS.Common.Extensions;
 global using System.Diagnostics;
 global using System.Reflection;

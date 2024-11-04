@@ -2,5 +2,5 @@
 
 public interface ICurrentUserService
 {
-    ICurrentUser CurrentUser { get; }
+    ICurrentUser? GetCurrentUser();
 }

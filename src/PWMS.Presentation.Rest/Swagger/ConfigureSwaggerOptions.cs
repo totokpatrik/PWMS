@@ -31,10 +31,11 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
             License = new OpenApiLicense { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
         };
 
+        /* turn on if there will be depreceted version
         if (description.IsDeprecated)
         {
             info.Description += " This API version has been deprecated.";
-        }
+        }*/
 
         return info;
     }

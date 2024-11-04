@@ -3,14 +3,7 @@
 public sealed class CurrentUser : ICurrentUser
 {
     [NotNull]
-    public long? Id { get; init; }
-
+    public string? Id { get; init; }
     [NotNull]
-    public string? FirstName { get; init; }
-
-    [NotNull]
-    public string? LastName { get; init; }
-
-    [NotNull]
-    public string? MiddleName { get; init; }
+    public string? Username { get; init; }
 }
