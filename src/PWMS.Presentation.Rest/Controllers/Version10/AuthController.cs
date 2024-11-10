@@ -1,5 +1,6 @@
 ﻿using PWMS.Application.Auth.Commands.Login;
 using PWMS.Application.Auth.Commands.Register;
+using PWMS.Application.Auth.Models;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Presentation.Rest.Models.Result;
 
@@ -23,9 +24,12 @@ public class AuthController : BaseController
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResultDto<Token>>> Login(
-    [FromBody] LoginCommand command,
+    [FromBody] LoginDto loginDto,
     CancellationToken cancellationToken)
-    => (await Mediator.Send(command, cancellationToken)).ToResultDto();
+    {
+        LoginCommand loginCommand = new(loginDto.UserName, loginDto.Password);
+        return (await Mediator.Send(loginCommand, cancellationToken)).ToResultDto();
+    }
 
     /// <summary>
     /// Register.
@@ -36,7 +40,10 @@ public class AuthController : BaseController
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResultDto<Token>>> Register(
-    [FromBody] RegisterCommand command,
+    [FromBody] RegisterDto registerDto,
     CancellationToken cancellationToken)
-    => (await Mediator.Send(command, cancellationToken)).ToResultDto();
+    {
+        RegisterCommand registerCommand = new(registerDto.UserName, registerDto.Password);
+        return (await Mediator.Send(registerCommand, cancellationToken)).ToResultDto();
+    }
 }
