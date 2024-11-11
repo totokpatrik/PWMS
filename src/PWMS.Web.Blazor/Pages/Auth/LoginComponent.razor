@@ -2,6 +2,28 @@
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 
-<h3>LoginComponent</h3>
-
-<button @onclick=Login class="btn btn-primary">Click me!</button>
+<MudCard Style="margin: auto; margin-top: 10%; max-width: 600px">
+    <img src="/logo.png" style="width: 200px; height: 200px; display: block; margin-left: auto; margin-right: auto" />
+    <MudForm @bind-IsValid="@success">
+        <MudCardContent>
+            <MudTextField @bind-Value="model.UserName"
+                          For="(() => model.UserName)"
+                          Validation="@userNameValidator.Validation"
+                          Immediate="true"
+                          Label="User Name" />
+            <MudTextField @bind-Value="model.Password"
+                          For="(() => model.Password)"
+                          Validation="@passwordValidator.Validation"
+                          Immediate="true"
+                          InputType="InputType.Password"
+                          Label="Password" />
+        </MudCardContent>
+    </MudForm>
+    <MudCardActions>
+        <MudButton Variant="Variant.Filled"
+        Color="Color.Primary"
+        Class="ml-auto"
+        OnClick="@(async () => await Login())"
+        Disabled="@(!success)">Login</MudButton>
+    </MudCardActions>
+</MudCard>
