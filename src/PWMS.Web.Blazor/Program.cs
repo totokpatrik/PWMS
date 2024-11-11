@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
+using MudExtensions.Services;
 using PWMS.Web.Blazor;
 using PWMS.Web.Blazor.Identity;
 using PWMS.Web.Blazor.Services.AuthService;
@@ -26,5 +27,6 @@ builder.Services.AddBlazoredLocalStorage();
 
 // adding mud blazor
 builder.Services.AddMudServices();
+builder.Services.AddMudExtensions();
 
 await builder.Build().RunAsync();

@@ -1,29 +1,34 @@
 ﻿@page "/login"
-@inject IAuthService AuthService
-@inject NavigationManager NavigationManager
 
 <MudCard Style="margin: auto; margin-top: 10%; max-width: 600px">
     <img src="/logo.png" style="width: 200px; height: 200px; display: block; margin-left: auto; margin-right: auto" />
-    <MudForm @bind-IsValid="@success">
+    <MudForm Model="@_model" @ref="@_form" @bind-IsValid="@_success">
         <MudCardContent>
-            <MudTextField @bind-Value="model.UserName"
-                          For="(() => model.UserName)"
+            <MudTextField @bind-Value="_model.UserName"
+                          For="(() => _model.UserName)"
                           Validation="@userNameValidator.Validation"
                           Immediate="true"
-                          Label="User Name" />
-            <MudTextField @bind-Value="model.Password"
-                          For="(() => model.Password)"
+                          Label="User Name"
+                          OnKeyDown="ClearErrors" />
+            <MudTextField @bind-Value="_model.Password"
+                          For="(() => _model.Password)"
                           Validation="@passwordValidator.Validation"
                           Immediate="true"
                           InputType="InputType.Password"
-                          Label="Password" />
+                          Label="Password"
+                          OnKeyDown="ClearErrors" />
+            @foreach (var error in _errors)
+            {
+                <MudText Color="@Color.Error">@error</MudText>
+            }
         </MudCardContent>
     </MudForm>
     <MudCardActions>
-        <MudButton Variant="Variant.Filled"
-        Color="Color.Primary"
-        Class="ml-auto"
-        OnClick="@(async () => await Login())"
-        Disabled="@(!success)">Login</MudButton>
+        <MudLoadingButton Variant="Variant.Filled"
+                          Color="Color.Primary"
+                          Class="ml-auto"
+                          OnClick="@(async () => await Login())"
+                          Disabled="@(!_success)"
+                          @bind-Loading="_loading">Login</MudLoadingButton>
     </MudCardActions>
 </MudCard>

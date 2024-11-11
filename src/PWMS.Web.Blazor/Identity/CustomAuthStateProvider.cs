@@ -29,7 +29,7 @@ namespace PWMS.Web.Blazor.Identity
                 {
                     identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
                     _http.DefaultRequestHeaders.Authorization =
-                        new AuthenticationHeaderValue("Bearer ", authToken.Replace("\"", ""));
+                        new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
                 }
                 catch (Exception)
                 {

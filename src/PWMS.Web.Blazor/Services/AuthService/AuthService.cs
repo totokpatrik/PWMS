@@ -13,7 +13,7 @@ public class AuthService : IAuthService
     {
         _http = http;
     }
-    public async Task<Token> Login(LoginDto request)
+    public async Task<Result<Token>> Login(LoginDto request)
     {
         var result = await _http.PostAsJsonAsync("api/v1/auth/login", request);
 
@@ -24,6 +24,6 @@ public class AuthService : IAuthService
             throw new Exception();
         }
 
-        return new Token { Expiration = DateTime.Now, TokenString = "" };
+        return response;
     }
 }
