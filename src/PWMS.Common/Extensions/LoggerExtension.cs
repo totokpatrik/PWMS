@@ -23,7 +23,7 @@ public static class LoggerExtension
         "Unhandled exception has occured for request: `{Request}.`");
 
     private static readonly Action<ILogger, string?, Exception?> _loggingRequest = LoggerMessage.Define<string?>(
-        LogLevel.Error,
+        LogLevel.Information,
         EventIds.LoggingRequest,
         "Request has executed: `{Request}.`");
 

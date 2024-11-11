@@ -35,8 +35,6 @@ public class ErrorHandlingMiddleware
 
     private static async Task HandleExceptionAsync(HttpContext context, ILogger log, Exception exception)
     {
-        log.LogError(exception, "Application: An unhandled exception has occurred");
-
         const HttpStatusCode code = HttpStatusCode.InternalServerError;
         var resultDto = new ResultDto<Unit>(Unit.Value, false, new[] { new ErrorDto(exception.Message, code.ToString()) });
 

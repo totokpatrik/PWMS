@@ -5,7 +5,7 @@ namespace PWMS.Web.Blazor.Pages.Auth
 
         void Login()
         {
-            Console.WriteLine("I logged in.");
+            AuthService.Login(new Application.Auth.Models.LoginDto { Password = "test", UserName = "test" });
         }
     }
 }

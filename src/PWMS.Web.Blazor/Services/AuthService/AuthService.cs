@@ -1,5 +1,6 @@
 ﻿using PWMS.Application.Auth.Models;
 using PWMS.Domain.Auth.Entities;
+using PWMS.Web.Blazor.Models;
 using System.Net.Http.Json;
 
 namespace PWMS.Web.Blazor.Services.AuthService;
@@ -14,15 +15,15 @@ public class AuthService : IAuthService
     }
     public async Task<Token> Login(LoginDto request)
     {
-        var result = await _http.PostAsJsonAsync("api/auth/login", request);
+        var result = await _http.PostAsJsonAsync("api/v1/auth/login", request);
 
-        var response = await result.Content.ReadFromJsonAsync<Token>();
+        var response = await result.Content.ReadFromJsonAsync<Result<Token>>();
 
         if (response == null)
         {
             throw new Exception();
         }
 
-        return response;
+        return new Token { Expiration = DateTime.Now, TokenString = "" };
     }
 }

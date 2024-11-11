@@ -16,7 +16,6 @@ public sealed class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipeline
         }
         catch (Exception ex)
         {
-            _logger.UnhandledExceptionRequest(request.ToString(), ex);
             throw;
         }
     }

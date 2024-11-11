@@ -15,8 +15,6 @@ public class CustomExceptionFilterAttribute : ExceptionFilterAttribute
 
     public override void OnException(ExceptionContext context)
     {
-        Log.Error(context.Exception, "An unhandled exception has occurred");
-
         context.HttpContext.Response.ContentType = "application/json";
 
         var (actionResult, statusCode) = ResultFactory.CreatedResult(context);
