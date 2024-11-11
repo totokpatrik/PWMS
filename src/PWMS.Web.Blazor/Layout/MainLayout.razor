@@ -1,31 +1,38 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
+<MudLayout>
     <AuthorizeView>
         <Authorized>
-            <div class="sidebar">
-                <NavMenu />
-            </div>
-        </Authorized>
-    </AuthorizeView>
-    <main>
-        <AuthorizeView>
-            <Authorized>
-                <div class="top-row px-4">
-                    <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-                </div>
-                <article class="content px-4">
-                    @Body
-                </article>
-            </Authorized>
-            <NotAuthorized>
-                <article class="content px-4">
-                    @Body
-                </article>
-            </NotAuthorized>
-        </AuthorizeView>
-    </main>
-</div>
+            <MudAppBar>
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+                <MudSpacer />
+                <MudMenu FullWidth="true" AnchorOrigin="Origin.BottomCenter">
+                    <ActivatorContent>
+                        <MudChip T="string"
+                                 Icon="@Icons.Material.Filled.Person"
+                                 Color="Color.Primary">@context.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value</MudChip>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudMenuItem>Profile</MudMenuItem>
+                        <MudMenuItem>Logout</MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
+            </MudAppBar>
+            <MudDrawer>
 
-<MudThemeProvider/>
+            </MudDrawer>
+            <MudMainContent>
+                @Body
+            </MudMainContent>
+        </Authorized>
+        <NotAuthorized>
+            <MudMainContent>
+                @Body
+            </MudMainContent>
+        </NotAuthorized>
+    </AuthorizeView>
+</MudLayout>
+
+<MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
+<MudPopoverProvider />
