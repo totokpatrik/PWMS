@@ -9,14 +9,14 @@
                           Validation="@userNameValidator.Validation"
                           Immediate="true"
                           Label="User Name"
-                          OnKeyDown="ClearErrors" />
+                          OnKeyDown="FormKeyDownAsync" />
             <MudTextField @bind-Value="_model.Password"
                           For="(() => _model.Password)"
                           Validation="@passwordValidator.Validation"
                           Immediate="true"
                           InputType="InputType.Password"
                           Label="Password"
-                          OnKeyDown="ClearErrors" />
+                          OnKeyDown="FormKeyDownAsync" />
             @foreach (var error in _errors)
             {
                 <MudText Color="@Color.Error">@error</MudText>

@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.WebUtilities;
 using MudBlazor;
 using PWMS.Application.Auth.Models;
@@ -20,7 +21,7 @@ namespace PWMS.Web.Blazor.Pages.Auth
         private MudForm _form = new();
         private bool _success;
         private LoginDto _model = new();
-        private string[] _errors = { };
+        private string[] _errors = [];
         private bool _loading = false;
         private string returnUrl = string.Empty;
 
@@ -48,7 +49,7 @@ namespace PWMS.Web.Blazor.Pages.Auth
             await _form.Validate();
 
             if (_form.IsValid)
-            { 
+            {
                 var loginResult = await AuthService.Login(_model);
 
                 if (loginResult.IsSuccess)
@@ -56,7 +57,8 @@ namespace PWMS.Web.Blazor.Pages.Auth
                     await LocalStorage.SetItemAsync("authToken", loginResult.Data.TokenString);
                     await AuthenticationStateProvider.GetAuthenticationStateAsync();
                     NavigationManager.NavigateTo(returnUrl);
-                } else
+                }
+                else
                 {
                     _errors = loginResult.Errors!.Select(e => e.Message!).ToArray();
                 }
@@ -64,9 +66,14 @@ namespace PWMS.Web.Blazor.Pages.Auth
             }
             _loading = false;
             _success = false;
+            StateHasChanged();
         }
-        private void ClearErrors()
+        private async Task FormKeyDownAsync(KeyboardEventArgs e)
         {
+            if (e.Code == "Enter" || e.Code == "NumpadEnter")
+            {
+                await Login();
+            }
             _errors = [];
             _success = true;
         }
