@@ -1,20 +1,20 @@
-﻿@inherits LayoutComponentBase
+﻿@inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@inherits LayoutComponentBase
 <MudLayout>
     <AuthorizeView>
         <Authorized>
             <MudAppBar Color="Color.Primary">
                 <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleDrawer" />
                 <MudSpacer />
-                <MudMenu FullWidth="true" AnchorOrigin="Origin.BottomCenter">
-                    <ActivatorContent>
-                        <MudChip T="string"
-                                 Icon="@Icons.Material.Filled.Person"
-                                 Color="Color.Primary">@context.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value</MudChip>
-                    </ActivatorContent>
-                    <ChildContent>
-                        <MudMenuItem>Profile</MudMenuItem>
-                        <MudMenuItem>Logout</MudMenuItem>
-                    </ChildContent>
+                <MudMenu Label="@context.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value"
+                         EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                         Variant="Variant.Text"
+                         Color="Color.Inherit"
+                         AnchorOrigin="Origin.BottomCenter">
+                    <MudMenuItem>Change Password</MudMenuItem>
+                    <MudMenuItem OnClick="Logout">Logout</MudMenuItem>
                 </MudMenu>
             </MudAppBar>
             <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Docked">
@@ -43,5 +43,11 @@
     private void ToggleDrawer()
     {
         _open = !_open;
+    }
+
+    private async Task Logout()
+    {
+        await LocalStorage.RemoveItemAsync("authToken");
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
     }
 }

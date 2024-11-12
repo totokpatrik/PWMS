@@ -29,4 +29,7 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddMudServices();
 builder.Services.AddMudExtensions();
 
+// Add localization
+builder.Services.AddLocalization();
+
 await builder.Build().RunAsync();

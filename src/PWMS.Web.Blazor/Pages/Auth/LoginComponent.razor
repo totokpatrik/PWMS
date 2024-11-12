@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@inject IStringLocalizer<Res> localizer
 
 <MudCard Style="margin: auto; margin-top: 10%; max-width: 600px">
     <img src="/logo.png" style="width: 200px; height: 200px; display: block; margin-left: auto; margin-right: auto" />
@@ -8,14 +9,14 @@
                           For="(() => _model.UserName)"
                           Validation="@userNameValidator.Validation"
                           Immediate="true"
-                          Label="User Name"
+                          Label="@localizer["UserName"]"
                           OnKeyDown="FormKeyDownAsync" />
             <MudTextField @bind-Value="_model.Password"
                           For="(() => _model.Password)"
                           Validation="@passwordValidator.Validation"
                           Immediate="true"
                           InputType="InputType.Password"
-                          Label="Password"
+                          Label="@localizer["Password"]"
                           OnKeyDown="FormKeyDownAsync" />
             @foreach (var error in _errors)
             {
@@ -29,6 +30,6 @@
                           Class="ml-auto"
                           OnClick="@(async () => await Login())"
                           Disabled="@(!_success)"
-                          @bind-Loading="_loading">Login</MudLoadingButton>
+                          @bind-Loading="_loading">@localizer["Login"]</MudLoadingButton>
     </MudCardActions>
 </MudCard>

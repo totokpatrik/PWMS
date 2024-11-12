@@ -17,6 +17,7 @@ namespace PWMS.Web.Blazor.Pages.Auth
         [Inject] IAuthService AuthService { get; set; } = default!;
         [Inject] NavigationManager NavigationManager { get; set; } = default!;
         [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
+        [Inject] AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
 
         private MudForm _form = new();
         private bool _success;
@@ -33,13 +34,19 @@ namespace PWMS.Web.Blazor.Pages.Auth
             .NotEmpty()
             .Length(1, 100));
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
             if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("returnUrl", out var url))
             {
                 returnUrl = url!;
             }
+
+            if ((await AuthStateProvider.GetAuthenticationStateAsync()).User.Identity!.IsAuthenticated)
+            {
+                NavigationManager.NavigateTo(returnUrl);
+            }
+
             base.OnInitialized();
         }
 

@@ -1,5 +1,7 @@
 ﻿@page "/"
-
+@using System.Globalization
+@inject IStringLocalizer<Res> localizer
+@attribute [Authorize]
 
 <PageTitle>Home</PageTitle>
 
@@ -7,3 +9,11 @@
 
 Welcome to your new app.
 
+
+<ul>
+    <li><b>CurrentCulture</b>: @CultureInfo.CurrentCulture</li>
+    <li><b>CurrentUICulture</b>: @CultureInfo.CurrentUICulture</li>
+</ul>
+
+
+<p>@localizer["Hello"]</p>
