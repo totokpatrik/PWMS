@@ -7,6 +7,7 @@ using MudExtensions.Services;
 using PWMS.Web.Blazor;
 using PWMS.Web.Blazor.Identity;
 using PWMS.Web.Blazor.Services.AuthService;
+using PWMS.Web.Blazor.Services.Configuration;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -21,6 +22,8 @@ builder.Services.AddScoped(sp =>
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+
+builder.Services.AddScoped<IAddressService, AddressService>();
 
 // adding localstorage
 builder.Services.AddBlazoredLocalStorage();
