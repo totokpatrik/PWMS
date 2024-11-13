@@ -1,27 +1,35 @@
-﻿@inject NavigationManager Navigation
+﻿@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<p>You don't have access to this page.</p>
+@if (authenticated)
+{
+    <p>not authorized</p>
+}
 
 @code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    private bool authenticated = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async void OnInitialized()
     {
-        var authenticationState = await AuthenticationStateTask;
+        var asd = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
-        if (authenticationState?.User?.Identity is null || !authenticationState.User.Identity.IsAuthenticated)
+        if ((await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.IsAuthenticated)
         {
-            var returnUrl = Navigation.ToBaseRelativePath(Navigation.Uri);
+            authenticated = true;
+            StateHasChanged();
+        }
+        else
+        {
+            var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
 
-            if (string.IsNullOrWhiteSpace(returnUrl))
+            if (returnUrl == "")
             {
-                Navigation.NavigateTo("/login", true);
-            } else
-            {
-                Navigation.NavigateTo($"/login?returnUrl={returnUrl}", true);
+                NavigationManager.NavigateTo("/login", forceLoad: true);
             }
-
+            else
+            {
+                NavigationManager.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(returnUrl)}", forceLoad: true);
+            }
         }
     }
 }
