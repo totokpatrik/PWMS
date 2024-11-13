@@ -4,7 +4,6 @@ using PWMS.Application.Addresses.Specifications;
 using PWMS.Application.Common.Handlers;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Application.Common.Paging;
-using PWMS.Common.Extensions;
 
 namespace PWMS.Application.Addresses.Queries.Get;
 
@@ -29,12 +28,14 @@ internal sealed class GetAddressQueryHandler
         var entities = await _addressRepository
             .GetAllAddresses(specification, cancellationToken, request.PageContext.Filter);
 
+        var count = await _addressRepository.CountAsync();
+
         var dtoAddresses = await entities
             .BuildAdapter(Mapper.Config)
             .AdaptToTypeAsync<List<AddressDto>>()
             .ConfigureAwait(false);
 
         return Result.Ok(new CollectionViewModel<AddressDto>(
-            dtoAddresses, dtoAddresses.Count));
+            dtoAddresses, count));
     }
 }

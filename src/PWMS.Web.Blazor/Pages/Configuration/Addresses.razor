@@ -1,11 +1,24 @@
 ﻿@page "/configuration/address"
+@using PWMS.Application.Addresses.Models
 @attribute [Authorize]
 
 <h3>Addresses</h3>
 
-@foreach (var address in _addresses)
-{
-    <p>@address.Id</p>
-}
+<MudDataGrid Items="@_addresses" Bordered="true" RowsPerPage="@_pageSize" Loading="@_loading">
+    <Columns>
+        <PropertyColumn Property="x => x.Id"/>
+        <PropertyColumn Property="x => x.AddressLine" />
+        <PropertyColumn Property="x => x.Created" />
+        <PropertyColumn Property="x => x.CreatedBy" />
+        <PropertyColumn Property="x => x.Modified"/>
+        <PropertyColumn Property="x => x.ModifiedBy" />
+    </Columns>
+    <PagerContent>
+        <label>Hello</label>
+    </PagerContent>
+    <NoRecordsContent>
+        <MudText>No matching records found</MudText>
+    </NoRecordsContent>
+</MudDataGrid>
 
 
