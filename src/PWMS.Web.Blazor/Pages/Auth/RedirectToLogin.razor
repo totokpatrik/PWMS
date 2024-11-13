@@ -22,7 +22,7 @@
         {
             var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
 
-            if (returnUrl == "")
+            if (returnUrl == "" || returnUrl == "logout")
             {
                 NavigationManager.NavigateTo("/login", forceLoad: true);
             }

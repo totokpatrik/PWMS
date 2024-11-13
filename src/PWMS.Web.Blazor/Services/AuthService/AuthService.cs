@@ -1,29 +1,27 @@
 ﻿using PWMS.Application.Auth.Models;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Web.Blazor.Models;
-using System.Net.Http.Json;
+using PWMS.Web.Blazor.Services.HttpService;
 
 namespace PWMS.Web.Blazor.Services.AuthService;
 
 public class AuthService : IAuthService
 {
-    private readonly HttpClient _http;
+    private readonly IHttpService _httpService;
 
-    public AuthService(HttpClient http)
+    public AuthService(IHttpService httpService)
     {
-        _http = http;
+        _httpService = httpService;
     }
     public async Task<Result<Token>> Login(LoginDto request)
     {
-        var result = await _http.PostAsJsonAsync("api/v1/auth/login", request);
+        var result = await _httpService.Post<Result<Token>>("api/v1/auth/login", request);
 
-        var response = await result.Content.ReadFromJsonAsync<Result<Token>>();
-
-        if (response == null)
+        if (result == null)
         {
             throw new Exception();
         }
 
-        return response;
+        return result;
     }
 }

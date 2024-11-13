@@ -1,5 +1,4 @@
-﻿@inject ILocalStorageService LocalStorage
-@inject AuthenticationStateProvider AuthenticationStateProvider
+﻿@inject NavigationManager NavigationManager
 
 @inherits LayoutComponentBase
 <MudLayout>
@@ -20,12 +19,12 @@
             <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Docked">
                 <NavMenu />
             </MudDrawer>
-            <MudMainContent>
+            <MudMainContent Class="px-4">
                 @Body
             </MudMainContent>
         </Authorized>
         <NotAuthorized>
-            <MudMainContent>
+            <MudMainContent Class="px-4">
                 @Body
             </MudMainContent>
         </NotAuthorized>
@@ -45,9 +44,8 @@
         _open = !_open;
     }
 
-    private async Task Logout()
+    private void Logout()
     {
-        await LocalStorage.RemoveItemAsync("authToken");
-        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        NavigationManager.NavigateTo("/logout", true);
     }
 }

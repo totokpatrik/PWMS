@@ -8,6 +8,7 @@ using PWMS.Web.Blazor;
 using PWMS.Web.Blazor.Identity;
 using PWMS.Web.Blazor.Services.AuthService;
 using PWMS.Web.Blazor.Services.Configuration;
+using PWMS.Web.Blazor.Services.HttpService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -19,6 +20,7 @@ builder.Services.AddAuthorizationCore();
 // set base address for default host
 builder.Services.AddScoped(sp =>
     new HttpClient { BaseAddress = new Uri(builder.Configuration["BackendUrl"] ?? "https://localhost:5001") });
+builder.Services.AddScoped<IHttpService, HttpService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
