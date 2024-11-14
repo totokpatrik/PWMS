@@ -12,11 +12,14 @@ public partial class Addresses
     [Inject] IAddressService AddressService { get; set; } = default!;
 
     MudDataGrid<AddressDto> dataGrid = new();
+    List<AddressDto> selectedAddresses = new List<AddressDto>();
     int _pageSize = 10;
     int _pageIndex = 1;
     int _totalItems = 0;
-    int[] _pageSizeOptions = { 10, 25, 50, 100 };
+    int[] _pageSizeOptions = [10, 25, 50, 100];
     bool _loading = false;
+
+    bool deleteDisabled = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,5 +52,11 @@ public partial class Addresses
             TotalItems = result.Data.TotalCount,
             Items = result.Data.Data
         };
+    }
+
+    void SelectedItemsChanged(HashSet<AddressDto> addresses)
+    {
+        selectedAddresses = addresses.ToList();
+        deleteDisabled = selectedAddresses.Count < 1;
     }
 }
