@@ -2,23 +2,65 @@
 @using PWMS.Application.Addresses.Models
 @attribute [Authorize]
 
-<h3>Addresses</h3>
 
-<MudDataGrid Items="@_addresses" Bordered="true" RowsPerPage="@_pageSize" Loading="@_loading">
-    <Columns>
-        <PropertyColumn Property="x => x.Id"/>
-        <PropertyColumn Property="x => x.AddressLine" />
-        <PropertyColumn Property="x => x.Created" />
-        <PropertyColumn Property="x => x.CreatedBy" />
-        <PropertyColumn Property="x => x.Modified"/>
-        <PropertyColumn Property="x => x.ModifiedBy" />
-    </Columns>
-    <PagerContent>
-        <label>Hello</label>
-    </PagerContent>
-    <NoRecordsContent>
-        <MudText>No matching records found</MudText>
-    </NoRecordsContent>
-</MudDataGrid>
+<MudContainer Style="overflow-y: scroll; width: 100%; min-width: 100%; max-height: calc(100vh - 64px - var(--mud-appbar-height)); min-height: calc(100vh - 64px - var(--mud-appbar-height));"
+              Fixed="true"
+              Class="p-0">
+    <div style="height: 128px">
+        <div class="d-flex flex-grow-1 flex-column gap-4">
+            <MudText Typo="Typo.h6">Addresses</MudText>
+            <MudSpacer />
+            <div class="d-flex flex-grow-1 flex-row">
+                <MudChip T="string">Add</MudChip>
+                <MudChip T="string">Delete</MudChip>
+                <MudSpacer/>
+                <MudIcon Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Default" />
+            </div>
+        </div>
+    </div>
+    <MudDataGrid @ref="dataGrid" MultiSelection="true" T="AddressDto" ServerData="ServerReload" Filterable="false" ColumnResizeMode="MudBlazor.ResizeMode.Column" Loading="@_loading" RowClass="no-borders" Elevation="1"
+                 Style="min-width: 100%" FixedHeader Height="calc(100vh - 64px - 128px - var(--mud-appbar-height))">
+        <Columns>
+            <SelectColumn T="AddressDto" />
+            <PropertyColumn Property="x => x.Id" />
+            <PropertyColumn Property="x => x.AddressLine" />
+            <PropertyColumn Property="x => x.Created" />
+            <PropertyColumn Property="x => x.CreatedBy" />
+            <PropertyColumn Property="x => x.Modified" />
+            <PropertyColumn Property="x => x.ModifiedBy" />
+        </Columns>
+        <NoRecordsContent>
+            <MudText>No matching records found</MudText>
+        </NoRecordsContent>
+    </MudDataGrid>
+</MudContainer>
+<div class="64px">
+    <MudToolBar>
+        <div class="mud-table-pagination-spacer"></div>
+        <MudText Typo="Typo.body2" Class="mud-table-pagination-caption">
+            Rows per page:
+        </MudText>
+        <MudSelect T="int"
+                   Value="@_pageSize"
+                   Class="mud-table-pagination-select"
+                   Underline="false"
+                   Dense="true"
+                   ValueChanged="PageSizeChangedAsync">
+            @foreach (var pageSize in _pageSizeOptions)
+            {
+                <MudSelectItem Value="pageSize">@pageSize</MudSelectItem>
+            }
+        </MudSelect>
+        <MudText Typo="Typo.body2" Class="mud-table-pagination-caption">
+            @_pageIndex-@if (_pageIndex * _pageSize > _totalItems)
+            {
+                @_totalItems
+            }
+            else
+            {
+                @(_pageIndex * _pageSize)
+            }
+        </MudText>
 
-
+    </MudToolBar>
+</div>

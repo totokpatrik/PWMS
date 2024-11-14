@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager NavigationManager
 
 @inherits LayoutComponentBase
-<MudLayout>
+<MudLayout Style="display: flex;flex-flow: column;">
     <AuthorizeView>
         <Authorized>
             <MudAppBar Color="Color.Primary">
@@ -16,10 +16,10 @@
                     <MudMenuItem OnClick="Logout">Logout</MudMenuItem>
                 </MudMenu>
             </MudAppBar>
-            <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Persistent" ClipMode="DrawerClipMode.Docked">
+            <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
                 <NavMenu />
             </MudDrawer>
-            <MudMainContent Class="px-4">
+            <MudMainContent >
                 @Body
             </MudMainContent>
         </Authorized>
