@@ -28,6 +28,13 @@ namespace PWMS.Web.Blazor.Services.HttpService
             _configuration = configuration;
         }
 
+        public async Task<T> Delete<T>(string uri, object value)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, uri);
+            request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
+            return await sendRequest<T>(request);
+        }
+
         public async Task<T> Get<T>(string uri)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -62,8 +69,9 @@ namespace PWMS.Web.Blazor.Services.HttpService
             // throw exception on error response
             if (!response.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
-                throw new Exception(error!["message"]);
+                var error = await response.Content.ReadAsStringAsync();
+                //var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+                //throw new Exception(error!["message"]);
             }
 
             var result = await response.Content.ReadFromJsonAsync<T>();

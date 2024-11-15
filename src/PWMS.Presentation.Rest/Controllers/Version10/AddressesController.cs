@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
+using PWMS.Application.Addresses.Commands.DeleteRange;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Addresses.Models;
 using PWMS.Application.Addresses.Queries.Get;
@@ -56,7 +57,20 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResultDto<Guid>>> Delete(
-    [FromBody][Required] DeleteAddressCommand command,
+    [FromBody][Required] DeleteAddressDto deleteAddressDto,
+    CancellationToken cancellationToken)
+    => (await Mediator.Send(new DeleteAddressCommand(deleteAddressDto.Id), cancellationToken)).ToResultDto();
+
+    /// <summary>
+    /// Deletes address range.
+    /// </summary>
+    [HttpDelete("range")]
+    [ProducesResponseType(typeof(ResultDto<Guid>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ResultDto<List<Guid>>>> DeleteRange(
+    [FromBody][Required] DeleteRangeAddressCommand command,
     CancellationToken cancellationToken)
     => (await Mediator.Send(command, cancellationToken)).ToResultDto();
 

@@ -7,12 +7,14 @@ using PWMS.Web.Blazor.Services.Configuration;
 
 namespace PWMS.Web.Blazor.Pages.Configuration;
 
-public partial class Addresses
+public partial class IndexAddress
 {
     [Inject] IAddressService AddressService { get; set; } = default!;
+    [Inject] ISnackbar Snackbar { get; set; } = default!;
+    [Inject] NavigationManager NavigationManager { get; set; } = default!;
 
     MudDataGrid<AddressDto> dataGrid = new();
-    List<AddressDto> selectedAddresses = new List<AddressDto>();
+    HashSet<AddressDto> selectedAddresses = new HashSet<AddressDto>();
     int _pageSize = 10;
     int _pageIndex = 1;
     int _totalItems = 0;
@@ -41,7 +43,6 @@ public partial class Addresses
             _totalItems = result.Data.TotalCount;
             _loading = false;
         }
-
         return result;
     }
     private async Task<GridData<AddressDto>> ServerReload(GridState<AddressDto> state)
@@ -53,10 +54,36 @@ public partial class Addresses
             Items = result.Data.Data
         };
     }
-
-    void SelectedItemsChanged(HashSet<AddressDto> addresses)
+    protected override bool ShouldRender()
     {
-        selectedAddresses = addresses.ToList();
         deleteDisabled = selectedAddresses.Count < 1;
+        return base.ShouldRender();
+    }
+    async void Delete()
+    {
+        //Snackbar.Add("Reactor meltdown is imminent", Severity.Error);
+
+        _loading = true;
+        if (selectedAddresses.Count > 1)
+        {
+            await AddressService.DeleteRangeAsync(selectedAddresses.Select(a => a.Id).ToList());
+        }
+        else
+        {
+            await AddressService.DeleteAsync(new DeleteAddressDto { Id = selectedAddresses.Select(a => a.Id).First() });
+        }
+        await GetAddressesAsync();
+
+        // clear selection
+        selectedAddresses.Clear();
+
+        // reload data grid
+        await dataGrid.ReloadServerData();
+
+        _loading = false;
+    }
+    void Add()
+    {
+        NavigationManager.NavigateTo("/configuration/address/create");
     }
 }

@@ -2,25 +2,27 @@
 @using PWMS.Application.Addresses.Models
 @attribute [Authorize]
 
+<PageTitle>Addresses</PageTitle>
 
-<MudContainer Style="overflow-y: scroll; width: 100%; min-width: 100%; max-height: calc(100vh - 64px - var(--mud-appbar-height)); min-height: calc(100vh - 64px - var(--mud-appbar-height));"
+<MudContainer Style="width: 100%; min-width: 100%; max-height: calc(100vh - 64px - var(--mud-appbar-height)); min-height: calc(100vh - 64px - var(--mud-appbar-height));"
               Fixed="true"
-              Class="p-0">
+              Class="p-1">
     <div style="height: 128px">
         <div class="d-flex flex-grow-1 flex-column gap-4">
             <MudText Typo="Typo.h6">Addresses</MudText>
             <MudSpacer />
             <div class="d-flex flex-grow-1 flex-row gap-1">
-                <MudButton Variant="Variant.Outlined">Add</MudButton>
-                <MudButton Variant="Variant.Outlined" Disabled="@deleteDisabled">Delete</MudButton>
-                <MudSpacer/>
+                <MudButton Variant="Variant.Outlined" OnClick="Add">Add</MudButton>
+                <MudButton Variant="Variant.Outlined" Disabled="@deleteDisabled" OnClick="Delete">Delete</MudButton>
+                <MudSpacer />
                 <MudIcon Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Default" />
             </div>
         </div>
     </div>
-    <MudDataGrid @ref="dataGrid" MultiSelection="true" T="AddressDto" ServerData="ServerReload" Filterable="false" ColumnResizeMode="MudBlazor.ResizeMode.Column" Loading="@_loading" RowClass="no-borders" Elevation="1"
+    <MudDataGrid @ref="dataGrid" MultiSelection="true" T="AddressDto" ServerData="ServerReload" Filterable="false" ColumnResizeMode="MudBlazor.ResizeMode.Column" Loading="@_loading" RowClass="no-borders"
+                 Elevation="0"
                  Style="min-width: 100%" FixedHeader Height="calc(100vh - 64px - 128px - var(--mud-appbar-height))"
-                 SelectedItemsChanged="@SelectedItemsChanged">
+                 @bind-SelectedItems="@selectedAddresses">
         <Columns>
             <SelectColumn T="AddressDto" />
             <PropertyColumn Property="x => x.Id" />
@@ -53,7 +55,16 @@
             }
         </MudSelect>
         <MudText Typo="Typo.body2" Class="mud-table-pagination-caption">
-            @_pageIndex-@if (_pageIndex * _pageSize > _totalItems)
+            @if (_totalItems == 0 )
+            {
+                @_totalItems
+            }
+            else
+            {
+                @_pageIndex
+            }
+            -
+            @if (_pageIndex * _pageSize > _totalItems)
             {
                 @_totalItems
             }

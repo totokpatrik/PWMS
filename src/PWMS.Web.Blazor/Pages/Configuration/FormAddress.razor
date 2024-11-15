@@ -1,0 +1,12 @@
+﻿<MudForm>
+    <MudCardContent>
+        <MudTextField @bind-Value="_model.UserName"
+                      For="(() => _model.UserName)"
+                      Validation="@userNameValidator.Validation"
+                      Immediate="true"
+                      Label="@localizer["UserName"]"
+                      OnKeyDown="FormKeyDownAsync" />
+    </MudCardContent>
+</MudForm>
+
+
