@@ -3,5 +3,33 @@
 
 <PageTitle>Create Address</PageTitle>
 
+<MudContainer Class="p-1 m-0">
+    <MudText Typo="Typo.h6">Create Address</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="pa-4">
+                @if (CreateAddressDto != null)
+                {
+                    <MudForm Model="CreateAddressDto" @ref="_form" @bind-IsValid="@success">
+                        <MudTextField @bind-Value="CreateAddressDto.AddressLine"
+                                      Immediate="true"
+                                      Label="Address Line"
+                                      Validation="_addressLineValidator.Validation"
+                                      OnKeyDown="FormKeyDownAsync"
+                                      Required />
 
-<p>This is where the magic happens.</p>
+                        <MudCardActions>
+                            <MudSpacer />
+                            <MudLoadingButton Variant="Variant.Filled"
+                                              Color="Color.Primary"
+                                              Class="ml-auto"
+                                              Disabled="@(!success)"
+                                              OnClick="SubmitFOrm"
+                                              @bind-Loading="_loading">@SubmitButtonTitle</MudLoadingButton>
+                        </MudCardActions>
+                    </MudForm>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>

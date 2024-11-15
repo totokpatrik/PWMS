@@ -17,6 +17,12 @@ public class AddressService : IAddressService
         _snackbar = Snackbar;
     }
 
+    public async Task<Result<Guid>> CreateAsync(CreateAddressDto createAddressDto)
+    {
+        var result = await _httpService.Post<Result<Guid>>("api/v1/addresses", createAddressDto);
+        return result;
+    }
+
     public async Task<Result<Guid>> DeleteAsync(DeleteAddressDto deleteAddressDto)
     {
         var result = await _httpService.Delete<Result<Guid>>("api/v1/addresses", deleteAddressDto);
