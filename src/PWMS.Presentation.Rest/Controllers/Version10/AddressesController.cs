@@ -70,9 +70,9 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResultDto<List<Guid>>>> DeleteRange(
-    [FromBody][Required] DeleteRangeAddressCommand command,
+    [FromBody][Required] List<DeleteAddressDto> deleteAddressDtos,
     CancellationToken cancellationToken)
-    => (await Mediator.Send(command, cancellationToken)).ToResultDto();
+    => (await Mediator.Send(new DeleteRangeAddressCommand(deleteAddressDtos.Select(a => a.Id).ToList()), cancellationToken)).ToResultDto();
 
 
     /// <summary>

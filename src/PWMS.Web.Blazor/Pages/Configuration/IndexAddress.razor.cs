@@ -61,12 +61,16 @@ public partial class IndexAddress
     }
     async void Delete()
     {
-        //Snackbar.Add("Reactor meltdown is imminent", Severity.Error);
-
         _loading = true;
         if (selectedAddresses.Count > 1)
         {
-            await AddressService.DeleteRangeAsync(selectedAddresses.Select(a => a.Id).ToList());
+            List<DeleteAddressDto> deleteAddressDtos = new List<DeleteAddressDto>();
+            foreach (var item in selectedAddresses)
+            {
+                var deleteAddressDto = new DeleteAddressDto() { Id = item.Id };
+                deleteAddressDtos.Add(deleteAddressDto);
+            }
+            await AddressService.DeleteRangeAsync(deleteAddressDtos);
         }
         else
         {

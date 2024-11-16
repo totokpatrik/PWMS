@@ -20,18 +20,42 @@ public class AddressService : IAddressService
     public async Task<Result<Guid>> CreateAsync(CreateAddressDto createAddressDto)
     {
         var result = await _httpService.Post<Result<Guid>>("api/v1/addresses", createAddressDto);
+        if (result.IsSuccess)
+        {
+            _snackbar.Add("Address created successfully.", Severity.Success);
+        }
+        else
+        {
+            _snackbar.Add("There was an error: " + result.Errors, Severity.Error);
+        }
         return result;
     }
 
     public async Task<Result<Guid>> DeleteAsync(DeleteAddressDto deleteAddressDto)
     {
         var result = await _httpService.Delete<Result<Guid>>("api/v1/addresses", deleteAddressDto);
+        if (result.IsSuccess)
+        {
+            _snackbar.Add("Address deleted successfully.", Severity.Success);
+        }
+        else
+        {
+            _snackbar.Add("There was an error: " + result.Errors, Severity.Error);
+        }
         return result;
     }
 
-    public async Task<Result<List<Guid>>> DeleteRangeAsync(List<Guid> ids)
+    public async Task<Result<List<Guid>>> DeleteRangeAsync(List<DeleteAddressDto> deleteAddressDtos)
     {
-        var result = await _httpService.Delete<Result<List<Guid>>>("api/v1/addresses/range", ids);
+        var result = await _httpService.Delete<Result<List<Guid>>>("api/v1/addresses/range", deleteAddressDtos);
+        if (result.IsSuccess)
+        {
+            _snackbar.Add("Addresses deleted successfully.", Severity.Success);
+        }
+        else
+        {
+            _snackbar.Add("There was an error: " + result.Errors, Severity.Error);
+        }
         return result;
     }
 
