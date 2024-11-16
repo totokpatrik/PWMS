@@ -67,11 +67,21 @@ public partial class IndexAddress
             _firstPageButtonDisabled = true;
             _navigateBeforeButtonDisabled = true;
         }
+        else
+        {
+            _firstPageButtonDisabled = false;
+            _navigateBeforeButtonDisabled = false;
+        }
 
         if (_pageIndex * _pageSize >= _totalItems)
         {
             _navigateNextButtonDisabled = true;
             _lastPageButtonDisabled = true;
+        }
+        else
+        {
+            _navigateNextButtonDisabled = false;
+            _lastPageButtonDisabled = false;
         }
 
 
@@ -101,6 +111,7 @@ public partial class IndexAddress
 
         // reload data grid
         await dataGrid.ReloadServerData();
+        StateHasChanged();
 
         _loading = false;
     }
@@ -120,7 +131,7 @@ public partial class IndexAddress
     }
     private async Task NavigateToLastPage()
     {
-        _pageIndex = _totalItems % _pageIndex;
+        _pageIndex = (int)Math.Ceiling((decimal)(_totalItems / (decimal)_pageSize));
         await dataGrid.ReloadServerData();
     }
     private async Task NavigateToNextPage()
