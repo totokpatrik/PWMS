@@ -21,6 +21,11 @@ public partial class IndexAddress
     int[] _pageSizeOptions = [10, 25, 50, 100];
     bool _loading = false;
 
+    bool _firstPageButtonDisabled;
+    bool _navigateBeforeButtonDisabled;
+    bool _navigateNextButtonDisabled;
+    bool _lastPageButtonDisabled;
+
     bool deleteDisabled = true;
 
     protected override async Task OnInitializedAsync()
@@ -57,6 +62,19 @@ public partial class IndexAddress
     protected override bool ShouldRender()
     {
         deleteDisabled = selectedAddresses.Count < 1;
+        if (_pageIndex == 1)
+        {
+            _firstPageButtonDisabled = true;
+            _navigateBeforeButtonDisabled = true;
+        }
+
+        if (_pageIndex * _pageSize >= _totalItems)
+        {
+            _navigateNextButtonDisabled = true;
+            _lastPageButtonDisabled = true;
+        }
+
+
         return base.ShouldRender();
     }
     async void Delete()
@@ -89,5 +107,26 @@ public partial class IndexAddress
     void Add()
     {
         NavigationManager.NavigateTo("/configuration/address/create");
+    }
+    private async Task NavigateToFirstPageAsync()
+    {
+        _pageIndex = 1;
+        await dataGrid.ReloadServerData();
+    }
+    private async Task NavigateToPreviousPage()
+    {
+        _pageIndex--;
+        await dataGrid.ReloadServerData();
+    }
+    private async Task NavigateToLastPage()
+    {
+        _pageIndex = _totalItems % _pageIndex;
+        await dataGrid.ReloadServerData();
+    }
+    private async Task NavigateToNextPage()
+    {
+        _pageIndex++;
+        await dataGrid.ReloadServerData();
+
     }
 }

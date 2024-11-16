@@ -59,9 +59,13 @@
             {
                 @_totalItems
             }
+            else if (@_pageIndex == 1)
+            {
+                @_pageIndex;
+            }
             else
             {
-                @_pageIndex
+                @(((_pageIndex - 1) * _pageSize) + 1)
             }
             -
             @if (_pageIndex * _pageSize > _totalItems)
@@ -72,7 +76,11 @@
             {
                 @(_pageIndex * _pageSize)
             }
+             of @_totalItems
         </MudText>
-
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.FirstPage" Disabled="@_firstPageButtonDisabled" @onclick="NavigateToFirstPageAsync" />
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.NavigateBefore" Disabled="@_navigateBeforeButtonDisabled" @onclick="NavigateToPreviousPage" />
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.NavigateNext" Disabled="@_navigateNextButtonDisabled" @onclick="NavigateToNextPage" />
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.LastPage" Disabled="@_lastPageButtonDisabled" @onclick="NavigateToLastPage" />
     </MudToolBar>
 </div>
