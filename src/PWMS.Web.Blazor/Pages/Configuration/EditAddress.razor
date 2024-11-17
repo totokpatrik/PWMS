@@ -9,10 +9,9 @@
             <MudPaper Class="p-1">
                 <MudForm Model="_updateAddressDto" @ref="_form" @bind-IsValid="@success">
                     <MudTextField @bind-Value="_updateAddressDto.Id"
-                                  Immediate="true"
                                   Label="Id"
-                                  Disabled="true"
-                                  OnKeyDown="FormKeyDownAsync"/>
+                                  ReadOnly="true"
+                                  Variant="Variant.Text" />
 
                     <MudTextField @bind-Value="_updateAddressDto.AddressLine"
                                   Immediate="true"

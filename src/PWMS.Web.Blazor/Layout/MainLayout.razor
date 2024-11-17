@@ -6,7 +6,25 @@
         <Authorized>
             <MudAppBar Color="Color.Primary">
                 <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleDrawer" />
+                <MudButton Color="Color.Inherit"
+                           Variant="Variant.Text"
+                           DropShadow="true">
+                    PWMS
+                </MudButton>
                 <MudSpacer />
+                <MudButton Color="Color.Inherit"
+                           Variant="Variant.Text"
+                           DropShadow="true"
+                           Class="rounded-r-0">
+                    Site
+                </MudButton>
+                <MudButton Color="Color.Inherit"
+                           Variant="Variant.Text"
+                           Class="border-l border-solid rounded-l-0 mr-8"
+                           Style="border-color: var(--mud-palette-primary-lighten)"
+                           DropShadow="true">
+                    Warehouse
+                </MudButton>
                 <MudMenu Label="@context.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value"
                          EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
                          Variant="Variant.Text"
