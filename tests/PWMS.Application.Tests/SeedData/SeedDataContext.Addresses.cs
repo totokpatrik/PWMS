@@ -14,6 +14,8 @@ public sealed partial class SeedDataContext
             yield return new Address(Guid.Parse("AB7D57B6-0EB1-4E7C-9147-A84B254034C7"), "TestAddress_4");
             yield return new Address("TestAddress_5");
             yield return new Address(Guid.Parse("AB7D57B6-0EB1-4E7C-9147-A84B254034C8"), "TestAddress_6");
+            yield return new Address(Guid.Parse("AB7D57B6-0EB1-4E7C-9147-A84B254034C9"), "TestAddress_7");
+            yield return new Address(Guid.Parse("AB7D57B6-0EB1-4E7C-9147-A84B25403410"), "TestAddress_8");
         }
     }
 }

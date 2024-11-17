@@ -2,8 +2,10 @@
 using MediatR;
 using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
+using PWMS.Application.Addresses.Commands.DeleteRange;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Addresses.Models;
+using PWMS.Application.Common.Interfaces;
 using PWMS.Application.Common.Paging;
 using PWMS.Presentation.Rest.Models.Result;
 using PWMS.Presentation.Rest.Tests.Common;
@@ -37,6 +39,8 @@ public class AddressesControllerTests
     public static class Delete
     {
         public static string DeleteAddressV1() => $"{ApiUrlBaseV1}";
+        public static string DeleteRangeAddressV1() => $"{ApiUrlBaseV1}/range";
+
     }
 
     [Fact]
@@ -177,6 +181,28 @@ public class AddressesControllerTests
         response.Should().BeOfType<ResultDto<Guid>>();
         response!.IsSuccess.Should().BeTrue();
         response.Data.Should().Be(addressId);
+    }
+
+    [Fact]
+    public async Task DeleteRangeTestAsync()
+    {
+        var client = new RestClient(_factory.CreateClient()).Authenticate();
+        var addresses = await GetAddresses();
+        var addressIds = addresses.Data.Data.Take(2).Select(a => a.Id).ToList();
+
+        List<DeleteAddressDto> deleteAddressDtos = new List<DeleteAddressDto>();
+        foreach (var addressId in addressIds)
+        {
+            var deleteAddressDto = new DeleteAddressDto { Id = addressId };
+            deleteAddressDtos.Add(deleteAddressDto);
+        }
+
+        var response = await client.DeleteAsync<ResultDto<List<Guid>>>(
+            new RestRequest(Delete.DeleteRangeAddressV1()).AddJsonBody(deleteAddressDtos));
+
+        response.Should().NotBeNull();
+        response.Should().BeOfType<ResultDto<List<Guid>>>();
+        response!.IsSuccess.Should().BeTrue();
     }
     private async Task<ResultDto<CollectionViewModel<AddressDto>>> GetAddresses()
     {

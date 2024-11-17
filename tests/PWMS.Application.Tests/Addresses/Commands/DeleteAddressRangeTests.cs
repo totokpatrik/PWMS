@@ -1,21 +1,23 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using PWMS.Application.Addresses.Commands.Delete;
-using PWMS.Application.Addresses.Repositories;
+using PWMS.Application.Addresses.Commands.DeleteRange;
 using PWMS.Application.Common.Exceptions;
 using PWMS.Application.Tests.Common;
-using PWMS.Common.Tests;
 using PWMS.Domain.Addresses.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PWMS.Application.Tests.Addresses.Commands;
 
 [Collection("QueryCollection")]
-public class DeleteAddressTests : TestBase
+public class DeleteAddressRangeTests : TestBase
 {
     private readonly QueryTestFixture _fixture;
 
-    public DeleteAddressTests(QueryTestFixture fixture) : base(fixture)
+    public DeleteAddressRangeTests(QueryTestFixture fixture) : base(fixture)
     {
         _fixture = fixture;
     }
@@ -24,10 +26,11 @@ public class DeleteAddressTests : TestBase
     public async Task Delete_ValidCommand_ShouldCreateSuccess()
     {
         // Arrange
-        Guid addressId = _fixture.Context.AppDbContext.Set<Address>()
-            .First()
-            .Id;
-        var command = new DeleteAddressCommand(addressId);
+        List<Guid> addressIds = _fixture.Context.AppDbContext.Set<Address>()
+            .Take(2)
+            .Select(a => a.Id)
+            .ToList();
+        var command = new DeleteRangeAddressCommand(addressIds);
 
         // Act
         var result = await Mediator.Send(command);
@@ -39,7 +42,7 @@ public class DeleteAddressTests : TestBase
     public async Task Delete_ValidCommand_NonExistingAddress_ShouldCreateNotFoundException()
     {
         // Arrange
-        var command = new DeleteAddressCommand(Guid.NewGuid());
+        var command = new DeleteRangeAddressCommand(new List<Guid>() { Guid.NewGuid(), Guid.NewGuid() });
 
         // Act
         Func<Task> act = () => Mediator.Send(command);
