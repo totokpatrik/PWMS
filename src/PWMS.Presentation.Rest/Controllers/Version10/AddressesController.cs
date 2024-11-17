@@ -31,9 +31,9 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResultDto<Guid>>> Create(
-    [FromBody] CreateAddressCommand command,
+    [FromBody] CreateAddressDto createAddressDto,
     CancellationToken cancellationToken)
-    => (await Mediator.Send(command, cancellationToken)).ToResultDto();
+    => (await Mediator.Send(new CreateAddressCommand(createAddressDto.AddressLine), cancellationToken)).ToResultDto();
 
     /// <summary>
     /// Updates address.
@@ -44,9 +44,9 @@ public class AddressesController : BaseController
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<ResultDto<AddressDto>>> Update(
-    [FromBody][Required] UpdateAddressCommand command,
+    [FromBody][Required] UpdateAddressDto updateAddressDto,
     CancellationToken cancellationToken)
-    => (await Mediator.Send(command, cancellationToken)).ToResultDto();
+    => (await Mediator.Send(new UpdateAddressCommand(updateAddressDto.Id, updateAddressDto.AddressLine), cancellationToken)).ToResultDto();
 
     /// <summary>
     /// Deletes address.

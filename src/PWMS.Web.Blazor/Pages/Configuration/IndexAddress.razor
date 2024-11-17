@@ -25,7 +25,11 @@
                  @bind-SelectedItems="@selectedAddresses">
         <Columns>
             <SelectColumn T="AddressDto" />
-            <PropertyColumn Property="x => x.Id" />
+            <TemplateColumn Title="Id">
+                <CellTemplate>
+                    <MudLink Href="@($"/configuration/address/{@context.Item.Id}")">@context.Item.Id</MudLink>
+                </CellTemplate>
+            </TemplateColumn>
             <PropertyColumn Property="x => x.AddressLine" />
             <PropertyColumn Property="x => x.Created" />
             <PropertyColumn Property="x => x.CreatedBy" />

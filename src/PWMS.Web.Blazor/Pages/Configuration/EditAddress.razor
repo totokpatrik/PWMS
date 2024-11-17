@@ -1,0 +1,39 @@
+﻿@page "/configuration/address/{AddressId:guid}"
+
+<PageTitle>Edit Address</PageTitle>
+
+<MudContainer Class="p-1 m-0">
+    <MudText Typo="Typo.h6">Edit Address</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="p-1">
+                <MudForm Model="_updateAddressDto" @ref="_form" @bind-IsValid="@success">
+                    <MudTextField @bind-Value="_updateAddressDto.Id"
+                                  Immediate="true"
+                                  Label="Id"
+                                  Disabled="true"
+                                  OnKeyDown="FormKeyDownAsync"/>
+
+                    <MudTextField @bind-Value="_updateAddressDto.AddressLine"
+                                  Immediate="true"
+                                  Label="Address Line"
+                                  Validation="_addressLineValidator.Validation"
+                                  OnKeyDown="FormKeyDownAsync"
+                                  Required />
+
+                    <MudCardActions Class="gap-2">
+                        <MudSpacer />
+                        <MudLoadingButton Variant="Variant.Filled"
+                                          Color="Color.Primary"
+                                          Class="ml-auto"
+                                          Disabled="@(!success)"
+                                          OnClick="UpdateAsync"
+                                          @bind-Loading="_loading">Update</MudLoadingButton>
+                        <MudButton Color="Color.Warning"
+                                   OnClick="Cancel">Cancel</MudButton>
+                    </MudCardActions>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>

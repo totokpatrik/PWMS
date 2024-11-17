@@ -59,9 +59,33 @@ public class AddressService : IAddressService
         return result;
     }
 
+    public async Task<Result<AddressDto>> GetAddressAsync(Guid addressId)
+    {
+        var result = await _httpService.Get<Result<AddressDto>>($"api/v1/addresses/{addressId}");
+        if (!result.IsSuccess)
+        {
+            _snackbar.Add("There was an error: " + result.Errors, Severity.Error);
+        }
+        return result;
+    }
+
     public async Task<Result<CollectionViewModel<AddressDto>>> GetAddressesAsync(PageContext pageContext)
     {
         var result = await _httpService.Post<Result<CollectionViewModel<AddressDto>>>("api/v1/addresses/page", pageContext);
+        return result;
+    }
+
+    public async Task<Result<AddressDto>> UpdateAddressAsync(UpdateAddressDto updateAddressDto)
+    {
+        var result = await _httpService.Put<Result<AddressDto>>("api/v1/addresses", updateAddressDto);
+        if (result.IsSuccess)
+        {
+            _snackbar.Add("Address updated successfully.", Severity.Success);
+        }
+        else
+        {
+            _snackbar.Add("There was an error: " + result.Errors, Severity.Error);
+        }
         return result;
     }
 }
