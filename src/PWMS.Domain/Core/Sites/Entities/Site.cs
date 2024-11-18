@@ -18,23 +18,19 @@ public class Site : BaseAuditableEntity<Guid, string>, IAggregateRoot
     }
     public string Name { get; }
     public List<Warehouse> Warehouses { get; }
-    public ICollection<User> Users { get; }
-    public ICollection<User> Admins { get; }
-    public User Owner { get; }
-    public Site(Guid id, string name, List<Warehouse> warehouses, List<User> users, List<User> admins, User owner) : base(id)
+    public ICollection<User>? Users { get; }
+    public ICollection<User>? Admins { get; }
+    public User Owner { get; set; }
+    public Site(Guid id, string name, List<Warehouse> warehouses, User owner) : base(id)
     {
         Name = name;
         Warehouses = warehouses;
-        Users = users;
-        Admins = admins;
         Owner = owner;
     }
-    public Site(string name, List<Warehouse> warehouses, List<User> users, List<User> admins, User owner) : base(Guid.NewGuid())
+    public Site(string name, List<Warehouse> warehouses, User owner) : base(Guid.NewGuid())
     {
         Name = name;
         Warehouses = warehouses;
-        Users = users;
-        Admins = admins;
         Owner = owner;
     }
 }

@@ -17,24 +17,20 @@ public class Warehouse : BaseAuditableEntity<Guid, string>, IAggregateRoot
         Owner = new User();
     }
     public string Name { get; }
-    public Site Site { get; }
-    public ICollection<User> Users { get; }
-    public ICollection<User> Admins { get; }
-    public User Owner { get; }
-    public Warehouse(Guid id, string name, Site site, List<User> users, List<User> admins, User owner) : base(id)
+    public Site Site { get; } = new Site();
+    public ICollection<User>? Users { get; }
+    public ICollection<User>? Admins { get; }
+    public User Owner { get; set; }
+    public Warehouse(Guid id, string name, Site site, User owner) : base(id)
     {
         Name = name;
         Site = site;
-        Users = users;
-        Admins = admins;
         Owner = owner;
     }
-    public Warehouse(string name, Site site, List<User> users, List<User> admins, User owner) : base(Guid.NewGuid())
+    public Warehouse(string name, Site site, User owner) : base(Guid.NewGuid())
     {
         Name = name;
         Site = site;
-        Users = users;
-        Admins = admins;
         Owner = owner;
     }
 }

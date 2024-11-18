@@ -2,6 +2,7 @@
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
 using PWMS.Domain.Auth.Entities;
+using PWMS.Domain.Core.Sites.Entities;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
 
@@ -19,10 +20,6 @@ public class DbInitializer() : IDbInitializer
             var userManager = scope!.ServiceProvider.GetRequiredService<UserManager<User>>();
             // Create initial user 
             var user = InitialData.User;
-
-            // Create the initial site
-
-            // Create the initial warehouse
 
             // Create password for the initial user
             var password = new PasswordHasher<User>();

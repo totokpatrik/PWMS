@@ -1,4 +1,6 @@
 ﻿using PWMS.Domain.Auth.Entities;
+using PWMS.Domain.Core.Sites.Entities;
+using PWMS.Domain.Core.Warehouses.Entities;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
 
@@ -21,12 +23,5 @@ public static class InitialData
             Id = "18721dd6-0da7-401d-8dfc-995d5d0b6645",
             Name = "Admin"
         };
-    */
-    /*
-    public static Warehouse Warehouse => new Warehouse(
-        id: "",
-        name: "",
-        site: new Domain.Core.Sites.Entities.Site(),
-        );
     */
 }
