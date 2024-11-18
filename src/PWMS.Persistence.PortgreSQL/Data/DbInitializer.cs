@@ -17,10 +17,14 @@ public class DbInitializer() : IDbInitializer
         {
             scope.ThrowIfNull();
             var userManager = scope!.ServiceProvider.GetRequiredService<UserManager<User>>();
-            //Create initial user
+            // Create initial user 
             var user = InitialData.User;
 
-            //Create password for the initial user
+            // Create the initial site
+
+            // Create the initial warehouse
+
+            // Create password for the initial user
             var password = new PasswordHasher<User>();
             var hashed = password.HashPassword(user, "secret");
             user.PasswordHash = hashed;
