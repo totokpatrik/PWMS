@@ -13,7 +13,6 @@ using System.ComponentModel.DataAnnotations;
 namespace PWMS.Presentation.Rest.Controllers.Version10;
 
 [ApiVersion(VersionController.Version10)]
-[Route("api/v{version:apiVersion}/addresses")]
 [Authorize]
 public class AddressesController : BaseController
 {
