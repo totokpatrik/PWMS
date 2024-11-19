@@ -11,6 +11,12 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<Guid>(
+                name: "SelectedSiteId",
+                table: "AspNetUsers",
+                type: "uuid",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Sites",
                 columns: table => new
@@ -161,6 +167,11 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_SelectedSiteId",
+                table: "AspNetUsers",
+                column: "SelectedSiteId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sites_OwnerId",
                 table: "Sites",
                 column: "OwnerId");
@@ -194,11 +205,22 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                 name: "IX_WarehousesUsers_UsersId",
                 table: "WarehousesUsers",
                 column: "UsersId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Sites_SelectedSiteId",
+                table: "AspNetUsers",
+                column: "SelectedSiteId",
+                principalTable: "Sites",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_Sites_SelectedSiteId",
+                table: "AspNetUsers");
+
             migrationBuilder.DropTable(
                 name: "SitesAdmins");
 
@@ -216,6 +238,14 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sites");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_SelectedSiteId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "SelectedSiteId",
+                table: "AspNetUsers");
         }
     }
 }

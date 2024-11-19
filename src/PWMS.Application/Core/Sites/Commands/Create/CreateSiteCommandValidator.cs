@@ -1,6 +1,11 @@
-﻿namespace PWMS.Application.Core.Sites.Commands.Create
+﻿namespace PWMS.Application.Core.Sites.Commands.Create;
+
+public sealed class CreateSiteCommandValidator : AbstractValidator<CreateSiteCommand>
 {
-    internal class CreateSiteCommandValidator
+    public CreateSiteCommandValidator()
     {
+        RuleFor(a => a.Name)
+            .MaximumLength(20)
+            .NotEmpty();
     }
 }

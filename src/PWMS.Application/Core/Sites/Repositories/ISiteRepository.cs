@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Castle.DynamicLinqQueryBuilder;
+using PWMS.Domain.Addresses.Entities;
+using PWMS.Domain.Core.Sites.Entities;
 
-namespace PWMS.Application.Core.Sites.Repositories
+namespace PWMS.Application.Core.Sites.Repositories;
+
+public interface ISiteRepository : IRepositoryBase<Site>
 {
-    internal interface ISiteRepository
-    {
-    }
+    Task<List<Address>> GetAllSites(ISpecification<Address> specification, CancellationToken cancellationToken, QueryBuilderFilterRule filter);
 }

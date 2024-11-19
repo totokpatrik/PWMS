@@ -6,9 +6,14 @@ namespace PWMS.Domain.Auth.Entities;
 
 public class User : IdentityUser
 {
-    public ICollection<Warehouse> UserWarehouses { get; set; } = new List<Warehouse>();
-    public ICollection<Warehouse> AdminWarehouses { get; set; } = new List<Warehouse>();
-    public ICollection<Site> UserSites { get; set; } = new List<Site>();
-    public ICollection<Site> AdminSites { get; set; } = new List<Site>();
+    public ICollection<Warehouse>? UserWarehouses { get; set; }
+    public ICollection<Warehouse>? AdminWarehouses { get; set; }
+    public ICollection<Site>? UserSites { get; set; }
+    public ICollection<Site>? AdminSites { get; set; }
+    public Site? SelectedSite { get; set; }
 
+    public void SelectSite(Site site)
+    {
+        SelectedSite = site;
+    }
 }

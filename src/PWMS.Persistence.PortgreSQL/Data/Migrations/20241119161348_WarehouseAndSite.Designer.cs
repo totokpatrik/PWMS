@@ -12,7 +12,7 @@ using PWMS.Persistence.PortgreSQL.Data;
 namespace PWMS.Persistence.PortgreSQL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241118161643_WarehouseAndSite")]
+    [Migration("20241119161348_WarehouseAndSite")]
     partial class WarehouseAndSite
     {
         /// <inheritdoc />
@@ -230,6 +230,9 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("SelectedSiteId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
@@ -245,6 +248,8 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("SelectedSiteId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -431,6 +436,15 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PWMS.Domain.Auth.Entities.User", b =>
+                {
+                    b.HasOne("PWMS.Domain.Core.Sites.Entities.Site", "SelectedSite")
+                        .WithMany()
+                        .HasForeignKey("SelectedSiteId");
+
+                    b.Navigation("SelectedSite");
                 });
 
             modelBuilder.Entity("PWMS.Domain.Core.Sites.Entities.Site", b =>

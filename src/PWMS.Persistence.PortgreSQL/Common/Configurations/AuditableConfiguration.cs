@@ -13,5 +13,10 @@ public class AuditableConfiguration<T> where T : class, IBaseAuditableEntity<str
         builder.Property(e => e.Modified);
 
         builder.Property(e => e.ModifiedBy);
+
+        builder.Property(e => e.Warehouse);
+
+        builder.HasOne(e => e.Warehouse)
+            .WithMany();
     }
 }
