@@ -1,30 +1,37 @@
 ﻿@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 @inherits LayoutComponentBase
 <MudLayout Style="display: flex;flex-flow: column;">
     <AuthorizeView>
         <Authorized>
             <MudAppBar Color="Color.Primary">
-                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleDrawer" />
+                @if (WarehouseAndSiteSet)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleDrawer" />
+                }
                 <MudButton Color="Color.Inherit"
                            Variant="Variant.Text"
                            DropShadow="true">
                     PWMS
                 </MudButton>
                 <MudSpacer />
-                <MudButton Color="Color.Inherit"
-                           Variant="Variant.Text"
-                           DropShadow="true"
-                           Class="rounded-r-0">
-                    Site
-                </MudButton>
-                <MudButton Color="Color.Inherit"
-                           Variant="Variant.Text"
-                           Class="border-l border-solid rounded-l-0 mr-8"
-                           Style="border-color: var(--mud-palette-primary-lighten)"
-                           DropShadow="true">
-                    Warehouse
-                </MudButton>
+                @if (WarehouseAndSiteSet)
+                {
+                    <MudButton Color="Color.Inherit"
+                               Variant="Variant.Text"
+                               DropShadow="true"
+                               Class="rounded-r-0">
+                        @_site
+                    </MudButton>
+                    <MudButton Color="Color.Inherit"
+                               Variant="Variant.Text"
+                               Class="border-l border-solid rounded-l-0 mr-8"
+                               Style="border-color: var(--mud-palette-primary-lighten)"
+                               DropShadow="true">
+                        @_warehouse
+                    </MudButton>
+                }
                 <MudMenu Label="@context.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value"
                          EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
                          Variant="Variant.Text"
@@ -34,9 +41,12 @@
                     <MudMenuItem OnClick="Logout">Logout</MudMenuItem>
                 </MudMenu>
             </MudAppBar>
-            <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
-                <NavMenu />
-            </MudDrawer>
+            @if (WarehouseAndSiteSet)
+            {
+                <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
+                    <NavMenu />
+                </MudDrawer>
+            }
             <MudMainContent>
                 @Body
             </MudMainContent>
@@ -55,7 +65,62 @@
 <MudPopoverProvider />
 
 @code {
+    public bool WarehouseAndSiteSet
+    {
+        get
+        {
+            return (!string.IsNullOrEmpty(_site) && !string.IsNullOrEmpty(_warehouse));
+        }
+    }
     private bool _open = false;
+    private string? _site;
+    private string? _warehouse;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        // If the site is not selected we will direct the user to the site page, where he can create a new site, or select the ones he has permissions with
+        var path = new Uri(NavigationManager.Uri).LocalPath;
+        if (string.IsNullOrEmpty(_site) && path != "/site")
+        {
+            NavigationManager.NavigateTo("/site");
+            return;
+        }
+        else if (string.IsNullOrEmpty(_warehouse) && path != "/warehouse" && path != "/site")
+        {
+            NavigationManager.NavigateTo("/warehouse");
+        }
+        base.OnAfterRender(firstRender);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity!.IsAuthenticated)
+        {
+            string? site = user.Claims.ToList()
+                .Where(s => s.Type == "Site")
+                .Select(s => s.Value)
+                .FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(site))
+            {
+                _site = site;
+            }
+
+            string? warehouse = user.Claims.ToList()
+                .Where(s => s.Type == "Warehouse")
+                .Select(s => s.Value)
+                .FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(warehouse))
+            {
+                _warehouse = warehouse;
+            }
+        }
+    }
+
 
     private void ToggleDrawer()
     {

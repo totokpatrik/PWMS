@@ -18,7 +18,7 @@ namespace PWMS.Web.Blazor.Identity
         }
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            var authToken = await _localStorageService.GetItemAsStringAsync("authToken");
+            var authToken = await GetJwtToken();
 
             var identity = new ClaimsIdentity();
             _http.DefaultRequestHeaders.Authorization = null;
@@ -44,6 +44,10 @@ namespace PWMS.Web.Blazor.Identity
             NotifyAuthenticationStateChanged(Task.FromResult(state));
 
             return state;
+        }
+        private async Task<string?> GetJwtToken()
+        {
+            return await _localStorageService.GetItemAsStringAsync("authToken");
         }
         private byte[] ParseBase64WithoutPadding(string base64)
         {

@@ -5,6 +5,8 @@ using PWMS.Application.Auth.Repositories;
 using PWMS.Application.Common.Exceptions;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Domain.Auth.Entities;
+using PWMS.Domain.Core.Sites.Entities;
+using PWMS.Domain.Core.Warehouses.Entities;
 using PWMS.Persistence.PortgreSQL.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,6 +16,7 @@ namespace PWMS.Persistence.PortgreSQL.Auth.Repositories;
 
 public class AuthRepository : RepositoryBase<User>, IAuthRepository
 {
+    private readonly IApplicationDbContext _dbContext;
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IConfiguration _configuration;
@@ -24,6 +27,7 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         SignInManager<User> signInManager,
         IConfiguration configuration) : base(dbContext.AppDbContext)
     {
+        _dbContext = dbContext;
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
@@ -86,6 +90,14 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             var claim = new Claim("Roles", role);
             claims.Add(claim);
         }*/
+
+        // Site claim
+        string? siteId = _dbContext.AppDbContext.Set<Site>().FirstOrDefault()?.Id.ToString();
+        claims.Add(new Claim("Site", siteId ?? string.Empty));
+
+        // Warehouse claim
+        string? warehouseId = _dbContext.AppDbContext.Set<Warehouse>().FirstOrDefault()?.Id.ToString();
+        claims.Add(new Claim("Warehouse", warehouseId ?? string.Empty));
 
         claims.AddRange(claimsDb);
 
