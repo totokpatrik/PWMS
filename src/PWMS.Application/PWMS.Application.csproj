@@ -24,20 +24,4 @@
     <ProjectReference Include="..\PWMS.Domain\PWMS.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Core\Sites\Commands\Create\" />
-    <Folder Include="Core\Sites\Commands\Delete\" />
-    <Folder Include="Core\Sites\Commands\" />
-    <Folder Include="Core\Sites\Commands\Update\" />
-    <Folder Include="Core\Sites\Models\" />
-    <Folder Include="Core\Sites\Commands\Select\" />
-    <Folder Include="Core\Sites\Repositories\" />
-    <Folder Include="Core\Sites\Specifications\" />
-    <Folder Include="Core\Sites\Queries\Get\" />
-    <Folder Include="Core\Sites\Queries\GetById\" />
-    <Folder Include="Core\Warehouses\Create\" />
-    <Folder Include="Core\Warehouses\Delete\" />
-    <Folder Include="Core\Warehouses\Update\" />
-  </ItemGroup>
-
 </Project>
