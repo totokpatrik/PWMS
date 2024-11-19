@@ -177,6 +177,9 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("WarehouseId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.ToTable("Addresses", (string)null);

@@ -12,7 +12,7 @@ using PWMS.Persistence.PortgreSQL.Data;
 namespace PWMS.Persistence.PortgreSQL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241119161348_WarehouseAndSite")]
+    [Migration("20241119171153_WarehouseAndSite")]
     partial class WarehouseAndSite
     {
         /// <inheritdoc />
@@ -179,6 +179,9 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("WarehouseId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 

@@ -1,6 +1,4 @@
-﻿using PWMS.Domain.Core.Warehouses.Entities;
-
-namespace PWMS.Domain.Common;
+﻿namespace PWMS.Domain.Common;
 
 public interface IBaseAuditableEntity<TKey> : IEntity
 {
@@ -11,6 +9,4 @@ public interface IBaseAuditableEntity<TKey> : IEntity
     DateTime? Modified { get; set; }
 
     TKey? ModifiedBy { get; set; }
-    Warehouse? Warehouse { get; set; }
-    public Guid? WarehouseId { get; set; }
 }

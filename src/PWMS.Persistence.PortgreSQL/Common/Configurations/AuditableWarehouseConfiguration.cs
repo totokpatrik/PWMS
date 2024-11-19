@@ -2,7 +2,7 @@
 
 namespace PWMS.Persistence.PortgreSQL.Common.Configurations;
 
-public class AuditableConfiguration<T> where T : class, IBaseAuditableEntity<string>
+public class AuditableWarehouseConfiguration<T> where T : class, IBaseAuditableEntity<string>, IWarehouseEntity
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
@@ -13,5 +13,7 @@ public class AuditableConfiguration<T> where T : class, IBaseAuditableEntity<str
         builder.Property(e => e.Modified);
 
         builder.Property(e => e.ModifiedBy);
+
+        builder.Property(e => e.WarehouseId);
     }
 }

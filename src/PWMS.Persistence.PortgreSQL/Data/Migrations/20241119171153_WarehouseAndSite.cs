@@ -17,6 +17,12 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                 type: "uuid",
                 nullable: true);
 
+            migrationBuilder.AddColumn<Guid>(
+                name: "WarehouseId",
+                table: "Addresses",
+                type: "uuid",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Sites",
                 columns: table => new
@@ -246,6 +252,10 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
             migrationBuilder.DropColumn(
                 name: "SelectedSiteId",
                 table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "WarehouseId",
+                table: "Addresses");
         }
     }
 }
