@@ -80,7 +80,7 @@ public static class ServiceCollectionExtension
         services.AddAuthorizationBuilder();
 
         services.AddIdentityCore<User>()
-            .AddRoles<IdentityRole>()
+            .AddRoles<Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddSignInManager()
             .AddTokenProvider<DataProtectorTokenProvider<User>>(jwtConfiguration.Provider);

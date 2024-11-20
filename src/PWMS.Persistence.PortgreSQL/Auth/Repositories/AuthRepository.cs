@@ -83,13 +83,12 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         var claimsDb = await _userManager.GetClaimsAsync(user);
         var roles = await _userManager.GetRolesAsync(user);
         claims.Add(new Claim("Id", user.Id));
-        claims.Add(new Claim("Roles", ""));
-        /*
+
         foreach (var role in roles)
         {
-            var claim = new Claim("Roles", role);
+            var claim = new Claim(ClaimTypes.Role, role);
             claims.Add(claim);
-        }*/
+        }
 
         // Site claim
         string? siteId = _dbContext.AppDbContext.Set<Site>().FirstOrDefault()?.Id.ToString();

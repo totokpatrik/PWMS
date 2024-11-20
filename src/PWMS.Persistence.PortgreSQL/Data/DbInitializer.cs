@@ -2,7 +2,6 @@
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
 using PWMS.Domain.Auth.Entities;
-using PWMS.Domain.Core.Sites.Entities;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
 
@@ -13,12 +12,23 @@ public class DbInitializer() : IDbInitializer
         IServiceScope? scope = null,
         CancellationToken cancellationToken = default)
     {
-        // TODO seeding initial user
-        if (!await context.Set<User>().AnyAsync(cancellationToken))
+        // Seeding the initial user with initial roles
+        scope.ThrowIfNull();
+
+        var userManager = scope!.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var roleManager = scope!.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+
+        var initialRole = InitialData.Role;
+        var initialUser = InitialData.User;
+
+        if (!await roleManager.RoleExistsAsync(initialRole.Name!))
         {
-            scope.ThrowIfNull();
-            var userManager = scope!.ServiceProvider.GetRequiredService<UserManager<User>>();
-            // Create initial user 
+            // Create the initial role
+            await roleManager.CreateAsync(initialRole);
+        }
+
+        if (await userManager.FindByNameAsync(initialUser.UserName!) == null)
+        {
             var user = InitialData.User;
 
             // Create password for the initial user
@@ -27,6 +37,8 @@ public class DbInitializer() : IDbInitializer
             user.PasswordHash = hashed;
 
             await userManager.CreateAsync(user);
+
+            await userManager.AddToRoleAsync(user, initialRole.Name!);
         }
     }
 }
