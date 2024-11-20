@@ -24,7 +24,7 @@ public class AddressesController : BaseController
     /// Creates address.
     /// </summary>
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = "Admin")]
     [ProducesResponseType(typeof(ResultDto<Guid>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]

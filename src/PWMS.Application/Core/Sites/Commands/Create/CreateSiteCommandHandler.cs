@@ -7,15 +7,14 @@ using PWMS.Domain.Core.Sites.Entities;
 namespace PWMS.Application.Core.Sites.Commands.Create;
 public sealed class CreateSiteCommandHandler(
     ISiteRepository siteRepository,
-    ICurrentUser currentUser,
     IAuthRepository authRepository) : IRequestHandler<CreateSiteCommand, Result<Guid>>
 {
     private readonly ISiteRepository _siteRepository = siteRepository.ThrowIfNull();
-    private readonly ICurrentUser _currentUser = currentUser.ThrowIfNull();
     private readonly IAuthRepository _authRepository = authRepository.ThrowIfNull();
 
     public async Task<Result<Guid>> Handle(CreateSiteCommand request, CancellationToken cancellationToken)
     {
+        /*
         var userId = _currentUser.Id;
 
         if (userId == null)
@@ -41,5 +40,7 @@ public sealed class CreateSiteCommandHandler(
             .SaveChangesAsync(cancellationToken);
 
         return Result.Ok(entity.Id);
+        */
+        throw new NotImplementedException();
     }
 }

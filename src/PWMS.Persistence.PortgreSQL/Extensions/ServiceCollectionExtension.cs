@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PWMS.Application.Auth.Requirements;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
 using PWMS.Domain.Auth.Entities;
@@ -84,7 +85,10 @@ public static class ServiceCollectionExtension
             .AddSignInManager()
             .AddTokenProvider<DataProtectorTokenProvider<User>>(jwtConfiguration.Provider);
 
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy => policy.AddRequirements(new AdminRequirement()));
+        });
         services.TryAddScoped<IDbInitializer, DbInitializer>();
 
         // maybe load from config also

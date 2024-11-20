@@ -4,9 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Core.Sites.Commands.Delete
-{
-    internal class DeleteSiteCommand
-    {
-    }
-}
+namespace PWMS.Application.Core.Sites.Commands.Delete;
+
+public sealed record DeleteSiteCommand(Guid Id) : IRequest<Result<Guid>>;

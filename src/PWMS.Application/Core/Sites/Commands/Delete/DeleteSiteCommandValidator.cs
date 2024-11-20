@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Core.Sites.Commands.Delete
+namespace PWMS.Application.Core.Sites.Commands.Delete;
+
+public class DeleteSiteCommandValidator : AbstractValidator<DeleteSiteCommand>
 {
-    internal class DeleteSiteCommandValidator
+    public DeleteSiteCommandValidator()
     {
+        RuleFor(a => a.Id)
+            .NotNull();
     }
 }
