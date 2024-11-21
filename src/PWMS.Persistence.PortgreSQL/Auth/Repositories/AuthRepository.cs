@@ -92,14 +92,17 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
 
         // Site claim
         var siteContext = _dbContext.AppDbContext.Set<Site>();
+        var userContext = _dbContext.AppDbContext.Set<User>();
 
-        string? siteId = siteContext.FirstOrDefault()?.Id.ToString();
-        claims.Add(new Claim("Site", siteId ?? string.Empty));
+        var selectedSite = await userContext
+            .Select(u => u.SelectedSite)
+            .FirstOrDefaultAsync(u => u.Id == Guid.Parse(user.Id));
+
+        claims.Add(new Claim("Site", selectedSite?.Id.ToString() ?? string.Empty));
 
         // Site roles
         var siteOwner = siteContext
             .FirstOrDefault(s => s.Owner == user);
-
         if (siteOwner != null)
             claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteOwner));
 
@@ -107,7 +110,6 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             .Select(s => s.Admins)
             .Where(a => a.Contains(user))
             .Any();
-
         if (siteAdmin)
             claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteAdmin));
 
@@ -115,7 +117,6 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             .Select(s => s.Users)
             .Where(a => a.Contains(user))
             .Any();
-
         if (siteUser)
             claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteUser));
 

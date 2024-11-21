@@ -1,14 +1,7 @@
 ﻿using Castle.DynamicLinqQueryBuilder;
-using PWMS.Application.Addresses.Repositories;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Application.Core.Sites.Repositories;
-using PWMS.Domain.Addresses.Entities;
 using PWMS.Domain.Core.Sites.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PWMS.Persistence.PortgreSQL.Core.Sites.Repositories;
 
@@ -21,8 +14,12 @@ public class SiteRepository : RepositoryBase<Site>, ISiteRepository
         _dbContext = dbContext;
     }
 
-    public Task<List<Address>> GetAllSites(ISpecification<Address> specification, CancellationToken cancellationToken, QueryBuilderFilterRule filter)
+    public async Task<List<Site>> GetAllSites(ISpecification<Site> specification, CancellationToken cancellationToken, QueryBuilderFilterRule filter)
     {
-        throw new NotImplementedException();
+        var queryResult = SpecificationEvaluator.Default.GetQuery(
+            query: _dbContext.Set<Site>().AsQueryable().BuildQuery(filter),
+            specification: specification);
+
+        return await queryResult.ToListAsync(cancellationToken);
     }
 }

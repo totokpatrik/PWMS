@@ -9,6 +9,7 @@ using PWMS.Web.Blazor;
 using PWMS.Web.Blazor.Identity;
 using PWMS.Web.Blazor.Services.AuthService;
 using PWMS.Web.Blazor.Services.Configuration;
+using PWMS.Web.Blazor.Services.Core;
 using PWMS.Web.Blazor.Services.HttpService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -27,6 +28,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 
 builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<ISiteService, SiteService>();
 
 // adding localstorage
 builder.Services.AddBlazoredLocalStorage();

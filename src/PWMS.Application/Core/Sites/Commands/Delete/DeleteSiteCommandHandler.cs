@@ -1,38 +1,27 @@
-﻿using PWMS.Application.Addresses.Commands.Delete;
-using PWMS.Application.Addresses.Repositories;
-using PWMS.Application.Addresses.Specifications;
-using PWMS.Domain.Addresses.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PWMS.Application.Core.Sites.Repositories;
+using PWMS.Application.Core.Sites.Specifications;
+using PWMS.Domain.Core.Sites.Entities;
 
 namespace PWMS.Application.Core.Sites.Commands.Delete;
 
-internal class DeleteSiteCommandHandler() : IRequestHandler<DeleteSiteCommand, Result<Guid>>
+internal class DeleteSiteCommandHandler(ISiteRepository siteRepository) : IRequestHandler<DeleteSiteCommand, Result<Guid>>
 {
+    private readonly ISiteRepository _siteRepository = siteRepository.ThrowIfNull();
+
     public async Task<Result<Guid>> Handle(DeleteSiteCommand request, CancellationToken cancellationToken)
     {
-        // Check if current user is an owner - only owner, or admin can delete the site
-        // TODO - requirement should be used
-
-        /*
-        var entity = await _addressRepository
-            .SingleOrDefaultAsync(new AddressByIdSpecification(request.Id), cancellationToken)
+        var entity = await _siteRepository
+            .SingleOrDefaultAsync(new SiteByIdSpecification(request.Id), cancellationToken)
             .ConfigureAwait(false);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(Address), request.Id);
+            throw new NotFoundException(nameof(Site), request.Id);
         }
-
-        await _addressRepository.DeleteAsync(entity, cancellationToken).ConfigureAwait(false);
-        await _addressRepository.SaveChangesAsync(cancellationToken)
+        await _siteRepository.DeleteAsync(entity, cancellationToken).ConfigureAwait(false);
+        await _siteRepository.SaveChangesAsync(cancellationToken)
             .ConfigureAwait(false);
 
         return Result.Ok(entity.Id);
-        */
-        throw new NotImplementedException();
     }
 }

@@ -1,11 +1,21 @@
-﻿using PWMS.Application.Common.Paging;
+﻿using MudBlazor;
+using PWMS.Application.Common.Paging;
 using PWMS.Application.Core.Sites.Models;
 using PWMS.Web.Blazor.Models;
+using PWMS.Web.Blazor.Services.HttpService;
 
 namespace PWMS.Web.Blazor.Services.Core;
 
 public class SiteService : ISiteService
 {
+    private readonly IHttpService _httpService;
+    private readonly ISnackbar _snackbar;
+
+    public SiteService(IHttpService httpService, ISnackbar Snackbar)
+    {
+        _httpService = httpService;
+        _snackbar = Snackbar;
+    }
     public Task<Result<Guid>> CreateAsync(CreateSiteDto createSiteDto)
     {
         throw new NotImplementedException();
@@ -26,9 +36,10 @@ public class SiteService : ISiteService
         throw new NotImplementedException();
     }
 
-    public Task<Result<CollectionViewModel<SiteDto>>> GetSitesAsync(PageContext pageContext)
+    public async Task<Result<CollectionViewModel<SiteDto>>> GetSitesAsync(PageContext pageContext)
     {
-        throw new NotImplementedException();
+        var result = await _httpService.Post<Result<CollectionViewModel<SiteDto>>>("api/v1/sites/page", pageContext);
+        return result;
     }
 
     public Task<Result<SiteDto>> UpdateSiteAsync(UpdateSiteDto updateSiteDto)

@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PWMS.Domain.Core.Sites.Entities;
 
-namespace PWMS.Application.Core.Sites.Specifications
+namespace PWMS.Application.Core.Sites.Specifications;
+
+public class SiteByIdSpecification : Specification<Site>, ISingleResultSpecification<Site>
 {
-    internal class SiteByIdSpecification
+    public SiteByIdSpecification(Guid id, bool noTracking = false)
     {
+        Query.Where(i => i.Id == id);
+        if (noTracking)
+        {
+            Query.AsNoTracking();
+        }
     }
 }
