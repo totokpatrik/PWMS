@@ -25,4 +25,8 @@
     <ProjectReference Include="..\PWMS.Domain\PWMS.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Auth\Queries\" />
+  </ItemGroup>
+
 </Project>

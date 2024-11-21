@@ -1,6 +1,89 @@
 ﻿@page "/site"
+@using PWMS.Application.Core.Sites.Models
 
-<p>You have to select a warehouse first</p>
-<h3>IndexSite</h3>
+<PageTitle>Sites</PageTitle>
 
-
+<MudContainer Style="width: 100%; min-width: 100%; max-height: calc(100vh - 64px - var(--mud-appbar-height)); min-height: calc(100vh - 64px - var(--mud-appbar-height));"
+              Fixed="true"
+              Class="p-1">
+    <div style="height: 128px">
+        <div class="d-flex flex-grow-1 flex-column gap-4">
+            <MudText Typo="Typo.h6">Sites</MudText>
+            <MudSpacer />
+            <div class="d-flex flex-grow-1 flex-row gap-1">
+                <MudButton Variant="Variant.Outlined" OnClick="Add">Add</MudButton>
+                <MudButton Variant="Variant.Outlined" Disabled="@deleteDisabled" OnClick="Delete">Delete</MudButton>
+                <MudSpacer />
+                <MudIcon Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Default" />
+            </div>
+        </div>
+    </div>
+    <MudDataGrid @ref="dataGrid" MultiSelection="true" T="SiteDto" ServerData="ServerReload" Filterable="false" ColumnResizeMode="MudBlazor.ResizeMode.Column" Loading="@_loading" RowClass="no-borders"
+                 Elevation="0"
+                 Style="min-width: 100%" FixedHeader Height="calc(100vh - 64px - 128px - var(--mud-appbar-height))"
+                 @bind-SelectedItems="@selectedSites">
+        <Columns>
+            <SelectColumn T="SiteDto" />
+            <TemplateColumn Title="Id">
+                <CellTemplate>
+                    <MudLink Href="@($"/site/{@context.Item.Id}")">@context.Item.Id</MudLink>
+                </CellTemplate>
+            </TemplateColumn>
+            <PropertyColumn Property="x => x.Name" />
+            <PropertyColumn Property="x => x.Created" />
+            <PropertyColumn Property="x => x.CreatedBy" />
+            <PropertyColumn Property="x => x.Modified" />
+            <PropertyColumn Property="x => x.ModifiedBy" />
+        </Columns>
+        <NoRecordsContent>
+            <MudText>No matching records found</MudText>
+        </NoRecordsContent>
+    </MudDataGrid>
+</MudContainer>
+<div class="64px">
+    <MudToolBar>
+        <div class="mud-table-pagination-spacer"></div>
+        <MudText Typo="Typo.body2" Class="mud-table-pagination-caption">
+            Rows per page:
+        </MudText>
+        <MudSelect T="int"
+                   Value="@_pageSize"
+                   Class="mud-table-pagination-select"
+                   Underline="false"
+                   Dense="true"
+                   ValueChanged="PageSizeChangedAsync">
+            @foreach (var pageSize in _pageSizeOptions)
+            {
+                <MudSelectItem Value="pageSize">@pageSize</MudSelectItem>
+            }
+        </MudSelect>
+        <MudText Typo="Typo.body2" Class="mud-table-pagination-caption">
+            @if (_totalItems == 0 )
+            {
+                @_totalItems
+            }
+            else if (@_pageIndex == 1)
+            {
+                @_pageIndex;
+            }
+            else
+            {
+                @(((_pageIndex - 1) * _pageSize) + 1)
+            }
+            -
+            @if (_pageIndex * _pageSize > _totalItems)
+            {
+                @_totalItems
+            }
+            else
+            {
+                @(_pageIndex * _pageSize)
+            }
+             of @_totalItems
+        </MudText>
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.FirstPage" Disabled="@_firstPageButtonDisabled" @onclick="NavigateToFirstPageAsync" />
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.NavigateBefore" Disabled="@_navigateBeforeButtonDisabled" @onclick="NavigateToPreviousPage" />
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.NavigateNext" Disabled="@_navigateNextButtonDisabled" @onclick="NavigateToNextPage" />
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.LastPage" Disabled="@_lastPageButtonDisabled" @onclick="NavigateToLastPage" />
+    </MudToolBar>
+</div>

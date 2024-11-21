@@ -1,4 +1,5 @@
 ﻿using PWMS.Application.Auth.Repositories;
+using PWMS.Application.Auth.Specifications;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Application.Core.Sites.Repositories;
 using PWMS.Domain.Auth.Entities;
@@ -7,23 +8,25 @@ using PWMS.Domain.Core.Sites.Entities;
 namespace PWMS.Application.Core.Sites.Commands.Create;
 public sealed class CreateSiteCommandHandler(
     ISiteRepository siteRepository,
-    IAuthRepository authRepository) : IRequestHandler<CreateSiteCommand, Result<Guid>>
+    IAuthRepository authRepository,
+    ICurrentUserService currentUserService) : IRequestHandler<CreateSiteCommand, Result<Guid>>
 {
     private readonly ISiteRepository _siteRepository = siteRepository.ThrowIfNull();
+    private readonly ICurrentUserService _currentUserService = currentUserService.ThrowIfNull();
     private readonly IAuthRepository _authRepository = authRepository.ThrowIfNull();
 
     public async Task<Result<Guid>> Handle(CreateSiteCommand request, CancellationToken cancellationToken)
     {
-        /*
-        var userId = _currentUser.Id;
-
+        // The user who creates it will be the owner
+        var userId = _currentUserService.GetCurrentUser()?.Id;
         if (userId == null)
         {
             throw new NotFoundException(nameof(User));
         }
 
         var user = await _authRepository
-            .GetByIdAsync(userId, cancellationToken);
+            .SingleOrDefaultAsync(new UserByIdSpecification(userId, false), cancellationToken)
+            .ConfigureAwait(false);
 
         if (user == null)
         {
@@ -31,8 +34,6 @@ public sealed class CreateSiteCommandHandler(
         }
 
         var entity = new Site(request.Name, user);
-        user.SelectSite(entity);
-
         await _siteRepository
             .AddAsync(entity, cancellationToken);
 
@@ -40,7 +41,5 @@ public sealed class CreateSiteCommandHandler(
             .SaveChangesAsync(cancellationToken);
 
         return Result.Ok(entity.Id);
-        */
-        throw new NotImplementedException();
     }
 }

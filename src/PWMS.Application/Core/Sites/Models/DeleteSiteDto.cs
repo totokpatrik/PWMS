@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PWMS.Application.Core.Sites.Models;
 
-namespace PWMS.Application.Core.Sites.Models
+public class DeleteSiteDto
 {
-    internal class DeleteSiteDto
-    {
-    }
+    public Guid Id { get; set; }
 }

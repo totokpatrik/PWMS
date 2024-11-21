@@ -14,13 +14,13 @@ public class Site : BaseAuditableEntity<Guid, string>, IAggregateRoot
         Warehouses = new List<Warehouse>();
         Users = new List<User>();
         Admins = new List<User>();
-        Owner = new User();
+        Owner = default!;
     }
     public string Name { get; }
     public List<Warehouse>? Warehouses { get; }
     public ICollection<User>? Users { get; }
     public ICollection<User>? Admins { get; }
-    public User Owner { get; set; }
+    public User Owner { get; }
     public Site(Guid id, string name, User owner) : base(id)
     {
         Name = name;

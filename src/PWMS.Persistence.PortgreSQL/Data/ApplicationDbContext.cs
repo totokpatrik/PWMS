@@ -40,7 +40,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IAppl
         }
 
         var currentWarehouse = _currentWarehouseService.GetCurrentWarehouse();
-        if (currentWarehouse is not null && currentUser is not null)
+        if (currentWarehouse is not null && currentWarehouse.Id != Guid.Empty && currentUser is not null)
         {
             UpdateWarehouseEntities(currentWarehouse, currentUser);
         }
@@ -120,8 +120,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IAppl
                 modelBuilder.Entity(entityType.Name).HasQueryFilter(filter);
             }
         }
-
-
 
         base.OnModelCreating(modelBuilder);
     }
