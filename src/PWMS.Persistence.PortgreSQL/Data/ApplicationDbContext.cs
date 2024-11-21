@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
-using PWMS.Domain.Addresses.Entities;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Domain.Common;
 using PWMS.Persistence.PortgreSQL.Extensions;
+using System.Linq.Expressions;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
 
@@ -105,8 +105,23 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IAppl
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         modelBuilder.DataTimeConfigure();
 
-        var warehouseEntityConfiguration = modelBuilder.Entity<Address>();
-        warehouseEntityConfiguration.HasQueryFilter(a => a.WarehouseId == _currentWarehouseService.GetCurrentWarehouse().Id);
+        // multi warehouse config
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes().Where(e =>
+            e.GetProperties().Select(property => property.Name).Any(pName => pName.Equals("WarehouseId"))))
+        {
+            var warehouseId = entityType.FindProperty("WarehouseId");
+            if (warehouseId != null)
+            {
+                var parameter = Expression.Parameter(entityType.ClrType, "p");
+                var left = Expression.Property(parameter, warehouseId.PropertyInfo);
+                Expression<Func<Guid?>> tenantId = () => _currentWarehouseService.GetCurrentWarehouse().Id;
+                var right = tenantId.Body;
+                var filter = Expression.Lambda(Expression.Equal(left, right), parameter);
+                modelBuilder.Entity(entityType.Name).HasQueryFilter(filter);
+            }
+        }
+
+
 
         base.OnModelCreating(modelBuilder);
     }
