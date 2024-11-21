@@ -16,6 +16,14 @@ public class CurrentWarehouseService(IHttpContextAccessor httpContextAccessor) :
 
         var warehouseId = GetSingleClaimValue("Warehouse");
 
+        if (string.IsNullOrWhiteSpace(warehouseId))
+        {
+            return new CurrentWarehouse
+            {
+                Id = Guid.Empty
+            };
+        }
+
         return new CurrentWarehouse
         {
             Id = Guid.Parse(warehouseId)

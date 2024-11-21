@@ -3,6 +3,10 @@ using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Domain.Common;
+using PWMS.Persistence.PortgreSQL.Addresses.Configurations;
+using PWMS.Persistence.PortgreSQL.Auth.Configurations;
+using PWMS.Persistence.PortgreSQL.Core.Sites.Configurations;
+using PWMS.Persistence.PortgreSQL.Core.Warehouses.Configurations;
 using PWMS.Persistence.PortgreSQL.Extensions;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
@@ -14,7 +18,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IAppl
     private IDateTime _dateTime = null!;
     private IMediator _mediator = null!;
     private IDbInitializer _dbInitializer = null!;
-
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
@@ -102,7 +105,10 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IAppl
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new AddressConfiguration());
+        modelBuilder.ApplyConfiguration(new SiteConfiguration());
+        modelBuilder.ApplyConfiguration(new WarehouseConfgiuration());
         modelBuilder.DataTimeConfigure();
 
         base.OnModelCreating(modelBuilder);
