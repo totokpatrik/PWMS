@@ -9,6 +9,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IDateTime, MachineDateTime>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<ICurrentWarehouseService, CurrentWarehouseService>();
 
         return services;
     }

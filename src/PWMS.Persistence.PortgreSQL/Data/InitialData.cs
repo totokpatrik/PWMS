@@ -14,6 +14,16 @@ public static class InitialData
         SecurityStamp = Guid.NewGuid().ToString("D")
     };
 
+    public static User User2 =>
+    new User
+    {
+        Id = "8e445865-a24d-4543-a6c6-9443d048cdb8",
+        UserName = "Admin2",
+        Email = "admin2@ddd.com",
+        EmailConfirmed = true,
+        SecurityStamp = Guid.NewGuid().ToString("D")
+    };
+
 
     public static Role Role =>
     new Role

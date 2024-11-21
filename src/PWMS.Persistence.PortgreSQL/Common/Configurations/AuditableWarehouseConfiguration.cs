@@ -2,7 +2,7 @@
 
 namespace PWMS.Persistence.PortgreSQL.Common.Configurations;
 
-public class AuditableWarehouseConfiguration<T> where T : class, IBaseAuditableEntity<string>, IWarehouseEntity
+public class AuditableWarehouseConfiguration<T> where T : class, IBaseAuditableWarehouseEntity<string>
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {

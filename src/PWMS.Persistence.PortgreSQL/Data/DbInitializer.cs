@@ -21,6 +21,8 @@ public class DbInitializer() : IDbInitializer
         var initialRole = InitialData.Role;
         var initialUser = InitialData.User;
 
+        var initialUser2 = InitialData.User2;
+
         if (!await roleManager.RoleExistsAsync(initialRole.Name!))
         {
             // Create the initial role
@@ -30,6 +32,20 @@ public class DbInitializer() : IDbInitializer
         if (await userManager.FindByNameAsync(initialUser.UserName!) == null)
         {
             var user = InitialData.User;
+
+            // Create password for the initial user
+            var password = new PasswordHasher<User>();
+            var hashed = password.HashPassword(user, "secret");
+            user.PasswordHash = hashed;
+
+            await userManager.CreateAsync(user);
+
+            await userManager.AddToRoleAsync(user, initialRole.Name!);
+        }
+
+        if (await userManager.FindByNameAsync(initialUser2.UserName!) == null)
+        {
+            var user = InitialData.User2;
 
             // Create password for the initial user
             var password = new PasswordHasher<User>();

@@ -10,10 +10,12 @@ public class ApplicationDbContextFactory : IDbContextFactory<ApplicationDbContex
     private readonly IDbInitializer _dbInitializer;
     private readonly IMediator _mediator;
     private readonly IDateTime _dateTime;
+    private readonly ICurrentWarehouseService _currentWarehouseService;
 
     public ApplicationDbContextFactory(
             IDbContextFactory<ApplicationDbContext> pooledFactory,
             ICurrentUserService currentUserService,
+            ICurrentWarehouseService currentWarehouseService,
             IDbInitializer dbInitializer,
             IMediator mediator,
             IDateTime dateTime)
@@ -23,12 +25,13 @@ public class ApplicationDbContextFactory : IDbContextFactory<ApplicationDbContex
         _dbInitializer = dbInitializer.ThrowIfNull();
         _mediator = mediator.ThrowIfNull();
         _dateTime = dateTime.ThrowIfNull();
+        _currentWarehouseService = currentWarehouseService;
     }
 
     public ApplicationDbContext CreateDbContext()
     {
         var context = _pooledFactory.CreateDbContext();
-        context.InitContext(_currentUserService, _dbInitializer, _dateTime, _mediator);
+        context.InitContext(_currentUserService, _currentWarehouseService, _dbInitializer, _dateTime, _mediator);
         return context;
     }
 }

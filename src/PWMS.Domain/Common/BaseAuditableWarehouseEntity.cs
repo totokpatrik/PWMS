@@ -1,6 +1,6 @@
 ﻿namespace PWMS.Domain.Common;
 
-public abstract class BaseAuditableWarehouseEntity<TPKey, TUserPKey> : BaseEntity<TPKey>, IBaseAuditableEntity<TUserPKey>, IWarehouseEntity
+public abstract class BaseAuditableWarehouseEntity<TPKey, TUserPKey> : BaseEntity<TPKey>, IBaseAuditableWarehouseEntity<TUserPKey>
 {
     public DateTime? Created { get; set; }
 

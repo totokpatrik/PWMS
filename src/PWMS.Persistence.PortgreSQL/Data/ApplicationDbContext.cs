@@ -10,6 +10,7 @@ namespace PWMS.Persistence.PortgreSQL.Data;
 public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IApplicationDbContext
 {
     private ICurrentUserService _currentUserService = null!;
+    private ICurrentWarehouseService _currentWarehouseService = null!;
     private IDateTime _dateTime = null!;
     private IMediator _mediator = null!;
     private IDbInitializer _dbInitializer = null!;
@@ -20,10 +21,11 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IAppl
     }
 
     public void InitContext
-        (ICurrentUserService currentUserService, IDbInitializer dbInitializer, IDateTime dateTime, IMediator mediator)
+        (ICurrentUserService currentUserService, ICurrentWarehouseService currentWarehouseService, IDbInitializer dbInitializer, IDateTime dateTime, IMediator mediator)
     {
         _dbInitializer = dbInitializer.ThrowIfNull();
         _currentUserService = currentUserService.ThrowIfNull();
+        _currentWarehouseService = currentWarehouseService.ThrowIfNull();
         _dateTime = dateTime.ThrowIfNull();
         _mediator = mediator.ThrowIfNull();
     }
@@ -35,6 +37,12 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IAppl
         if (currentUser is not null)
         {
             UpdateEntities(currentUser);
+        }
+
+        var currentWarehouse = _currentWarehouseService.GetCurrentWarehouse();
+        if (currentWarehouse is not null && currentUser is not null)
+        {
+            UpdateWarehouseEntities(currentWarehouse, currentUser);
         }
 
         var result = await base.SaveChangesAsync(cancellationToken);
@@ -53,6 +61,25 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IAppl
             .Entries<IEntity>()
             .Where(x => x.Entity.DomainEvents.Count != 0);
         await _mediator.DispatchDomainEventsAsync(domainEntities);
+    }
+
+    private void UpdateWarehouseEntities(ICurrentWarehouse currentWarehouse, ICurrentUser currentUser)
+    {
+        foreach (var entry in ChangeTracker.Entries<IBaseAuditableWarehouseEntity<string>>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedBy = currentUser!.Id!.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    entry.Entity.Created = _dateTime.Now;
+                    entry.Entity.WarehouseId = currentWarehouse.Id;
+                    break;
+                case EntityState.Modified:
+                    entry.Entity.ModifiedBy = currentUser!.Id!.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    entry.Entity.Modified = _dateTime.Now;
+                    break;
+            }
+        }
     }
 
     private void UpdateEntities(ICurrentUser currentUser)
