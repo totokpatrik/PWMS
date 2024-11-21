@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
+using PWMS.Domain.Addresses.Entities;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Domain.Common;
-using PWMS.Persistence.PortgreSQL.Addresses.Configurations;
-using PWMS.Persistence.PortgreSQL.Auth.Configurations;
-using PWMS.Persistence.PortgreSQL.Core.Sites.Configurations;
-using PWMS.Persistence.PortgreSQL.Core.Warehouses.Configurations;
 using PWMS.Persistence.PortgreSQL.Extensions;
 
 namespace PWMS.Persistence.PortgreSQL.Data;
@@ -105,11 +102,11 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>, IAppl
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
-        modelBuilder.ApplyConfiguration(new AddressConfiguration());
-        modelBuilder.ApplyConfiguration(new SiteConfiguration());
-        modelBuilder.ApplyConfiguration(new WarehouseConfgiuration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         modelBuilder.DataTimeConfigure();
+
+        var warehouseEntityConfiguration = modelBuilder.Entity<Address>();
+        warehouseEntityConfiguration.HasQueryFilter(a => a.WarehouseId == _currentWarehouseService.GetCurrentWarehouse().Id);
 
         base.OnModelCreating(modelBuilder);
     }
