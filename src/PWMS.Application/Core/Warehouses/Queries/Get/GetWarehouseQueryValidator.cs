@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PWMS.Application.Common.Paging;
+using PWMS.Application.Core.Warehouses.Models;
 
-namespace PWMS.Application.Core.Warehouses.Queries.Get
+namespace PWMS.Application.Core.Warehouses.Queries.Get;
+
+public sealed class GetWarehouseQueryValidator
+: PagingQueryValidator<GetWarehouseQuery, Result<CollectionViewModel<WarehouseDto>>>
 {
-    internal class GetWarehouseQueryValidator
-    {
-    }
 }

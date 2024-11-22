@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using PWMS.Application.Common.Paging;
 using PWMS.Application.Core.Sites.Commands.Create;
+using PWMS.Application.Core.Sites.Commands.Select;
 using PWMS.Application.Core.Sites.Models;
 using PWMS.Application.Core.Sites.Queries.Get;
+using PWMS.Domain.Auth.Entities;
 using PWMS.Presentation.Rest.Models.Result;
 
 namespace PWMS.Presentation.Rest.Controllers.Version10.Core;
@@ -28,6 +30,20 @@ public class SitesController : BaseController
     [FromBody] CreateSiteDto createSiteDto,
     CancellationToken cancellationToken)
     => (await Mediator.Send(new CreateSiteCommand(createSiteDto.Name), cancellationToken)).ToResultDto();
+
+    /// <summary>
+    /// Selects site.
+    /// </summary>
+    [HttpPost]
+    [Route("select")]
+    [ProducesResponseType(typeof(ResultDto<Token>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ResultDto<Token>>> Select(
+    [FromBody] SelectSiteDto selectSiteDto,
+    CancellationToken cancellationToken)
+    => (await Mediator.Send(new SelectSiteCommand(selectSiteDto.SiteId), cancellationToken)).ToResultDto();
 
     /// <summary>
     /// Gets addresses with pagination.

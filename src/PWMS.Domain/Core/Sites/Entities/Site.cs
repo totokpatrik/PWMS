@@ -20,6 +20,7 @@ public class Site : BaseAuditableEntity<Guid, string>, IAggregateRoot
     public List<Warehouse>? Warehouses { get; }
     public ICollection<User>? Users { get; }
     public ICollection<User>? Admins { get; }
+    public ICollection<User>? UsersSelected { get; set; }
     public User Owner { get; }
     public Site(Guid id, string name, User owner) : base(id)
     {

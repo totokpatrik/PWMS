@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PWMS.Application.Core.Warehouses.Models
 {
-    internal class DeleteWarehou8seDto
+    internal class DeleteWarehouseDto
     {
     }
 }

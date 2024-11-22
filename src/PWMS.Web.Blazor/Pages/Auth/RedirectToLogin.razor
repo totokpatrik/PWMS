@@ -8,6 +8,8 @@
 
 @code {
     private bool authenticated = false;
+    private string? _site;
+    private string? _warehouse;
 
     protected override async void OnInitialized()
     {
@@ -17,6 +19,42 @@
         {
             authenticated = true;
             StateHasChanged();
+
+            // Check if site or warehouse exists and redirect based on that
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+            if (authState.User.Identity!.IsAuthenticated)
+            {
+                var user = authState.User;
+
+                string? warehouse = user.Claims.ToList()
+                    .Where(s => s.Type == "Warehouse")
+                    .Select(s => s.Value)
+                    .FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(warehouse))
+                {
+                    _warehouse = warehouse;
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/warehouse");
+                }
+                
+                string? site = user.Claims.ToList()
+                    .Where(s => s.Type == "Site")
+                    .Select(s => s.Value)
+                    .FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(site))
+                {
+                    _site = site;
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/site");
+                }
+            }
         }
         else
         {

@@ -1,4 +1,6 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using PWMS.Application.Common.Paging;
 using PWMS.Application.Core.Sites.Models;
@@ -12,6 +14,8 @@ public partial class IndexSite
     [Inject] ISiteService SiteService { get; set; } = default!;
     [Inject] ISnackbar Snackbar { get; set; } = default!;
     [Inject] NavigationManager NavigationManager { get; set; } = default!;
+    [Inject] ILocalStorageService LocalStorage { get; set; } = default!;
+    [Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; } = default!;
 
     MudDataGrid<SiteDto> dataGrid = new();
     HashSet<SiteDto> selectedSites = new HashSet<SiteDto>();
@@ -27,9 +31,14 @@ public partial class IndexSite
     bool _lastPageButtonDisabled;
 
     bool deleteDisabled = true;
+    bool selectDisabled = true;
+
+    string currentUserId = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
+        currentUserId = (await AuthenticationStateProvider.GetAuthenticationStateAsync())
+            .User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value ?? string.Empty;
         await GetSitesAsync();
     }
     private Task PageSizeChangedAsync(int pageSize)
@@ -62,6 +71,7 @@ public partial class IndexSite
     protected override bool ShouldRender()
     {
         deleteDisabled = selectedSites.Count < 1;
+        selectDisabled = selectedSites.Count != 1;
         if (_pageIndex == 1)
         {
             _firstPageButtonDisabled = true;
@@ -118,6 +128,21 @@ public partial class IndexSite
     void Add()
     {
         NavigationManager.NavigateTo("/site/create");
+    }
+    async Task SelectAsync()
+    {
+        var selectSiteResult = await SiteService.SelectSiteAsync(new SelectSiteDto { SiteId = selectedSites.First().Id });
+        if (selectSiteResult.IsSuccess)
+        {
+            await LocalStorage.SetItemAsync("authToken", selectSiteResult.Data.TokenString);
+            await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        }
+        // clear selection
+        selectedSites.Clear();
+
+        // reload data grid
+        await dataGrid.ReloadServerData();
+        StateHasChanged();
     }
     private async Task NavigateToFirstPageAsync()
     {

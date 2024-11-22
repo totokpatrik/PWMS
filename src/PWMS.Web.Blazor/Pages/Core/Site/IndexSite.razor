@@ -12,6 +12,7 @@
             <MudSpacer />
             <div class="d-flex flex-grow-1 flex-row gap-1">
                 <MudButton Variant="Variant.Outlined" OnClick="Add">Add</MudButton>
+                <MudButton Variant="Variant.Outlined" Disabled="@selectDisabled" OnClick="SelectAsync">Select</MudButton>
                 <MudButton Variant="Variant.Outlined" Disabled="@deleteDisabled" OnClick="Delete">Delete</MudButton>
                 <MudSpacer />
                 <MudIcon Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Default" />
@@ -24,6 +25,14 @@
                  @bind-SelectedItems="@selectedSites">
         <Columns>
             <SelectColumn T="SiteDto" />
+            <TemplateColumn Title="Selected">
+                <CellTemplate>
+                    @if (context.Item.UsersSelected.Any(u => u.Id == currentUserId))
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" />
+                    }
+                </CellTemplate>
+            </TemplateColumn>
             <TemplateColumn Title="Id">
                 <CellTemplate>
                     <MudLink Href="@($"/site/{@context.Item.Id}")">@context.Item.Id</MudLink>

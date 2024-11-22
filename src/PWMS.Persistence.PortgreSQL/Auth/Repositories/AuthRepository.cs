@@ -49,7 +49,7 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             throw new UnauthorizedException("Username or password is incorrect.");
         }
 
-        var token = await BuildToken(username, password);
+        var token = await BuildToken(username);
 
         return token;
     }
@@ -63,12 +63,12 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         {
             throw new RegisterException(result.Errors);
         }
-        var token = await BuildToken(username, password);
+        var token = await BuildToken(username);
 
         return token;
     }
 
-    private async Task<Token> BuildToken(string username, string password)
+    public async Task<Token> BuildToken(string username)
     {
         var jwtConfiguration = _configuration.GetSection(JwtConfigurationSection.SectionName).Get<JwtDetails>();
         ArgumentNullException.ThrowIfNull(jwtConfiguration);
@@ -94,31 +94,33 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         var siteContext = _dbContext.AppDbContext.Set<Site>();
         var userContext = _dbContext.AppDbContext.Set<User>();
 
-        var selectedSite = await userContext
-            .Select(u => u.SelectedSite)
-            .FirstOrDefaultAsync(u => u.Id == Guid.Parse(user.Id));
+        var selectedSite = (await userContext
+            .Include(u => u.SelectedSite)
+            .FirstOrDefaultAsync(u => u.Id == user.Id)).SelectedSite;
 
-        claims.Add(new Claim("Site", selectedSite?.Id.ToString() ?? string.Empty));
+        if (selectedSite != null)
+        {
+            claims.Add(new Claim("Site", selectedSite.Id.ToString()));
+            // Site roles
+            var siteOwner = siteContext
+                .FirstOrDefault(s => s.Owner == user);
+            if (siteOwner != null)
+                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteOwner));
 
-        // Site roles
-        var siteOwner = siteContext
-            .FirstOrDefault(s => s.Owner == user);
-        if (siteOwner != null)
-            claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteOwner));
+            var siteAdmin = siteContext
+                .Select(s => s.Admins)
+                .Where(a => a.Contains(user))
+                .Any();
+            if (siteAdmin)
+                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteAdmin));
 
-        var siteAdmin = siteContext
-            .Select(s => s.Admins)
-            .Where(a => a.Contains(user))
-            .Any();
-        if (siteAdmin)
-            claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteAdmin));
-
-        var siteUser = siteContext
-            .Select(s => s.Users)
-            .Where(a => a.Contains(user))
-            .Any();
-        if (siteUser)
-            claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteUser));
+            var siteUser = siteContext
+                .Select(s => s.Users)
+                .Where(a => a.Contains(user))
+                .Any();
+            if (siteUser)
+                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteUser));
+        }
 
         // Warehouse claim
         var warehouseContext = _dbContext.AppDbContext.Set<Warehouse>();

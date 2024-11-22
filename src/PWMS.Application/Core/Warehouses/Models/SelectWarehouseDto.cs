@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PWMS.Application.Core.Warehouses.Models;
 
-namespace PWMS.Application.Core.Warehouses.Models
+public class SelectWarehouseDto
 {
-    internal class SelectWarehouseDto
-    {
-    }
+    public Guid WarehouseId { get; set; }
 }

@@ -7,7 +7,7 @@ using PWMS.Application.Core.Sites.Specifications;
 
 namespace PWMS.Application.Core.Sites.Queries.Get;
 
-internal sealed class GetSiteQueryHandler
+public sealed class GetSiteQueryHandler
     : PagingDbQueryHandlerDb<GetSiteQuery, Result<CollectionViewModel<SiteDto>>, SiteDto>
 {
     private readonly ISiteRepository _siteRepository;
@@ -30,7 +30,8 @@ internal sealed class GetSiteQueryHandler
         var entities = await _siteRepository
             .GetAllSites(specification, cancellationToken, request.PageContext.Filter);
 
-        var count = await _siteRepository.CountAsync();
+        var siteCountSpecification = new SiteCountSpecification(_currentUserService.GetCurrentUser().Id);
+        var count = await _siteRepository.CountAsync(siteCountSpecification);
 
         var dtoSites = await entities
             .BuildAdapter(Mapper.Config)

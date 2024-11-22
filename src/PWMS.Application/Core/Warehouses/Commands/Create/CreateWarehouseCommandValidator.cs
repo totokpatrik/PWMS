@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PWMS.Application.Core.Warehouses.Commands.Create
+﻿namespace PWMS.Application.Core.Warehouses.Commands.Create;
+public sealed class CreateWarehouseCommandValidator : AbstractValidator<CreateWarehouseCommand>
 {
-    internal class CreateWarehouseCommandValidator
+    public CreateWarehouseCommandValidator()
     {
+        RuleFor(a => a.Name)
+            .MaximumLength(20)
+            .NotEmpty();
     }
 }

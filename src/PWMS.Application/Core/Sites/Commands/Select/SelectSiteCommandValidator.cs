@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PWMS.Application.Core.Sites.Commands.Select;
 
-namespace PWMS.Application.Core.Sites.Commands.Select
+public class SelectSiteCommandValidator : AbstractValidator<SelectSiteCommand>
 {
-    internal class SelectSiteCommandValidator
+    public SelectSiteCommandValidator()
     {
+        RuleFor(a => a.Id)
+            .NotNull();
     }
 }

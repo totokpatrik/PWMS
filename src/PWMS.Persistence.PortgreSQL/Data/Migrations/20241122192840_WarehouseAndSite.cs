@@ -18,6 +18,12 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<Guid>(
+                name: "SelectedWarehouseId",
+                table: "AspNetUsers",
+                type: "uuid",
+                nullable: true);
+
+            migrationBuilder.AddColumn<Guid>(
                 name: "WarehouseId",
                 table: "Addresses",
                 type: "uuid",
@@ -178,6 +184,11 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                 column: "SelectedSiteId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_SelectedWarehouseId",
+                table: "AspNetUsers",
+                column: "SelectedWarehouseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sites_OwnerId",
                 table: "Sites",
                 column: "OwnerId");
@@ -218,6 +229,13 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                 column: "SelectedSiteId",
                 principalTable: "Sites",
                 principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Warehouses_SelectedWarehouseId",
+                table: "AspNetUsers",
+                column: "SelectedWarehouseId",
+                principalTable: "Warehouses",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
@@ -225,6 +243,10 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUsers_Sites_SelectedSiteId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_AspNetUsers_Warehouses_SelectedWarehouseId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropTable(
@@ -249,8 +271,16 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                 name: "IX_AspNetUsers_SelectedSiteId",
                 table: "AspNetUsers");
 
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_SelectedWarehouseId",
+                table: "AspNetUsers");
+
             migrationBuilder.DropColumn(
                 name: "SelectedSiteId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "SelectedWarehouseId",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(

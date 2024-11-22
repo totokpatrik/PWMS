@@ -12,7 +12,7 @@ using PWMS.Persistence.PortgreSQL.Data;
 namespace PWMS.Persistence.PortgreSQL.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241119171153_WarehouseAndSite")]
+    [Migration("20241122192840_WarehouseAndSite")]
     partial class WarehouseAndSite
     {
         /// <inheritdoc />
@@ -24,32 +24,6 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -188,6 +162,32 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                     b.ToTable("Addresses", (string)null);
                 });
 
+            modelBuilder.Entity("PWMS.Domain.Auth.Entities.Role", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
             modelBuilder.Entity("PWMS.Domain.Auth.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -236,6 +236,9 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                     b.Property<Guid?>("SelectedSiteId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("SelectedWarehouseId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
@@ -253,6 +256,8 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.HasIndex("SelectedSiteId");
+
+                    b.HasIndex("SelectedWarehouseId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -392,7 +397,7 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("PWMS.Domain.Auth.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -419,7 +424,7 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("PWMS.Domain.Auth.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -447,7 +452,13 @@ namespace PWMS.Persistence.PortgreSQL.Data.Migrations
                         .WithMany()
                         .HasForeignKey("SelectedSiteId");
 
+                    b.HasOne("PWMS.Domain.Core.Warehouses.Entities.Warehouse", "SelectedWarehouse")
+                        .WithMany()
+                        .HasForeignKey("SelectedWarehouseId");
+
                     b.Navigation("SelectedSite");
+
+                    b.Navigation("SelectedWarehouse");
                 });
 
             modelBuilder.Entity("PWMS.Domain.Core.Sites.Entities.Site", b =>

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PWMS.Application.Core.Warehouses.Commands.Select
+﻿namespace PWMS.Application.Core.Warehouses.Commands.Select;
+public class SelectWarehouseCommandValidator : AbstractValidator<SelectWarehouseCommand>
 {
-    internal class SelectWarehouseCommandValidator
+    public SelectWarehouseCommandValidator()
     {
+        RuleFor(a => a.Id)
+            .NotNull();
     }
 }

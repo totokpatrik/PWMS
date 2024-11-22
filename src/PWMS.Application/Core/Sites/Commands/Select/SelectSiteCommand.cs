@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PWMS.Domain.Auth.Entities;
 
-namespace PWMS.Application.Core.Sites.Commands.Select
-{
-    internal class SelectSiteCommand
-    {
-    }
-}
+namespace PWMS.Application.Core.Sites.Commands.Select;
+
+public sealed record SelectSiteCommand(Guid Id) : IRequest<Result<Token>>;

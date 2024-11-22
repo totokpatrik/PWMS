@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PWMS.Domain.Auth.Entities;
 
-namespace PWMS.Application.Core.Warehouses.Commands.Select
-{
-    internal class SelectWarehouseCommand
-    {
-    }
-}
+namespace PWMS.Application.Core.Warehouses.Commands.Select;
+public sealed record SelectWarehouseCommand(Guid Id) : IRequest<Result<Token>>;

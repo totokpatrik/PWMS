@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PWMS.Application.Common.Paging;
+using PWMS.Application.Core.Warehouses.Models;
 
-namespace PWMS.Application.Core.Warehouses.Queries.Get
+namespace PWMS.Application.Core.Warehouses.Queries.Get;
+
+public class GetWarehouseQuery : PagingQuery<Result<CollectionViewModel<WarehouseDto>>>
 {
-    internal class GetWarehouseQuery
+    public GetWarehouseQuery(IPageContext pageContext) : base(pageContext)
     {
     }
+
+    public static GetWarehouseQuery Create(PageContext pageContext) => new(pageContext);
 }

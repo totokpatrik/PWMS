@@ -11,9 +11,14 @@ public class User : IdentityUser
     public ICollection<Site>? UserSites { get; set; }
     public ICollection<Site>? AdminSites { get; set; }
     public Site? SelectedSite { get; set; }
+    public Warehouse? SelectedWarehouse { get; set; }
 
     public void SelectSite(Site site)
     {
         SelectedSite = site;
+    }
+    public void SelectWarehouse(Warehouse warehouse)
+    {
+        SelectedWarehouse = warehouse;
     }
 }

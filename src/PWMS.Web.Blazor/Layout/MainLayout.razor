@@ -12,7 +12,8 @@
                 }
                 <MudButton Color="Color.Inherit"
                            Variant="Variant.Text"
-                           DropShadow="true">
+                           DropShadow="true"
+                           OnClick="@(()=>NavigationManager.NavigateTo("/"))">
                     PWMS
                 </MudButton>
                 <MudSpacer />
@@ -75,30 +76,21 @@
     private bool _open = false;
     private string? _site;
     private string? _warehouse;
+    private AuthenticationState? _authenticationState;
 
     protected override void OnAfterRender(bool firstRender)
     {
-        // If the site is not selected we will direct the user to the site page, where he can create a new site, or select the ones he has permissions with
-        var path = new Uri(NavigationManager.Uri).LocalPath;
-        if (string.IsNullOrEmpty(_site) && path != "/site")
-        {
-            NavigationManager.NavigateTo("/site");
-            return;
-        }
-        else if (string.IsNullOrEmpty(_warehouse) && path != "/warehouse" && path != "/site")
-        {
-            NavigationManager.NavigateTo("/warehouse");
-        }
         base.OnAfterRender(firstRender);
     }
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+        _authenticationState = authState;
 
-        if (user.Identity!.IsAuthenticated)
+        if (_authenticationState.User.Identity!.IsAuthenticated)
         {
+            var user = _authenticationState.User;
             string? site = user.Claims.ToList()
                 .Where(s => s.Type == "Site")
                 .Select(s => s.Value)

@@ -1,12 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PWMS.Application.Core.Warehouses.Commands.Create;
 
-namespace PWMS.Application.Core.Warehouses.Commands.Create
-{
-    internal class CreateWarehouseCommand
-    {
-    }
-}
+public sealed record CreateWarehouseCommand(string Name) : IRequest<Result<Guid>>;

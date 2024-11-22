@@ -39,8 +39,4 @@
     <ProjectReference Include="..\PWMS.Infrastructure.Core\PWMS.Infrastructure.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Core\Warehouses\Repositories\" />
-  </ItemGroup>
-
 </Project>

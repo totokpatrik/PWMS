@@ -18,7 +18,8 @@ public class SiteRepository : RepositoryBase<Site>, ISiteRepository
     {
         var queryResult = SpecificationEvaluator.Default.GetQuery(
             query: _dbContext.Set<Site>().AsQueryable().BuildQuery(filter),
-            specification: specification);
+            specification: specification)
+            .Include(us => us.UsersSelected);
 
         return await queryResult.ToListAsync(cancellationToken);
     }
