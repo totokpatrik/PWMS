@@ -14,9 +14,9 @@ public class CurrentSIteService(IHttpContextAccessor httpContextAccessor) : ICur
             return null;
         }
 
-        var warehouseId = GetSingleClaimValue("Warehouse");
+        var siteId = GetSingleClaimValue("Site");
 
-        if (string.IsNullOrWhiteSpace(warehouseId))
+        if (string.IsNullOrWhiteSpace(siteId))
         {
             return new CurrentSite
             {
@@ -26,7 +26,7 @@ public class CurrentSIteService(IHttpContextAccessor httpContextAccessor) : ICur
 
         return new CurrentSite
         {
-            Id = Guid.Parse(warehouseId)
+            Id = Guid.Parse(siteId)
         };
     }
     private string GetSingleClaimValue(string claimType) =>

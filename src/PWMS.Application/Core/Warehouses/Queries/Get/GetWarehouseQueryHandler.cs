@@ -33,12 +33,12 @@ public sealed class GetWarehouseQueryHandler
         var warehouseCountSpecification = new WarehouseCountSpecification(_currentUserService.GetCurrentUser().Id);
         var count = await _warehouseRepository.CountAsync(warehouseCountSpecification);
 
-        var dtoSites = await entities
+        var dtoWarehouses = await entities
             .BuildAdapter(Mapper.Config)
             .AdaptToTypeAsync<List<WarehouseDto>>()
             .ConfigureAwait(false);
 
         return Result.Ok(new CollectionViewModel<WarehouseDto>(
-            dtoSites, count));
+            dtoWarehouses, count));
     }
 }

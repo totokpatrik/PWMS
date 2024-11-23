@@ -1,18 +1,18 @@
 ﻿@attribute [Authorize]
-@page "/site/create"
+@page "/warehouse/create"
 
-<PageTitle>Create Site</PageTitle>
+<PageTitle>Create Warehouse</PageTitle>
 
 <MudContainer Class="p-1 m-0">
-    <MudText Typo="Typo.h6">Create Site</MudText>
+    <MudText Typo="Typo.h6">Create Warehouse</MudText>
     <MudGrid>
         <MudItem xs="12" sm="7">
             <MudPaper Class="p-1">
-                <MudForm Model="_createSiteDto" @ref="_form" @bind-IsValid="@success">
-                    <MudTextField @bind-Value="_createSiteDto.Name"
+                <MudForm Model="_createWarehouseDto" @ref="_form" @bind-IsValid="@success">
+                    <MudTextField @bind-Value="_createWarehouseDto.Name"
                                   Immediate="true"
                                   Label="Name"
-                                  Validation="_siteNameValidator.Validation"
+                                  Validation="_warehouseNameValidator.Validation"
                                   OnKeyDown="FormKeyDownAsync"
                                   Required />
 
@@ -32,5 +32,4 @@
         </MudItem>
     </MudGrid>
 </MudContainer>
-
 

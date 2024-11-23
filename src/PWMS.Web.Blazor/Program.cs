@@ -29,6 +29,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>
 
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IWarehouseService, WarehouseService>();
 
 // adding localstorage
 builder.Services.AddBlazoredLocalStorage();
