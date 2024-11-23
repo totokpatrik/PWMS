@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PWMS.Application.Core.Sites.Queries.GetById;
 
-namespace PWMS.Application.Core.Sites.Queries.GetById
+internal sealed class GetSiteByIdQueryValidator : AbstractValidator<GetSiteByIdQuery>
 {
-    internal class GetSiteByIdQueryValidator
+    public GetSiteByIdQueryValidator()
     {
+        RuleFor(a => a.Id)
+            .NotEmpty();
     }
 }

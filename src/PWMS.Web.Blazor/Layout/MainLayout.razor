@@ -1,5 +1,7 @@
-﻿@inject NavigationManager NavigationManager
+﻿@using PWMS.Web.Blazor.Services.Core
+@inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISiteService SiteService
 
 @inherits LayoutComponentBase
 <MudLayout Style="display: flex;flex-flow: column;">
@@ -98,7 +100,7 @@
 
             if (!string.IsNullOrEmpty(site))
             {
-                _site = site;
+                _site = (await SiteService.GetSiteAsync(Guid.Parse(site))).Data.Name;
             }
 
             string? warehouse = user.Claims.ToList()

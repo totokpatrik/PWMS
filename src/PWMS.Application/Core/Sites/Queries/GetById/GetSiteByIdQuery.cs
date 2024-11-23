@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PWMS.Application.Core.Sites.Models;
 
-namespace PWMS.Application.Core.Sites.Queries.GetById
-{
-    internal class GetSiteByIdQuery
-    {
-    }
-}
+namespace PWMS.Application.Core.Sites.Queries.GetById;
+
+public sealed record GetSiteByIdQuery(Guid Id) : IRequest<Result<SiteDto>>;

@@ -41,9 +41,14 @@ public class SiteService : ISiteService
         throw new NotImplementedException();
     }
 
-    public Task<Result<SiteDto>> GetSiteAsync(Guid siteId)
+    public async Task<Result<SiteDto>> GetSiteAsync(Guid siteId)
     {
-        throw new NotImplementedException();
+        var result = await _httpService.Get<Result<SiteDto>>($"api/v1/sites/{siteId}");
+        if (!result.IsSuccess)
+        {
+            _snackbar.Add("There was an error: " + result.Errors, Severity.Error);
+        }
+        return result;
     }
 
     public async Task<Result<CollectionViewModel<SiteDto>>> GetSitesAsync(PageContext pageContext)

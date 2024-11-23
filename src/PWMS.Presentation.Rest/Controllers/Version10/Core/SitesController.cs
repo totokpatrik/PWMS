@@ -5,6 +5,7 @@ using PWMS.Application.Core.Sites.Commands.Create;
 using PWMS.Application.Core.Sites.Commands.Select;
 using PWMS.Application.Core.Sites.Models;
 using PWMS.Application.Core.Sites.Queries.Get;
+using PWMS.Application.Core.Sites.Queries.GetById;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Presentation.Rest.Models.Result;
 
@@ -84,4 +85,16 @@ public class SitesController : BaseController
     [FromBody] PageContext pageContext,
     CancellationToken cancellationToken)
     => (await Mediator.Send(GetSiteQuery.Create(pageContext), cancellationToken)).ToResultDto();
+
+    /// <summary>
+    /// Gets sites by id.
+    /// </summary>
+    [HttpGet]
+    [Route("{id}")]
+    [ProducesResponseType(typeof(ResultDto<SiteDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ResultDto<Unit>), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ResultDto<SiteDto>>> Get(Guid id, CancellationToken cancellationToken)
+    => (await Mediator.Send(new GetSiteByIdQuery(id), cancellationToken)).ToResultDto();
 }
