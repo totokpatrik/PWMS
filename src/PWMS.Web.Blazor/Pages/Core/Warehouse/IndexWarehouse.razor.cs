@@ -50,7 +50,7 @@ public partial class IndexWarehouse
     private async Task<Result<CollectionViewModel<WarehouseDto>>> GetWarehousesAsync()
     {
         _loading = true;
-        var result = await WarehouseService.GetWarehousesAsync(new Application.Common.Paging.PageContext(_pageIndex, _pageSize));
+        var result = await WarehouseService.GetWarehousesAsync(new PageContext(_pageIndex, _pageSize));
 
         if (result.IsSuccess)
         {

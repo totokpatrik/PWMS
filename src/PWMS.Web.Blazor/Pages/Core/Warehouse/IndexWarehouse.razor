@@ -30,9 +30,12 @@
             <SelectColumn T="WarehouseDto" />
             <TemplateColumn Title="Selected">
                 <CellTemplate>
-                    @if (context.Item.UsersSelected.Any(u => u.Id == currentUserId))
+                    @if (context.Item.UsersSelected != null)
                     {
-                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" />
+                        @if (context.Item.UsersSelected.Any(u => u.Id == currentUserId))
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" />
+                        }
                     }
                 </CellTemplate>
             </TemplateColumn>

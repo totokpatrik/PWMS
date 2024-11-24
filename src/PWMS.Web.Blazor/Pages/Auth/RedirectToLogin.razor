@@ -28,7 +28,7 @@
                 var user = authState.User;
 
                 string? warehouse = user.Claims.ToList()
-                    .Where(s => s.Type == "Warehouse")
+                    .Where(s => s.Type == "WarehouseId")
                     .Select(s => s.Value)
                     .FirstOrDefault();
 
@@ -42,7 +42,7 @@
                 }
                 
                 string? site = user.Claims.ToList()
-                    .Where(s => s.Type == "Site")
+                    .Where(s => s.Type == "SiteId")
                     .Select(s => s.Value)
                     .FirstOrDefault();
 

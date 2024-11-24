@@ -18,7 +18,8 @@ public class WarehouseRepository : RepositoryBase<Warehouse>, IWarehouseReposito
     {
         var queryResult = SpecificationEvaluator.Default.GetQuery(
             query: _dbContext.Set<Warehouse>().AsQueryable().BuildQuery(filter),
-            specification: specification);
+            specification: specification)
+            .Include(w => w.UsersSelected);
 
         return await queryResult.ToListAsync(cancellationToken);
     }

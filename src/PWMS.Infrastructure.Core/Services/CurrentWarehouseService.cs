@@ -14,7 +14,7 @@ public class CurrentWarehouseService(IHttpContextAccessor httpContextAccessor) :
             return null;
         }
 
-        var warehouseId = GetSingleClaimValue("Warehouse");
+        var warehouseId = GetSingleClaimValue("WarehouseId");
 
         if (string.IsNullOrWhiteSpace(warehouseId))
         {

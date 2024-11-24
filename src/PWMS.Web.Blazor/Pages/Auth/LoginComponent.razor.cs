@@ -43,7 +43,7 @@ namespace PWMS.Web.Blazor.Pages.Auth
 
             if ((await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.IsAuthenticated)
             {
-                NavigationManager.NavigateTo(returnUrl);
+                NavigationManager.NavigateTo(returnUrl, true);
             }
 
             base.OnInitialized();
@@ -62,7 +62,7 @@ namespace PWMS.Web.Blazor.Pages.Auth
                 {
                     await LocalStorage.SetItemAsync("authToken", loginResult.Data.TokenString);
                     await AuthenticationStateProvider.GetAuthenticationStateAsync();
-                    NavigationManager.NavigateTo(returnUrl);
+                    NavigationManager.NavigateTo(returnUrl, true);
                 }
                 else
                 {

@@ -81,6 +81,7 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         var user = await _userManager.FindByNameAsync(username);
         ArgumentNullException.ThrowIfNull(user);
         var claimsDb = await _userManager.GetClaimsAsync(user);
+        claims.AddRange(claimsDb);
         var roles = await _userManager.GetRolesAsync(user);
         claims.Add(new Claim("Id", user.Id));
 
@@ -98,9 +99,11 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             .Include(u => u.SelectedSite)
             .FirstOrDefaultAsync(u => u.Id == user.Id)).SelectedSite;
 
+        claims.Add(new Claim("SiteId", selectedSite?.Id.ToString() ?? string.Empty));
+
         if (selectedSite != null)
         {
-            claims.Add(new Claim("Site", selectedSite.Id.ToString()));
+            claims.Add(new Claim("SiteName", selectedSite.Name));
             // Site roles
             var siteOwner = siteContext
                 .FirstOrDefault(s => s.Owner == user);
@@ -125,33 +128,35 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         // Warehouse claim
         var warehouseContext = _dbContext.AppDbContext.Set<Warehouse>();
 
-        string? warehouseId = warehouseContext.FirstOrDefault()?.Id.ToString();
-        claims.Add(new Claim("Warehouse", warehouseId ?? string.Empty));
+        var selectedWarehouse = (await userContext
+            .Include(u => u.SelectedWarehouse)
+            .FirstOrDefaultAsync(u => u.Id == user.Id)).SelectedWarehouse;
 
-        //Warehouse roles
-        var warehouseOwner = warehouseContext
-            .FirstOrDefault(s => s.Owner == user);
+        claims.Add(new Claim("WarehouseId", selectedWarehouse?.Id.ToString() ?? string.Empty));
 
-        if (warehouseOwner != null)
-            claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.WarehouseOwner));
+        if (selectedWarehouse != null)
+        {
+            claims.Add(new Claim("WarehouseName", selectedWarehouse.Name));
+            // Warehouse roles
+            var warehouseOwner = warehouseContext
+                .FirstOrDefault(s => s.Owner == user);
+            if (warehouseOwner != null)
+                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.WarehouseOwner));
 
-        var warehouseAdmin = warehouseContext
-            .Select(s => s.Admins)
-            .Where(a => a.Contains(user))
-            .Any();
+            var warehouseAdmin = warehouseContext
+                .Select(s => s.Admins)
+                .Where(a => a.Contains(user))
+                .Any();
+            if (warehouseAdmin)
+                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.WarehouseAdmin));
 
-        if (warehouseAdmin)
-            claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.WarehouseAdmin));
-
-        var warehouseUser = warehouseContext
-            .Select(s => s.Users)
-            .Where(a => a.Contains(user))
-            .Any();
-
-        if (warehouseUser)
-            claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.WarehouseUser));
-
-        claims.AddRange(claimsDb);
+            var warehouseUser = warehouseContext
+                .Select(s => s.Users)
+                .Where(a => a.Contains(user))
+                .Any();
+            if (warehouseUser)
+                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.WarehouseUser));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.Secret));
 

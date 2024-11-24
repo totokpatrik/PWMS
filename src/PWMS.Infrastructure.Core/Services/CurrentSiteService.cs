@@ -14,7 +14,7 @@ public class CurrentSIteService(IHttpContextAccessor httpContextAccessor) : ICur
             return null;
         }
 
-        var siteId = GetSingleClaimValue("Site");
+        var siteId = GetSingleClaimValue("SiteId");
 
         if (string.IsNullOrWhiteSpace(siteId))
         {

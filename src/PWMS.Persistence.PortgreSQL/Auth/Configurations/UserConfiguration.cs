@@ -10,6 +10,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithMany(s => s.UsersSelected);
 
         builder.HasOne(u => u.SelectedWarehouse)
-            .WithMany();
+            .WithMany(w => w.UsersSelected);
     }
 }
