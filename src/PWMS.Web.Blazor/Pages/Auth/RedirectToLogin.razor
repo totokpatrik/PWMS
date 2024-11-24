@@ -25,6 +25,7 @@
 
             if (authState.User.Identity!.IsAuthenticated)
             {
+                /*
                 var user = authState.User;
 
                 string? warehouse = user.Claims.ToList()
@@ -40,7 +41,7 @@
                 {
                     NavigationManager.NavigateTo("/warehouse");
                 }
-                
+
                 string? site = user.Claims.ToList()
                     .Where(s => s.Type == "SiteId")
                     .Select(s => s.Value)
@@ -54,6 +55,7 @@
                 {
                     NavigationManager.NavigateTo("/site");
                 }
+                */
             }
         }
         else

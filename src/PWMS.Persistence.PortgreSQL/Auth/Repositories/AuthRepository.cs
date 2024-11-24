@@ -73,17 +73,15 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         var jwtConfiguration = _configuration.GetSection(JwtConfigurationSection.SectionName).Get<JwtDetails>();
         ArgumentNullException.ThrowIfNull(jwtConfiguration);
 
-        var claims = new List<Claim>()
-            {
-                new Claim("username", username)
-            };
-
         var user = await _userManager.FindByNameAsync(username);
         ArgumentNullException.ThrowIfNull(user);
-        var claimsDb = await _userManager.GetClaimsAsync(user);
-        claims.AddRange(claimsDb);
+
+        var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, username)
+            };
+
         var roles = await _userManager.GetRolesAsync(user);
-        claims.Add(new Claim("Id", user.Id));
 
         foreach (var role in roles)
         {
@@ -100,31 +98,7 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             .FirstOrDefaultAsync(u => u.Id == user.Id)).SelectedSite;
 
         claims.Add(new Claim("SiteId", selectedSite?.Id.ToString() ?? string.Empty));
-
-        if (selectedSite != null)
-        {
-            claims.Add(new Claim("SiteName", selectedSite.Name));
-            // Site roles
-            var siteOwner = siteContext
-                .FirstOrDefault(s => s.Owner == user);
-            if (siteOwner != null)
-                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteOwner));
-
-            var siteAdmin = siteContext
-                .Select(s => s.Admins)
-                .Where(a => a.Contains(user))
-                .Any();
-            if (siteAdmin)
-                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteAdmin));
-
-            var siteUser = siteContext
-                .Select(s => s.Users)
-                .Where(a => a.Contains(user))
-                .Any();
-            if (siteUser)
-                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.SiteUser));
-        }
-
+        
         // Warehouse claim
         var warehouseContext = _dbContext.AppDbContext.Set<Warehouse>();
 
@@ -133,30 +107,11 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             .FirstOrDefaultAsync(u => u.Id == user.Id)).SelectedWarehouse;
 
         claims.Add(new Claim("WarehouseId", selectedWarehouse?.Id.ToString() ?? string.Empty));
-
-        if (selectedWarehouse != null)
-        {
-            claims.Add(new Claim("WarehouseName", selectedWarehouse.Name));
-            // Warehouse roles
-            var warehouseOwner = warehouseContext
-                .FirstOrDefault(s => s.Owner == user);
-            if (warehouseOwner != null)
-                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.WarehouseOwner));
-
-            var warehouseAdmin = warehouseContext
-                .Select(s => s.Admins)
-                .Where(a => a.Contains(user))
-                .Any();
-            if (warehouseAdmin)
-                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.WarehouseAdmin));
-
-            var warehouseUser = warehouseContext
-                .Select(s => s.Users)
-                .Where(a => a.Contains(user))
-                .Any();
-            if (warehouseUser)
-                claims.Add(new Claim(ClaimTypes.Role, PWMS.Application.Common.Identity.Roles.Role.WarehouseUser));
-        }
+        
+        var claimsDb = await _userManager.GetClaimsAsync(user);
+        claims.AddRange(claimsDb);
+        
+        claims.Add(new Claim("Id", user.Id));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.Secret));
 

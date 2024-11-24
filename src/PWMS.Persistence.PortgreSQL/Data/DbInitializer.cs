@@ -18,16 +18,21 @@ public class DbInitializer() : IDbInitializer
         var userManager = scope!.ServiceProvider.GetRequiredService<UserManager<User>>();
         var roleManager = scope!.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
-        var initialRole = InitialData.Role;
+        var initialRoles = InitialData.Roles;
         var initialUser = InitialData.User;
 
         var initialUser2 = InitialData.User2;
 
-        if (!await roleManager.RoleExistsAsync(initialRole.Name!))
+        foreach ( var role in initialRoles )
         {
-            // Create the initial role
-            await roleManager.CreateAsync(initialRole);
+
+            if (!await roleManager.RoleExistsAsync(role.Name!))
+            {
+                // Create the initial role
+                await roleManager.CreateAsync(role);
+            }
         }
+
 
         if (await userManager.FindByNameAsync(initialUser.UserName!) == null)
         {
@@ -40,7 +45,7 @@ public class DbInitializer() : IDbInitializer
 
             await userManager.CreateAsync(user);
 
-            await userManager.AddToRoleAsync(user, initialRole.Name!);
+            await userManager.AddToRoleAsync(user, InitialData.AdminRole.Name!);
         }
 
         if (await userManager.FindByNameAsync(initialUser2.UserName!) == null)
@@ -54,7 +59,7 @@ public class DbInitializer() : IDbInitializer
 
             await userManager.CreateAsync(user);
 
-            await userManager.AddToRoleAsync(user, initialRole.Name!);
+            await userManager.AddToRoleAsync(user, InitialData.AdminRole.Name!);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using PWMS.Web.Blazor.Services.Core
+@using System.Security.Claims
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ISiteService SiteService
@@ -37,7 +38,7 @@
                         @context.User.Claims.FirstOrDefault(c => c.Type == "WarehouseName")?.Value
                     </MudButton>
                 }
-                <MudMenu Label="@context.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value"
+                <MudMenu Label="@context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value"
                          EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
                          Variant="Variant.Text"
                          Color="Color.Inherit"
