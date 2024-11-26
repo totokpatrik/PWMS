@@ -13,7 +13,7 @@ public class AdminRequirement : AuthorizationHandler<AdminRequirement>, IAuthori
             .Where(c => c.Type == ClaimTypes.Role);
 
         var asd = context.Resource;
-        if (context.User.Claims.Where(c => c.Type == ClaimTypes.Role).Where(c => c.Value == Role.Admin).Any())
+        if (context.User.Claims.Where(c => c.Type == ClaimTypes.Role).Any(c => c.Value == Role.Admin))
         {
             context.Succeed(requirement);
         }

@@ -28,6 +28,13 @@ namespace PWMS.Web.Blazor.Identity
                 try
                 {
                     identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
+                    var roleClaims = identity.Claims.First(x => x.Type == ClaimTypes.Role).Value.Split(',');
+
+                    foreach (var roleClaim in roleClaims)
+                    {
+                        identity.AddClaim(new Claim(ClaimTypes.Role, roleClaim));
+                    }
+
                     _http.DefaultRequestHeaders.Authorization =
                         new AuthenticationHeaderValue("Bearer", authToken.Replace("\"", ""));
                 }

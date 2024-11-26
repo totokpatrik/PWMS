@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using PWMS.Common.Extensions;
+using System.Security.Claims;
 
 namespace PWMS.Infrastructure.Core.Services;
 
@@ -15,7 +16,7 @@ public sealed class CurrentUserService(IHttpContextAccessor httpContextAccessor)
             return null;
         }
 
-        var username = GetSingleClaimValue("username");
+        var username = GetSingleClaimValue(ClaimTypes.Name);
         var id = GetSingleClaimValue("Id");
         /*var permissions = GetClaimValues("permissions");
         var roles = GetClaimValues(ClaimTypes.Role);

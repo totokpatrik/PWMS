@@ -31,9 +31,11 @@ public class SelectSiteCommandHandler(ISiteRepository siteRepository,
         // Select the site
         user.SelectSite(entity);
 
+        await _authRepository.SelectSite(entity, user.UserName!);
+
         // Get the new token
         var token = await _authRepository
-            .BuildToken(user.UserName);
+            .BuildToken(user.UserName!);
 
         await _authRepository.SaveChangesAsync();
 

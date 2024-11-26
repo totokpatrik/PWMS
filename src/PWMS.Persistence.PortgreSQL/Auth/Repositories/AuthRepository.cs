@@ -76,18 +76,13 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         var user = await _userManager.FindByNameAsync(username);
         ArgumentNullException.ThrowIfNull(user);
 
-        var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, username)
-            };
+        var claims = new List<Claim>();
 
         var roles = await _userManager.GetRolesAsync(user);
+        string roleString = String.Join(",", roles);
 
-        foreach (var role in roles)
-        {
-            var claim = new Claim(ClaimTypes.Role, role);
-            claims.Add(claim);
-        }
+        claims.Add(new Claim(ClaimTypes.Name, username));
+        claims.Add(new Claim(ClaimTypes.Role, roleString));
 
         // Site claim
         var siteContext = _dbContext.AppDbContext.Set<Site>();
@@ -98,7 +93,8 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             .FirstOrDefaultAsync(u => u.Id == user.Id)).SelectedSite;
 
         claims.Add(new Claim("SiteId", selectedSite?.Id.ToString() ?? string.Empty));
-        
+        claims.Add(new Claim("SiteName", selectedSite?.Name ?? string.Empty));
+
         // Warehouse claim
         var warehouseContext = _dbContext.AppDbContext.Set<Warehouse>();
 
@@ -107,10 +103,11 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             .FirstOrDefaultAsync(u => u.Id == user.Id)).SelectedWarehouse;
 
         claims.Add(new Claim("WarehouseId", selectedWarehouse?.Id.ToString() ?? string.Empty));
-        
+        claims.Add(new Claim("WarehouseName", selectedWarehouse?.Name ?? string.Empty));
+
         var claimsDb = await _userManager.GetClaimsAsync(user);
         claims.AddRange(claimsDb);
-        
+
         claims.Add(new Claim("Id", user.Id));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfiguration.Secret));
@@ -126,5 +123,48 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
             TokenString = new JwtSecurityTokenHandler().WriteToken(token),
             Expiration = expiration
         };
+    }
+
+    public async Task SelectSite(Site site, string userName)
+    {
+        var user = await _userManager.FindByNameAsync(userName);
+
+        if (user == null)
+        {
+            throw new NotFoundException(nameof(User));
+        }
+
+        if (site.Owner.Id == user.Id)
+        {
+            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.SiteOwner);
+        }
+
+        if (site.Admins.Any(a => a.Id.Contains(user.Id)))
+        {
+            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.SiteAdmin);
+        }
+
+        if (site.Users.Any(a => a.Id.Contains(user.Id)))
+        {
+            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.SiteUser);
+        }
+    }
+
+    public async Task SelectWarehouse(Warehouse warehouse, User user)
+    {
+        if (warehouse.Owner == user)
+        {
+            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.WarehouseOwner);
+        }
+
+        if (warehouse.Admins.Contains(user))
+        {
+            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.WarehouseAdmin);
+        }
+
+        if (warehouse.Users.Contains(user))
+        {
+            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.WarehouseUser);
+        }
     }
 }
