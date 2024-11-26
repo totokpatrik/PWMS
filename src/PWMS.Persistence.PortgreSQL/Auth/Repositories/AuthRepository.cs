@@ -77,34 +77,35 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         ArgumentNullException.ThrowIfNull(user);
 
         var claims = new List<Claim>();
+        claims.Add(new Claim(ClaimTypes.Name, username));
 
         var roles = await _userManager.GetRolesAsync(user);
-        string roleString = String.Join(",", roles);
-
-        claims.Add(new Claim(ClaimTypes.Name, username));
-        claims.Add(new Claim(ClaimTypes.Role, roleString));
 
         // Site claim
-        var siteContext = _dbContext.AppDbContext.Set<Site>();
-        var userContext = _dbContext.AppDbContext.Set<User>();
-
-        var selectedSite = (await userContext
-            .Include(u => u.SelectedSite)
-            .FirstOrDefaultAsync(u => u.Id == user.Id)).SelectedSite;
-
-        claims.Add(new Claim("SiteId", selectedSite?.Id.ToString() ?? string.Empty));
-        claims.Add(new Claim("SiteName", selectedSite?.Name ?? string.Empty));
-
+        roles.Add(await SiteRole(user.UserName!));
+        var selectedSite = await Site(user.UserName!);
+        if (selectedSite != null)
+        {
+            claims.Add(new Claim("SiteId", selectedSite.Id.ToString() ?? string.Empty));
+            claims.Add(new Claim("SiteName", selectedSite.Name ?? string.Empty));
+        }
 
         // Warehouse claim
-        var warehouseContext = _dbContext.AppDbContext.Set<Warehouse>();
+        roles.Add(await WarehouseRole(user.UserName!));
+        var selectedWarehouse = await Warehouse(user.UserName!);
+        if (selectedWarehouse != null)
+        {
+            claims.Add(new Claim("WarehouseId", selectedWarehouse.Id.ToString() ?? string.Empty));
+            claims.Add(new Claim("WarehouseName", selectedWarehouse.Name ?? string.Empty));
+        }
+        else
+        {
+            claims.Add(new Claim("WarehouseId", string.Empty));
+            claims.Add(new Claim("WarehouseName", string.Empty));
+        }
 
-        var selectedWarehouse = (await userContext
-            .Include(u => u.SelectedWarehouse)
-            .FirstOrDefaultAsync(u => u.Id == user.Id)).SelectedWarehouse;
-
-        claims.Add(new Claim("WarehouseId", selectedWarehouse?.Id.ToString() ?? string.Empty));
-        claims.Add(new Claim("WarehouseName", selectedWarehouse?.Name ?? string.Empty));
+        string roleString = String.Join(",", roles);
+        claims.Add(new Claim(ClaimTypes.Role, roleString));
 
         var claimsDb = await _userManager.GetClaimsAsync(user);
         claims.AddRange(claimsDb);
@@ -126,53 +127,85 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         };
     }
 
-    public async Task SelectSite(Site site, string userName)
+    private async Task<Site?> Site(string userName)
     {
-        var user = await _userManager.FindByNameAsync(userName);
-
-        if (user == null)
-        {
-            throw new NotFoundException(nameof(User));
-        }
-
-        if (site.Owner.Id == user.Id)
-        {
-            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.SiteOwner);
-        }
-
-        if (site.Admins.Any(a => a.Id.Contains(user.Id)))
-        {
-            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.SiteAdmin);
-        }
-
-        if (site.Users.Any(a => a.Id.Contains(user.Id)))
-        {
-            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.SiteUser);
-        }
+        return (await (_dbContext.Set<User>()).Include(u => u.SelectedSite).FirstOrDefaultAsync(u => u.UserName == userName))!.SelectedSite;
     }
 
-    public async Task SelectWarehouse(Warehouse warehouse, string userName)
+    private async Task<Warehouse?> Warehouse(string userName)
     {
-        var user = await _userManager.FindByNameAsync(userName);
+        return (await (_dbContext.Set<User>()).Include(u => u.SelectedWarehouse).FirstOrDefaultAsync(u => u.UserName == userName))!.SelectedWarehouse;
+    }
 
-        if (user == null)
+    private async Task<string> SiteRole(string userName)
+    {
+        var userContext = _dbContext.Set<User>();
+        var user = await userContext
+            .Include(u => u.SelectedSite)
+            .FirstOrDefaultAsync(u => u.UserName == userName) ?? throw new NotFoundException(nameof(User));
+
+        var role = string.Empty;
+
+        if (user.SelectedSite == null)
+            return role;
+
+        if (user.SelectedSite.Owner.Id == user.Id)
         {
-            throw new NotFoundException(nameof(User));
+            role = PWMS.Application.Common.Identity.Roles.Role.SiteOwner;
         }
 
-        if (warehouse.Owner == user)
+        if (user.SelectedSite.Admins == null)
+            return role;
+
+        if (user.SelectedSite.Admins.Any(a => a.Id.Contains(user.Id)))
         {
-            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.WarehouseOwner);
+            role = PWMS.Application.Common.Identity.Roles.Role.SiteAdmin;
         }
 
-        if (warehouse.Admins.Contains(user))
+        if (user.SelectedSite.Users == null)
+            return role;
+
+        if (user.SelectedSite.Users.Any(a => a.Id.Contains(user.Id)))
         {
-            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.WarehouseAdmin);
+            role = PWMS.Application.Common.Identity.Roles.Role.SiteUser;
         }
 
-        if (warehouse.Users.Contains(user))
+        return role;
+    }
+
+    private async Task<string> WarehouseRole(string userName)
+    {
+        var userContext = _dbContext.Set<User>();
+        var user = await userContext
+            .Include(u => u.SelectedWarehouse)
+            .FirstOrDefaultAsync(u => u.UserName == userName) ?? throw new NotFoundException(nameof(User));
+
+        var role = string.Empty;
+
+        if (user.SelectedWarehouse == null)
+            return role;
+
+        if (user.SelectedWarehouse.Owner.Id == user.Id)
         {
-            await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.WarehouseUser);
+            role = PWMS.Application.Common.Identity.Roles.Role.WarehouseOwner;
         }
+
+        if (user.SelectedWarehouse.Admins == null)
+            return role;
+
+        if (user.SelectedWarehouse.Admins.Any(a => a.Id.Contains(user.Id)))
+        {
+            role = PWMS.Application.Common.Identity.Roles.Role.WarehouseAdmin;
+        }
+
+        if (user.SelectedWarehouse.Users == null)
+            return role;
+
+        if (user.SelectedWarehouse.Users.Any(a => a.Id.Contains(user.Id)))
+        {
+            role = PWMS.Application.Common.Identity.Roles.Role.WarehouseUser;
+        }
+
+        return role;
     }
 }

@@ -30,8 +30,6 @@ public class SelectWarehouseCommandHandler(IWarehouseRepository warehouseReposit
         // Select the site
         user.SelectWarehouse(warehouse);
 
-        await _authRepository.SelectWarehouse(warehouse, user.UserName!);
-
         // Get the new token
         var token = await _authRepository
             .BuildToken(user.UserName);

@@ -143,6 +143,7 @@ public partial class IndexWarehouse
         // reload data grid
         await dataGrid.ReloadServerData();
         StateHasChanged();
+        NavigationManager.Refresh(true);
     }
     private async Task NavigateToFirstPageAsync()
     {
