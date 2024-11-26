@@ -10,5 +10,5 @@ public interface IAuthRepository : IRepositoryBase<User>
     Task<Token> Login(string username, string password);
     Task<Token> BuildToken(string username);
     Task SelectSite(Site site, string username);
-    Task SelectWarehouse(Warehouse warehouse, User user);
+    Task SelectWarehouse(Warehouse warehouse, string username);
 }

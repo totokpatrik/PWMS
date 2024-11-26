@@ -17,7 +17,14 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddOptions();
-builder.Services.AddAuthorizationCore();
+builder.Services.AddAuthorizationCore(options =>
+{
+    options.AddPolicy("SiteAndWarehouseSelected", policy =>
+    {
+        policy.AddRequirements(new SiteSelectedRequirement());
+        policy.AddRequirements(new WarehouseSelectedRequirement());
+    });
+});
 
 // set base address for default host
 builder.Services.AddScoped(sp =>

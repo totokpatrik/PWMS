@@ -95,6 +95,7 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         claims.Add(new Claim("SiteId", selectedSite?.Id.ToString() ?? string.Empty));
         claims.Add(new Claim("SiteName", selectedSite?.Name ?? string.Empty));
 
+
         // Warehouse claim
         var warehouseContext = _dbContext.AppDbContext.Set<Warehouse>();
 
@@ -150,8 +151,15 @@ public class AuthRepository : RepositoryBase<User>, IAuthRepository
         }
     }
 
-    public async Task SelectWarehouse(Warehouse warehouse, User user)
+    public async Task SelectWarehouse(Warehouse warehouse, string userName)
     {
+        var user = await _userManager.FindByNameAsync(userName);
+
+        if (user == null)
+        {
+            throw new NotFoundException(nameof(User));
+        }
+
         if (warehouse.Owner == user)
         {
             await _userManager.AddToRoleAsync(user, PWMS.Application.Common.Identity.Roles.Role.WarehouseOwner);

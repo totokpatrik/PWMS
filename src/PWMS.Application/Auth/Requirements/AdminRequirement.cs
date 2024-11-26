@@ -8,16 +8,10 @@ public class AdminRequirement : AuthorizationHandler<AdminRequirement>, IAuthori
 {
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminRequirement requirement)
     {
-
-        var asd2 = context.User.Claims
-            .Where(c => c.Type == ClaimTypes.Role);
-
-        var asd = context.Resource;
         if (context.User.Claims.Where(c => c.Type == ClaimTypes.Role).Any(c => c.Value == Role.Admin))
         {
             context.Succeed(requirement);
         }
-
         return Task.CompletedTask;
     }
 }
