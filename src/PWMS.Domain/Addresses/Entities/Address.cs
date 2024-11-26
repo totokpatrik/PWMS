@@ -3,9 +3,8 @@ using PWMS.Domain.Common;
 
 namespace PWMS.Domain.Addresses.Entities;
 
-public class Address : BaseAuditableEntity<Guid, string>, IAggregateRoot
+public class Address : BaseAuditableWarehouseEntity<Guid, string>, IAggregateRoot
 {
-
     public string AddressLine { get; set; }
 
     public Address(Guid id, string addressLine) : base(id)

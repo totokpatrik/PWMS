@@ -2,5 +2,5 @@
 
 namespace PWMS.Application.Addresses.Models;
 
-public sealed record AddressDto(Guid Id, string AddressLine, string CreatedBy, DateTime Created, string ModifiedBy, DateTime? Modified, DateTime? Deleted)
-    : BaseDto(CreatedBy, Created, ModifiedBy, Modified, Deleted);
+public sealed record AddressDto(Guid Id, string AddressLine, string CreatedBy, DateTime Created, string ModifiedBy, DateTime? Modified, DateTime? Deleted, Guid WarehouseId)
+    : BaseWarehouseDto(CreatedBy, Created, ModifiedBy, Modified, Deleted, WarehouseId);

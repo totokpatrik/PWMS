@@ -16,6 +16,16 @@ public static class AppMockFactory
         return MockRepositoryInstance
             .Of<ICurrentUserService>().First(x => x.GetCurrentUser() == currentUser);
     }
+    public static ICurrentWarehouseService CreateCurrentWarehouseServiceMock()
+    {
+        ICurrentWarehouse currentWarehouse = new CurrentWarehouse
+        {
+            Id = Guid.NewGuid()
+        };
+
+        return MockRepositoryInstance
+            .Of<ICurrentWarehouseService>().First(x => x.GetCurrentWarehouse() == currentWarehouse);
+    }
 
     public static IMediator CreateMediatorMock()
     {

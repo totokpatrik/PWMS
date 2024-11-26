@@ -12,20 +12,54 @@ public class DbInitializer() : IDbInitializer
         IServiceScope? scope = null,
         CancellationToken cancellationToken = default)
     {
-        // TODO seeding initial user
-        if (!await context.Set<User>().AnyAsync(cancellationToken))
+        // Seeding the initial user with initial roles
+        scope.ThrowIfNull();
+
+        var userManager = scope!.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var roleManager = scope!.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+
+        var initialRoles = InitialData.Roles;
+        var initialUser = InitialData.User;
+
+        var initialUser2 = InitialData.User2;
+
+        foreach ( var role in initialRoles )
         {
-            scope.ThrowIfNull();
-            var userManager = scope!.ServiceProvider.GetRequiredService<UserManager<User>>();
-            //Create initial user
+
+            if (!await roleManager.RoleExistsAsync(role.Name!))
+            {
+                // Create the initial role
+                await roleManager.CreateAsync(role);
+            }
+        }
+
+
+        if (await userManager.FindByNameAsync(initialUser.UserName!) == null)
+        {
             var user = InitialData.User;
 
-            //Create password for the initial user
+            // Create password for the initial user
             var password = new PasswordHasher<User>();
             var hashed = password.HashPassword(user, "secret");
             user.PasswordHash = hashed;
 
             await userManager.CreateAsync(user);
+
+            await userManager.AddToRoleAsync(user, InitialData.AdminRole.Name!);
+        }
+
+        if (await userManager.FindByNameAsync(initialUser2.UserName!) == null)
+        {
+            var user = InitialData.User2;
+
+            // Create password for the initial user
+            var password = new PasswordHasher<User>();
+            var hashed = password.HashPassword(user, "secret");
+            user.PasswordHash = hashed;
+
+            await userManager.CreateAsync(user);
+
+            await userManager.AddToRoleAsync(user, InitialData.AdminRole.Name!);
         }
     }
 }

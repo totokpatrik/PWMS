@@ -3,7 +3,7 @@ using PWMS.Persistence.PortgreSQL.Common.Configurations;
 
 namespace PWMS.Persistence.PortgreSQL.Addresses.Configurations;
 
-public class AddressConfiguration : AuditableConfiguration<Address>, IEntityTypeConfiguration<Address>
+public class AddressConfiguration : AuditableWarehouseConfiguration<Address>, IEntityTypeConfiguration<Address>
 {
     public override void Configure(EntityTypeBuilder<Address> builder)
     {

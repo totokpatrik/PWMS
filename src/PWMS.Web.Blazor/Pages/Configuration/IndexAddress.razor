@@ -1,6 +1,7 @@
 ﻿@page "/configuration/address"
 @using PWMS.Application.Addresses.Models
-@attribute [Authorize]
+@using PWMS.Application.Common.Identity.Roles
+@attribute [Authorize(Roles = $"{Role.SiteOwner}, {Role.SiteAdmin}, {Role.SiteUser}")]
 
 <PageTitle>Addresses</PageTitle>
 

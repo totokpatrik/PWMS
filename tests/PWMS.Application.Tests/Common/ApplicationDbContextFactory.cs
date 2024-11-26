@@ -19,6 +19,7 @@ public static class ApplicationDbContextFactory
         var context = new ApplicationDbContext(options);
         context.InitContext(
             AppMockFactory.CreateCurrentUserServiceMock(),
+            AppMockFactory.CreateCurrentWarehouseServiceMock(),
             new SeedDataContext(),
             new MachineDateTime(),
             AppMockFactory.CreateMediatorMock());

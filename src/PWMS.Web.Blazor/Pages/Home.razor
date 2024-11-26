@@ -1,7 +1,8 @@
 ﻿@page "/"
 @using System.Globalization
+@using PWMS.Application.Common.Identity.Roles
 @inject IStringLocalizer<Res> localizer
-@attribute [Authorize]
+@attribute [Authorize(Policy = "SiteAndWarehouseSelected")]
 
 <PageTitle>Home</PageTitle>
 

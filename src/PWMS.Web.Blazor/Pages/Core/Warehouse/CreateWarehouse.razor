@@ -1,0 +1,35 @@
+﻿@attribute [Authorize]
+@page "/warehouse/create"
+
+<PageTitle>Create Warehouse</PageTitle>
+
+<MudContainer Class="p-1 m-0">
+    <MudText Typo="Typo.h6">Create Warehouse</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="p-1">
+                <MudForm Model="_createWarehouseDto" @ref="_form" @bind-IsValid="@success">
+                    <MudTextField @bind-Value="_createWarehouseDto.Name"
+                                  Immediate="true"
+                                  Label="Name"
+                                  Validation="_warehouseNameValidator.Validation"
+                                  OnKeyDown="FormKeyDownAsync"
+                                  Required />
+
+                    <MudCardActions Class="gap-2">
+                        <MudSpacer />
+                        <MudLoadingButton Variant="Variant.Filled"
+                                          Color="Color.Primary"
+                                          Class="ml-auto"
+                                          Disabled="@(!success)"
+                                          OnClick="Create"
+                                          @bind-Loading="_loading">Create</MudLoadingButton>
+                        <MudButton Color="Color.Warning"
+                                   OnClick="Cancel">Cancel</MudButton>
+                    </MudCardActions>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+

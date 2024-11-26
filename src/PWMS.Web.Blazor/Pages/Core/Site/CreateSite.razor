@@ -1,0 +1,36 @@
+﻿@attribute [Authorize]
+@page "/site/create"
+
+<PageTitle>Create Site</PageTitle>
+
+<MudContainer Class="p-1 m-0">
+    <MudText Typo="Typo.h6">Create Site</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="p-1">
+                <MudForm Model="_createSiteDto" @ref="_form" @bind-IsValid="@success">
+                    <MudTextField @bind-Value="_createSiteDto.Name"
+                                  Immediate="true"
+                                  Label="Name"
+                                  Validation="_siteNameValidator.Validation"
+                                  OnKeyDown="FormKeyDownAsync"
+                                  Required />
+
+                    <MudCardActions Class="gap-2">
+                        <MudSpacer />
+                        <MudLoadingButton Variant="Variant.Filled"
+                                          Color="Color.Primary"
+                                          Class="ml-auto"
+                                          Disabled="@(!success)"
+                                          OnClick="Create"
+                                          @bind-Loading="_loading">Create</MudLoadingButton>
+                        <MudButton Color="Color.Warning"
+                                   OnClick="Cancel">Cancel</MudButton>
+                    </MudCardActions>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+

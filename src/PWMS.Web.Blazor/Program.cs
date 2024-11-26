@@ -9,6 +9,7 @@ using PWMS.Web.Blazor;
 using PWMS.Web.Blazor.Identity;
 using PWMS.Web.Blazor.Services.AuthService;
 using PWMS.Web.Blazor.Services.Configuration;
+using PWMS.Web.Blazor.Services.Core;
 using PWMS.Web.Blazor.Services.HttpService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -16,7 +17,14 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddOptions();
-builder.Services.AddAuthorizationCore();
+builder.Services.AddAuthorizationCore(options =>
+{
+    options.AddPolicy("SiteAndWarehouseSelected", policy =>
+    {
+        policy.AddRequirements(new SiteSelectedRequirement());
+        policy.AddRequirements(new WarehouseSelectedRequirement());
+    });
+});
 
 // set base address for default host
 builder.Services.AddScoped(sp =>
@@ -27,6 +35,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 
 builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IWarehouseService, WarehouseService>();
 
 // adding localstorage
 builder.Services.AddBlazoredLocalStorage();

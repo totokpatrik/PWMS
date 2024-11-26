@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PWMS.Application.Auth.Requirements;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Common.Extensions;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Persistence.PortgreSQL.Data;
 using Serilog;
+using System.Security.Claims;
 using System.Text;
 
 public static class ServiceCollectionExtension
@@ -72,19 +74,23 @@ public static class ServiceCollectionExtension
                 ValidateIssuerSigningKey = false,
                 ValidAudience = jwtConfiguration.Audience,
                 ValidIssuer = jwtConfiguration.Issuer,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfiguration.Secret))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfiguration.Secret)),
+                RoleClaimType = ClaimTypes.Role
             };
         });
 
         services.AddAuthorizationBuilder();
 
         services.AddIdentityCore<User>()
-            .AddRoles<IdentityRole>()
+            .AddRoles<Role>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddSignInManager()
             .AddTokenProvider<DataProtectorTokenProvider<User>>(jwtConfiguration.Provider);
 
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy => policy.AddRequirements(new AdminRequirement()));
+        });
         services.TryAddScoped<IDbInitializer, DbInitializer>();
 
         // maybe load from config also
