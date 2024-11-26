@@ -7,7 +7,7 @@ public interface IApplicationDbContext
 
     DbContext AppDbContext { get; }
 
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     Task MigrateAsync();
 

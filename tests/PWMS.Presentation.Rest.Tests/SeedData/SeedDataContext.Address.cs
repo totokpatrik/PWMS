@@ -1,5 +1,4 @@
 using PWMS.Domain.Addresses.Entities;
-using PWMS.Domain.Auth.Entities;
 
 namespace PWMS.Presentation.Rest.Tests.SeedData;
 public sealed partial class SeedDataContext
@@ -13,20 +12,6 @@ public sealed partial class SeedDataContext
             yield return new Address("TestAddress3");
             yield return new Address("TestAddress4");
             yield return new Address("TestAddress5");
-        }
-    }
-
-    public static User User
-    {
-        get {
-            return new User
-            {
-                Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
-                UserName = "Admin",
-                Email = "admin@ddd.com",
-                EmailConfirmed = true,
-                SecurityStamp = Guid.NewGuid().ToString("D")
-            };
         }
     }
 }

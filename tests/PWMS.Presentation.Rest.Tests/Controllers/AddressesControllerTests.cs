@@ -2,10 +2,8 @@
 using MediatR;
 using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
-using PWMS.Application.Addresses.Commands.DeleteRange;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Addresses.Models;
-using PWMS.Application.Common.Interfaces;
 using PWMS.Application.Common.Paging;
 using PWMS.Presentation.Rest.Models.Result;
 using PWMS.Presentation.Rest.Tests.Common;
@@ -169,8 +167,8 @@ public class AddressesControllerTests
     public async Task DeleteTestAsync()
     {
         var client = new RestClient(_factory.CreateClient()).Authenticate();
-        var addressId = Guid.Parse("4B178375-845F-4D84-9E5B-31A14F097AA1");
-
+        var asd = await GetAddresses();
+        var addressId = (await GetAddresses()).Data.Data.First().Id;
 
         var command = new DeleteAddressCommand(addressId);
 

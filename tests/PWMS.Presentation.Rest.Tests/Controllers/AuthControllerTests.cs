@@ -1,20 +1,12 @@
 ﻿using FluentAssertions;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using PWMS.Application.Addresses.Commands.Create;
-using PWMS.Application.Addresses.Models;
 using PWMS.Application.Auth.Commands.Login;
 using PWMS.Application.Auth.Commands.Register;
 using PWMS.Domain.Auth.Entities;
 using PWMS.Presentation.Rest.Models.Result;
 using PWMS.Presentation.Rest.Tests.Common;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PWMS.Presentation.Rest.Tests.Controllers;
 
@@ -36,7 +28,7 @@ public class AuthControllerTests
     {
         var client = new RestClient(_factory.CreateClient());
 
-        var command = new LoginCommand("Admin", "secret");
+        var command = new LoginCommand("TestAdmin", "secret");
 
         var response = await client.PostAsync<ResultDto<Token>>(
             new RestRequest(Post.Login()).AddJsonBody(command));
@@ -109,7 +101,7 @@ public class AuthControllerTests
     [Fact]
     public async Task RegisterUser_AlreadyExistingUser()
     {
-        var username = "Admin";
+        var username = "TestAdmin";
         var password = "Secretpassword123!";
         var client = new RestClient(_factory.CreateClient());
         var command = new RegisterCommand(username, password);
@@ -122,6 +114,6 @@ public class AuthControllerTests
         response.Data!.IsSuccess.Should().BeFalse();
         response.Data!.Errors.Should().ContainSingle();
         response.Data!.Errors.First().Code.Should().Be("DuplicateUserName");
-        response.Data!.Errors.First().Message.Should().Be("Username 'Admin' is already taken.");
+        response.Data!.Errors.First().Message.Should().Be("Username 'TestAdmin' is already taken.");
     }
 }
