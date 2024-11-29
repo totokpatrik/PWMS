@@ -31,7 +31,7 @@ public class AddressesController : BaseController
     public async Task<ActionResult<ResultDto<Guid>>> Create(
     [FromBody] CreateAddressDto createAddressDto,
     CancellationToken cancellationToken)
-    => (await Mediator.Send(new CreateAddressCommand(createAddressDto.AddressLine), cancellationToken)).ToResultDto();
+    => (await Mediator.Send(new CreateAddressCommand(createAddressDto.AddressLine, createAddressDto.AddressType), cancellationToken)).ToResultDto();
 
     /// <summary>
     /// Updates address.
@@ -44,7 +44,7 @@ public class AddressesController : BaseController
     public async Task<ActionResult<ResultDto<AddressDto>>> Update(
     [FromBody][Required] UpdateAddressDto updateAddressDto,
     CancellationToken cancellationToken)
-    => (await Mediator.Send(new UpdateAddressCommand(updateAddressDto.Id, updateAddressDto.AddressLine), cancellationToken)).ToResultDto();
+    => (await Mediator.Send(new UpdateAddressCommand(updateAddressDto.Id, updateAddressDto.AddressLine, updateAddressDto.AddressType), cancellationToken)).ToResultDto();
 
     /// <summary>
     /// Deletes address.

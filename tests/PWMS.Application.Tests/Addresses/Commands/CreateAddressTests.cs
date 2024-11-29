@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Tests.Common;
+using PWMS.Domain.Addresses.Entities;
 
 namespace PWMS.Application.Tests.Addresses.Commands;
 
@@ -15,7 +16,7 @@ public class CreateAddressTests : TestBase
     [Fact]
     public async Task Should_Create_Address()
     {
-        var command = new CreateAddressCommand("Test address");
+        var command = new CreateAddressCommand("Test address", AddressType.InboundAddress);
         var result = await Mediator.Send(command);
 
         result.Should().NotBeNull();

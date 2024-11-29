@@ -7,6 +7,7 @@ public class AddressMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<Address, AddressDto>();
+        config.NewConfig<Address, AddressDto>()
+            .Map(dest => dest.AddressType, src => "asd");
     }
 }

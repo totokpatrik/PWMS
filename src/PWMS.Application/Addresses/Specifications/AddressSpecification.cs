@@ -37,7 +37,8 @@ internal sealed class AddressSpecification : Specification<Address>
             specificationBuilder.Take(pageContext.PageSize);
         }
 
-        specificationBuilder.AsNoTracking();
+        specificationBuilder
+            .AsNoTracking();
         return specification;
     }
 

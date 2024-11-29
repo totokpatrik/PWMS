@@ -1,3 +1,5 @@
-﻿namespace PWMS.Application.Addresses.Commands.Create;
+﻿using PWMS.Domain.Addresses.Entities;
 
-public sealed record CreateAddressCommand(string AddressLine) : IRequest<Result<Guid>>;
+namespace PWMS.Application.Addresses.Commands.Create;
+
+public sealed record CreateAddressCommand(string AddressLine, AddressType AddressType) : IRequest<Result<Guid>>;

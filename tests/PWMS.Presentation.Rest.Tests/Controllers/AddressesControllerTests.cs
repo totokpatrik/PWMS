@@ -5,6 +5,7 @@ using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Addresses.Models;
 using PWMS.Application.Common.Paging;
+using PWMS.Domain.Addresses.Entities;
 using PWMS.Presentation.Rest.Models.Result;
 using PWMS.Presentation.Rest.Tests.Common;
 using RestSharp;
@@ -122,7 +123,7 @@ public class AddressesControllerTests
     {
         var client = new RestClient(_factory.CreateClient()).Authenticate();
 
-        var command = new CreateAddressCommand("Test Address");
+        var command = new CreateAddressCommand("Test Address", AddressType.InboundAddress);
 
         var response = await client.PostAsync<ResultDto<Guid>>(
             new RestRequest(Post.CreateAddressV1()).AddJsonBody(command));
@@ -137,7 +138,7 @@ public class AddressesControllerTests
         var client = new RestClient(_factory.CreateClient()).Authenticate();
         var updatedAddressLine = "Updated test address";
 
-        var command = new UpdateAddressCommand(Guid.Parse("4B178375-845F-4D84-9E5B-31A14F097AA1"), updatedAddressLine);
+        var command = new UpdateAddressCommand(Guid.Parse("4B178375-845F-4D84-9E5B-31A14F097AA1"), updatedAddressLine, AddressType.InboundAddress);
 
         var response = await client.PutAsync<ResultDto<AddressDto>>(
             new RestRequest(Put.UpdateAddressV1()).AddJsonBody(command));
@@ -153,7 +154,7 @@ public class AddressesControllerTests
         var client = new RestClient(_factory.CreateClient()).Authenticate();
         var updatedAddressLine = "";
 
-        var command = new UpdateAddressCommand(Guid.Parse("4B178375-845F-4D84-9E5B-31A14F097AA1"), updatedAddressLine);
+        var command = new UpdateAddressCommand(Guid.Parse("4B178375-845F-4D84-9E5B-31A14F097AA1"), updatedAddressLine, AddressType.InboundAddress);
 
         // Act
         Func<Task> act = () => client.PutAsync<ResultDto<AddressDto>>(

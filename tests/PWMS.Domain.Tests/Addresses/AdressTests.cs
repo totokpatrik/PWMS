@@ -12,7 +12,7 @@ public class AdressTests
     {
         // Arrange
         var addressFaker = new Faker<Address>()
-            .CustomInstantiator(faker => new Address(faker.Address.FullAddress()));
+            .CustomInstantiator(faker => new Address(faker.Address.FullAddress(), AddressType.InboundAddress));
 
         // Act
         var act = addressFaker.Generate();

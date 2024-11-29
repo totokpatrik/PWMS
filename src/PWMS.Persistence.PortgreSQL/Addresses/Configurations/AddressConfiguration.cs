@@ -16,5 +16,8 @@ public class AddressConfiguration : AuditableWarehouseConfiguration<Address>, IE
         builder.Property(a => a.AddressLine)
             .IsRequired()
             .HasMaxLength(100);
+
+        builder.Property(a => a.AddressType)
+            .HasConversion<int>();
     }
 }

@@ -3,6 +3,7 @@ using FluentAssertions;
 using PWMS.Application.Addresses.Commands.Update;
 using PWMS.Application.Common.Exceptions;
 using PWMS.Application.Tests.Common;
+using PWMS.Domain.Addresses.Entities;
 
 namespace PWMS.Application.Tests.Addresses.Commands;
 
@@ -17,7 +18,7 @@ public class UpdateAddressTests : TestBase
     {
         // Arrange
         var validator = new UpdateAddressCommandValidator();
-        var command = new UpdateAddressCommand(Guid.NewGuid(), "");
+        var command = new UpdateAddressCommand(Guid.NewGuid(), "", AddressType.InboundAddress);
 
         // Act
         var validationResult = await validator.ValidateAsync(command);
@@ -31,7 +32,7 @@ public class UpdateAddressTests : TestBase
     {
         // Arrange
         var updatedAddressLine = new Faker().Address.FullAddress();
-        var command = new UpdateAddressCommand(Guid.Parse("AB7D57B6-0EB1-4E7C-9147-A84B254034C7"), updatedAddressLine);
+        var command = new UpdateAddressCommand(Guid.Parse("AB7D57B6-0EB1-4E7C-9147-A84B254034C7"), updatedAddressLine, AddressType.InboundAddress);
 
         // Act
         var result = await Mediator.Send(command);
@@ -46,7 +47,7 @@ public class UpdateAddressTests : TestBase
     {
         // Arrange
         var updatedAddressLine = new Faker().Address.FullAddress();
-        var command = new UpdateAddressCommand(Guid.Parse("AB7D57B6-0EB1-4E7C-9147-A84B254034D7"), updatedAddressLine);
+        var command = new UpdateAddressCommand(Guid.Parse("AB7D57B6-0EB1-4E7C-9147-A84B254034D7"), updatedAddressLine, AddressType.InboundAddress);
 
         // Act
         Func<Task> act = () => Mediator.Send(command);

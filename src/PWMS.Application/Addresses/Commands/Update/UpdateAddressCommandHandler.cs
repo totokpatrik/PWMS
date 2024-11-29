@@ -1,8 +1,6 @@
 ﻿using PWMS.Application.Addresses.Models;
 using PWMS.Application.Addresses.Repositories;
 using PWMS.Application.Addresses.Specifications;
-using PWMS.Application.Common.Exceptions;
-using PWMS.Common.Extensions;
 using PWMS.Domain.Addresses.Entities;
 
 namespace PWMS.Application.Addresses.Commands.Update;
@@ -22,7 +20,7 @@ public sealed class UpdateAddressCommandHandler(IAddressRepository addressReposi
             throw new NotFoundException(nameof(Address), request.Id);
         }
 
-        entity.Update(request.AddressLine);
+        entity.Update(request.AddressLine, request.addressType);
 
         await _addressRepository.SaveChangesAsync(cancellationToken)
             .ConfigureAwait(false);
