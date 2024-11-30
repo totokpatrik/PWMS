@@ -4,6 +4,7 @@ using PWMS.Application.Addresses.Specifications;
 using PWMS.Application.Common.Handlers;
 using PWMS.Application.Common.Interfaces;
 using PWMS.Application.Common.Paging;
+using System.Globalization;
 
 namespace PWMS.Application.Addresses.Queries.Get;
 
@@ -29,6 +30,8 @@ internal sealed class GetAddressQueryHandler
             .GetAllAddresses(specification, cancellationToken, request.PageContext.Filter);
 
         var count = await _addressRepository.CountAsync();
+
+        var currentCulture = CultureInfo.CurrentCulture;
 
         var dtoAddresses = await entities
             .BuildAdapter(Mapper.Config)

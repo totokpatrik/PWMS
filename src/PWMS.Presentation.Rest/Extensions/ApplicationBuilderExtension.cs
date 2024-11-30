@@ -24,6 +24,7 @@ public static class ApplicationBuilderExtension
 
         app.UseCors("CorsPolicy");
 
+        app.UseMiddleware(typeof(LocalizationMiddleware));
         app.UseMiddleware(typeof(ErrorHandlingMiddleware));
 
         return app;
