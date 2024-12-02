@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Core.Warehouses.Commands.Delete
+namespace PWMS.Application.Core.Warehouses.Commands.Delete;
+
+internal class DeleteWarehouseCommand
 {
-    internal class DeleteWarehouseCommand
-    {
-    }
 }

@@ -7,67 +7,67 @@
 }
 
 @code {
-    private bool authenticated = false;
-    private string? _site;
-    private string? _warehouse;
+private bool authenticated = false;
+private string? _site;
+private string? _warehouse;
 
-    protected override async void OnInitialized()
+protected override async void OnInitialized()
+{
+    var asd = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+    if ((await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.IsAuthenticated)
     {
-        var asd = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        authenticated = true;
+        StateHasChanged();
 
-        if ((await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.IsAuthenticated)
+        // Check if site or warehouse exists and redirect based on that
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        if (authState.User.Identity!.IsAuthenticated)
         {
-            authenticated = true;
-            StateHasChanged();
+            var user = authState.User;
 
-            // Check if site or warehouse exists and redirect based on that
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            string? warehouse = user.Claims.ToList()
+                .Where(s => s.Type == "WarehouseId")
+                .Select(s => s.Value)
+                .FirstOrDefault();
 
-            if (authState.User.Identity!.IsAuthenticated)
+            if (!string.IsNullOrEmpty(warehouse))
             {
-                var user = authState.User;
-
-                string? warehouse = user.Claims.ToList()
-                    .Where(s => s.Type == "WarehouseId")
-                    .Select(s => s.Value)
-                    .FirstOrDefault();
-
-                if (!string.IsNullOrEmpty(warehouse))
-                {
-                    _warehouse = warehouse;
-                }
-                else
-                {
-                    NavigationManager.NavigateTo("/warehouse");
-                }
-
-                string? site = user.Claims.ToList()
-                    .Where(s => s.Type == "SiteId")
-                    .Select(s => s.Value)
-                    .FirstOrDefault();
-
-                if (!string.IsNullOrEmpty(site))
-                {
-                    _site = site;
-                }
-                else
-                {
-                    NavigationManager.NavigateTo("/site");
-                }
-            }
-        }
-        else
-        {
-            var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-
-            if (returnUrl == "" || returnUrl == "logout")
-            {
-                NavigationManager.NavigateTo("/login", forceLoad: true);
+                _warehouse = warehouse;
             }
             else
             {
-                NavigationManager.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(returnUrl)}", forceLoad: true);
+                NavigationManager.NavigateTo("/warehouse");
+            }
+
+            string? site = user.Claims.ToList()
+                .Where(s => s.Type == "SiteId")
+                .Select(s => s.Value)
+                .FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(site))
+            {
+                _site = site;
+            }
+            else
+            {
+                NavigationManager.NavigateTo("/site");
             }
         }
     }
+    else
+    {
+        var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+
+        if (returnUrl == "" || returnUrl == "logout")
+        {
+            NavigationManager.NavigateTo("/login", forceLoad: true);
+        }
+        else
+        {
+            NavigationManager.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(returnUrl)}", forceLoad: true);
+        }
+    }
+}
 }

@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Core.Warehouses.Queries.GetById
+namespace PWMS.Application.Core.Warehouses.Queries.GetById;
+
+internal class GetWarehouseByIdQuery
 {
-    internal class GetWarehouseByIdQuery
-    {
-    }
 }

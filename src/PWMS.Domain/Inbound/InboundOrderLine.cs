@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Domain.Inbound
+namespace PWMS.Domain.Inbound;
+
+internal class InboundOrderLine
 {
-    internal class InboundOrderLine
-    {
-    }
 }

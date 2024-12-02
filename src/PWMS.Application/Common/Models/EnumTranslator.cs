@@ -1,19 +1,18 @@
 ﻿using System.Resources;
 
-namespace PWMS.Application.Common.Models
+namespace PWMS.Application.Common.Models;
+
+public static class EnumTranslator
 {
-    public static class EnumTranslator
+    public static string GetDisplayDescription(this Enum enumValue, Type resourceType)
     {
-        public static string GetDisplayDescription(this Enum enumValue, Type resourceType)
-        {
-            var resourceManager = new ResourceManager(resourceType);
+        var resourceManager = new ResourceManager(resourceType);
 
-            var translatedDescription = resourceManager.GetString(enumValue.ToString());
+        var translatedDescription = resourceManager.GetString(enumValue.ToString());
 
-            if (string.IsNullOrEmpty(translatedDescription))
-                return enumValue.ToString();
+        if (string.IsNullOrEmpty(translatedDescription))
+            return enumValue.ToString();
 
-            return translatedDescription;
-        }
+        return translatedDescription;
     }
 }

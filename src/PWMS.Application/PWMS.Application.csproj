@@ -27,6 +27,18 @@
 
   <ItemGroup>
     <Folder Include="Auth\Queries\" />
+    <Folder Include="Inventories\AlternateItems\Commands\DeleteRange\" />
+    <Folder Include="Inventories\AlternateItems\Commands\Update\" />
+    <Folder Include="Inventories\AlternateItems\EventHandlers\" />
+    <Folder Include="Inventories\AlternateItems\Mappings\" />
+    <Folder Include="Inventories\AlternateItems\Models\" />
+    <Folder Include="Inventories\AlternateItems\Queries\" />
+    <Folder Include="Inventories\AlternateItems\Repositories\" />
+    <Folder Include="Inventories\AlternateItems\Specifications\" />
+    <Folder Include="Inventories\Footprints\EventHandlers\" />
+    <Folder Include="Inventories\Footprints\Mappings\" />
+    <Folder Include="Inventories\ItemFamilies\EventHandlers\" />
+    <Folder Include="Inventories\Items\EventHandlers\" />
   </ItemGroup>
 
 </Project>

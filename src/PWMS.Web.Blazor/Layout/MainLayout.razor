@@ -10,9 +10,9 @@
         <Authorized>
             <MudAppBar Color="Color.Primary">
                 @if (_warehouseAndSiteSet)
-                {
-                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleDrawer" />
-                }
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="ToggleDrawer" />
+            }
                 <MudButton Color="Color.Inherit"
                            Variant="Variant.Text"
                            DropShadow="true"
@@ -21,8 +21,8 @@
                 </MudButton>
                 <MudSpacer />
                 @if (_warehouseAndSiteSet)
-                {
-                    <MudButton Color="Color.Inherit"
+            {
+                <MudButton Color="Color.Inherit"
                                Variant="Variant.Text"
                                DropShadow="true"
                                Class="rounded-r-0"
@@ -30,7 +30,7 @@
                                OnClick="@(() => NavigationManager.NavigateTo("/site"))">
                         @context.User.Claims.FirstOrDefault(c => c.Type == "SiteName")?.Value
                     </MudButton>
-                    <MudButton Color="Color.Inherit"
+                <MudButton Color="Color.Inherit"
                                Variant="Variant.Text"
                                Class="border-l border-solid rounded-l-0 mr-8"
                                Style="border-color: var(--mud-palette-primary-lighten)"
@@ -39,7 +39,7 @@
                                OnClick="@(() => NavigationManager.NavigateTo("/warehouse"))">
                         @context.User.Claims.FirstOrDefault(c => c.Type == "WarehouseName")?.Value
                     </MudButton>
-                }
+            }
                 <MudMenu Label="@context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value"
                          EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
                          Variant="Variant.Text"
@@ -50,11 +50,11 @@
                 </MudMenu>
             </MudAppBar>
             @if (_warehouseAndSiteSet)
-            {
-                <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
+        {
+            <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Responsive" ClipMode="DrawerClipMode.Docked">
                     <NavMenu />
                 </MudDrawer>
-            }
+        }
             <MudMainContent>
                 @Body
             </MudMainContent>
@@ -73,35 +73,35 @@
 <MudPopoverProvider />
 
 @code {
-    public bool _warehouseAndSiteSet = false;
-    private bool _open = false;
+public bool _warehouseAndSiteSet = false;
+private bool _open = false;
 
-    protected override void OnAfterRender(bool firstRender)
+protected override void OnAfterRender(bool firstRender)
+{
+    base.OnAfterRender(firstRender);
+}
+
+protected override async Task OnInitializedAsync()
+{
+    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+    if (authState.User.Identity!.IsAuthenticated)
     {
-        base.OnAfterRender(firstRender);
+        if (!string.IsNullOrEmpty(authState.User.Claims.FirstOrDefault(c => c.Type == "WarehouseId")?.Value) &&
+        !string.IsNullOrEmpty(authState.User.Claims.FirstOrDefault(c => c.Type == "SiteId")?.Value))
+            _warehouseAndSiteSet = true;
     }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-
-        if (authState.User.Identity!.IsAuthenticated)
-        {
-            if (!string.IsNullOrEmpty(authState.User.Claims.FirstOrDefault(c => c.Type == "WarehouseId")?.Value) &&
-            !string.IsNullOrEmpty(authState.User.Claims.FirstOrDefault(c => c.Type == "SiteId")?.Value))
-                _warehouseAndSiteSet = true;
-        }
-        StateHasChanged();
-    }
+    StateHasChanged();
+}
 
 
-    private void ToggleDrawer()
-    {
-        _open = !_open;
-    }
+private void ToggleDrawer()
+{
+    _open = !_open;
+}
 
-    private void Logout()
-    {
-        NavigationManager.NavigateTo("/logout", true);
-    }
+private void Logout()
+{
+    NavigationManager.NavigateTo("/logout", true);
+}
 }

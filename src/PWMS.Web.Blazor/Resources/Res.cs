@@ -1,6 +1,5 @@
-﻿namespace PWMS.Web.Blazor.Resources
+﻿namespace PWMS.Web.Blazor.Resources;
+
+public class Res
 {
-    public class Res
-    {
-    }
 }

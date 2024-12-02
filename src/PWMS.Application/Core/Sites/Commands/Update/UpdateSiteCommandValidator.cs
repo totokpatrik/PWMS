@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Core.Sites.Commands.Update
+namespace PWMS.Application.Core.Sites.Commands.Update;
+
+internal class UpdateSiteCommandValidator
 {
-    internal class UpdateSiteCommandValidator
-    {
-    }
 }
