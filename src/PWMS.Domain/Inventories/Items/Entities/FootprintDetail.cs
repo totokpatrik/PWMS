@@ -1,10 +1,13 @@
 ﻿using PWMS.Domain.Common;
 using PWMS.Domain.Inventories.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PWMS.Domain.Inventories.Items.Entities;
 
 public class FootprintDetail : BaseAuditableWarehouseEntity<Guid, string>, IAggregateRoot
 {
+    [ExcludeFromCodeCoverage]
+    private FootprintDetail() : base(Guid.NewGuid()) { }
     public FootprintDetail(
         int level,
         UnitOfMeasure unitOfMeasure,
@@ -55,7 +58,6 @@ public class FootprintDetail : BaseAuditableWarehouseEntity<Guid, string>, IAggr
     }
 
     public int Level { get; set; }
-    public UnitOfMeasure UnitOfMeasure { get; set; } = default!;
     public int UnitQuantity { get; set; }
     public int GrossWeight { get; set; }
     public int NetWeight { get; set; }
@@ -63,5 +65,10 @@ public class FootprintDetail : BaseAuditableWarehouseEntity<Guid, string>, IAggr
     public int Width { get; set; }
     public int Height { get; set; }
     public bool Receive { get; set; }
-    public Footprint Footprint { get; set; } = default!;
+    [ForeignKey("Footprint")]
+    public Guid FoorptinrId { get; set; }
+    public virtual Footprint Footprint { get; set; } = default!;
+    [ForeignKey("UnitOfMeasure")]
+    public Guid UnitOfMeasureId { get; set; }
+    public virtual UnitOfMeasure UnitOfMeasure { get; set; } = default!;
 }

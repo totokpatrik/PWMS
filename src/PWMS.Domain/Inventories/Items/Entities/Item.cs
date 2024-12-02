@@ -24,7 +24,9 @@ public class Item : BaseAuditableWarehouseEntity<Guid, string>, IAggregateRoot
     public string Description { get; set; } = default!;
     public string ShortDescription { get; set; } = default!;
     public bool ReceiveStatus { get; set; } = false;
-    public ItemFamily? ItemFamily { get; set; }
-    public ICollection<Footprint>? Footprints { get; set; }
-    public ICollection<AlternateItem>? AlternateItems { get; set; }
+    [ForeignKey("ItemFamily")]
+    public Guid ItemFamilyId { get; set; }
+    public virtual ItemFamily? ItemFamily { get; set; }
+    public virtual ICollection<Footprint>? Footprints { get; set; }
+    public virtual ICollection<AlternateItem>? AlternateItems { get; set; }
 }
