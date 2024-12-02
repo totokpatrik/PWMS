@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Models
+namespace PWMS.Application.Inventories.Footprints.Models;
+
+internal class UpdateFootprintDto
 {
-    internal class UpdateFootprintDto
-    {
-    }
 }

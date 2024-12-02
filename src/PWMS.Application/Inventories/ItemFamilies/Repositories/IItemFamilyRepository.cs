@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.ItemFamilies.Repositories
+namespace PWMS.Application.Inventories.ItemFamilies.Repositories;
+
+internal interface IItemFamilyRepository
 {
-    internal interface IItemFamilyRepository
-    {
-    }
 }

@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.ItemFamilies.Commands.Create
+namespace PWMS.Application.Inventories.ItemFamilies.Commands.Create;
+
+internal class CreateItemFamilyCommandHandler
 {
-    internal class CreateItemFamilyCommandHandler
-    {
-    }
 }

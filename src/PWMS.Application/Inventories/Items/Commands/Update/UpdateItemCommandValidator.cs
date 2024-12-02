@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Items.Commands.Update
+namespace PWMS.Application.Inventories.Items.Commands.Update;
+
+internal class UpdateItemCommandValidator
 {
-    internal class UpdateItemCommandValidator
-    {
-    }
 }

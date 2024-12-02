@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Repositories
+namespace PWMS.Application.Inventories.Footprints.Repositories;
+
+internal interface IFootprintDetailRepository
 {
-    internal interface IFootprintDetailRepository
-    {
-    }
 }

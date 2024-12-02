@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Commands.Create
+namespace PWMS.Application.Inventories.Footprints.Commands.Create;
+
+internal class CreateFootprtintDetailCommand
 {
-    internal class CreateFootprtintDetailCommand
-    {
-    }
 }

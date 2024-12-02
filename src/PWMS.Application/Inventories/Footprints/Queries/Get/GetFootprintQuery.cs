@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Queries.Get
+namespace PWMS.Application.Inventories.Footprints.Queries.Get;
+
+internal class GetFootprintQuery
 {
-    internal class GetFootprintQuery
-    {
-    }
 }

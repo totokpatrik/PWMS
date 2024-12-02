@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.ItemFamilies.Commands.Update
+namespace PWMS.Application.Inventories.ItemFamilies.Commands.Update;
+
+internal class UpdateItemFamilyCommand
 {
-    internal class UpdateItemFamilyCommand
-    {
-    }
 }

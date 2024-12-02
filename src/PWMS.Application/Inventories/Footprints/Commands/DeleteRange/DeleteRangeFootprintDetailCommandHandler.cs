@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Commands.DeleteRange
+namespace PWMS.Application.Inventories.Footprints.Commands.DeleteRange;
+
+internal class DeleteRangeFootprintDetailCommandHandler
 {
-    internal class DeleteRangeFootprintDetailCommandHandler
-    {
-    }
 }

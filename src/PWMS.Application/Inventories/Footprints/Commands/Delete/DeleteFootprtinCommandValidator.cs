@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Commands.Delete
+namespace PWMS.Application.Inventories.Footprints.Commands.Delete;
+
+internal class DeleteFootprtinCommandValidator
 {
-    internal class DeleteFootprtinCommandValidator
-    {
-    }
 }

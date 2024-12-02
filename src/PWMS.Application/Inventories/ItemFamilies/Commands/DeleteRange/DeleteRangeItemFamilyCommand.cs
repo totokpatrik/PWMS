@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.ItemFamilies.Commands.DeleteRange
+namespace PWMS.Application.Inventories.ItemFamilies.Commands.DeleteRange;
+
+internal class DeleteRangeItemFamilyCommand
 {
-    internal class DeleteRangeItemFamilyCommand
-    {
-    }
 }

@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Specifications
+namespace PWMS.Application.Inventories.Footprints.Specifications;
+
+internal class FootprintDetailByIdSpecification
 {
-    internal class FootprintDetailByIdSpecification
-    {
-    }
 }

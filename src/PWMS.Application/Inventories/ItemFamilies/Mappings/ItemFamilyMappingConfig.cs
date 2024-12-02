@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.ItemFamilies.Mappings
+namespace PWMS.Application.Inventories.ItemFamilies.Mappings;
+
+internal class ItemFamilyMappingConfig
 {
-    internal class ItemFamilyMappingConfig
-    {
-    }
 }

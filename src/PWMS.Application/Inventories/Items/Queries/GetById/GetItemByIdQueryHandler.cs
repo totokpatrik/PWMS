@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Items.Queries.GetById
+namespace PWMS.Application.Inventories.Items.Queries.GetById;
+
+internal class GetItemByIdQueryHandler
 {
-    internal class GetItemByIdQueryHandler
-    {
-    }
 }
