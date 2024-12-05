@@ -1,4 +1,5 @@
 ﻿
+using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using PWMS.Application.Common.Paging;
 using PWMS.Application.Core.Sites.Commands.Create;
@@ -15,7 +16,7 @@ namespace PWMS.Presentation.Rest.Controllers.Version10.Core;
 [Authorize]
 public class SitesController : BaseController
 {
-    public SitesController(IMediator mediator) : base(mediator)
+    public SitesController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
     {
     }
 

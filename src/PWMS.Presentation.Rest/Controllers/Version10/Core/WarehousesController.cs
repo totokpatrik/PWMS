@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
 using PWMS.Application.Common.Paging;
 using PWMS.Application.Core.Warehouses.Commands.Create;
 using PWMS.Application.Core.Warehouses.Commands.Select;
@@ -13,7 +14,7 @@ namespace PWMS.Presentation.Rest.Controllers.Version10.Core;
 [Authorize]
 public class WarehousesController : BaseController
 {
-    public WarehousesController(IMediator mediator) : base(mediator)
+    public WarehousesController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
     {
     }
 

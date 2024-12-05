@@ -3,7 +3,6 @@ using PWMS.Application.Addresses.Repositories;
 using PWMS.Application.Addresses.Specifications;
 using PWMS.Application.Common.Handlers;
 using PWMS.Application.Common.Interfaces;
-using PWMS.Common.Extensions;
 
 namespace PWMS.Application.Addresses.Queries.GetById;
 
@@ -28,11 +27,11 @@ public sealed class GetAddressByIdQueryHandler : HandlerDbQueryBase<GetAddressBy
 
         entity.ThrowIfNull(new NotFoundException());
 
-        var dtoItem = await entity
+        var dtoEntity = await entity
             .BuildAdapter(Mapper.Config)
             .AdaptToTypeAsync<AddressDto>()
             .ConfigureAwait(false);
 
-        return Result.Ok(dtoItem);
+        return Result.Ok(dtoEntity);
     }
 }

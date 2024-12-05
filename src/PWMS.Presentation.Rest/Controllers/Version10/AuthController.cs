@@ -1,4 +1,5 @@
-﻿using PWMS.Application.Auth.Commands.Login;
+﻿using MapsterMapper;
+using PWMS.Application.Auth.Commands.Login;
 using PWMS.Application.Auth.Commands.Register;
 using PWMS.Application.Auth.Models;
 using PWMS.Domain.Auth.Entities;
@@ -10,7 +11,7 @@ namespace PWMS.Presentation.Rest.Controllers.Version10;
 [Route("api/v{version:apiVersion}/auth")]
 public class AuthController : BaseController
 {
-    public AuthController(IMediator mediator) : base(mediator)
+    public AuthController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
     {
     }
 

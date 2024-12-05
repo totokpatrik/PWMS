@@ -25,8 +25,8 @@ public sealed class UpdateAddressCommandHandler(IAddressRepository addressReposi
         await _addressRepository.SaveChangesAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        var addressDto = entity.Adapt<AddressDto>();
+        var dto = entity.Adapt<AddressDto>();
 
-        return Result.Ok(addressDto);
+        return Result.Ok(dto);
     }
 }

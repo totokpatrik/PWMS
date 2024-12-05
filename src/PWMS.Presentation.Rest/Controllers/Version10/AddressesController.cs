@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
 using PWMS.Application.Addresses.Commands.Create;
 using PWMS.Application.Addresses.Commands.Delete;
 using PWMS.Application.Addresses.Commands.DeleteRange;
@@ -16,7 +17,7 @@ namespace PWMS.Presentation.Rest.Controllers.Version10;
 [Authorize]
 public class AddressesController : BaseController
 {
-    public AddressesController(IMediator mediator) : base(mediator)
+    public AddressesController(IMediator mediator, IMapper mapper) : base(mediator, mapper)
     {
     }
 

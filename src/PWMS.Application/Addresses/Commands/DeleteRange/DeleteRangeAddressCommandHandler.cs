@@ -10,15 +10,15 @@ internal class DeleteRangeAddressCommandHandler(IAddressRepository addressReposi
     public async Task<Result<List<Guid>>> Handle(DeleteRangeAddressCommand request, CancellationToken cancellationToken)
     {
         var entities = new List<Address>();
-        foreach (var addressId in request.Ids)
+        foreach (var id in request.Ids)
         {
             var entity = await _addressRepository
-                .SingleOrDefaultAsync(new AddressByIdSpecification(addressId), cancellationToken)
+                .SingleOrDefaultAsync(new AddressByIdSpecification(id), cancellationToken)
                 .ConfigureAwait(false);
 
             if (entity == null)
             {
-                throw new NotFoundException(nameof(Address), addressId);
+                throw new NotFoundException(nameof(Address), id);
             }
 
             entities.Add(entity);

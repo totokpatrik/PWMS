@@ -1,11 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PWMS.Application.Inventories.AlternateItems.Commands.Create;
 
-namespace PWMS.Application.Inventories.AlternateItems.Commands.Create;
-
-internal class CreateAlternateItemCommand
-{
-}
+public sealed record CreateAlternateItemCommand(string AddressLine) : IRequest<Result<Guid>>;

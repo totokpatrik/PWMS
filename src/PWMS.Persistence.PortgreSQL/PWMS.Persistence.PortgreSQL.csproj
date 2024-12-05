@@ -39,4 +39,8 @@
     <ProjectReference Include="..\PWMS.Infrastructure.Core\PWMS.Infrastructure.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
 </Project>

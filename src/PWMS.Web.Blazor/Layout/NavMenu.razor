@@ -1,9 +1,12 @@
 ﻿<MudNavMenu>
     <MudTreeView T="string" ReadOnly ExpandOnClick="true">
         <MudTreeViewItem Text="Configuration">
-            <MudNavLink Href="/configuration/partners">Partners</MudNavLink>
-            <MudNavLink Href="/configuration/address">Addresses</MudNavLink>
-            <MudNavLink Href="/configuration/inbound">Inbound</MudNavLink>
+            <MudTreeViewItem Text="Inventory">
+                <MudTreeViewItem Text="Items">
+                    <MudNavLink Href="/configuration/inventory/items/itemFamilyGroup">Item Family Groups</MudNavLink>
+                    <MudNavLink Href="/configuration/inventory/items/itemFamily">Item Family</MudNavLink>
+                </MudTreeViewItem>
+            </MudTreeViewItem>
         </MudTreeViewItem>
         <MudTreeViewItem Text="Inventory">
             <MudTreeViewItem Text="Inventory" />

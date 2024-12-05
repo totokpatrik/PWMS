@@ -19,4 +19,10 @@ public class ItemFamilyGroup : BaseAuditableWarehouseEntity<Guid, string>, IAggr
     public string Name { get; set; } = default!;
     public string Description { get; set; } = default!;
     public ICollection<ItemFamily>? ItemFamilies { get; set; }
+
+    public void Update(string name, string description)
+    {
+        Name = name;
+        Description = description;
+    }
 }
