@@ -3,7 +3,7 @@ using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Repositories;
 using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Specifications;
 using PWMS.Application.Configuration.Inventory.Items.ItemFamilyGroups.Repositories;
 using PWMS.Application.Configuration.Inventory.Items.ItemFamilyGroups.Specifications;
-using PWMS.Domain.Inventories.Items.Entities;
+using PWMS.Domain.Configuration.Inventory.Items.Entities;
 
 namespace PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Commands.Update;
 public sealed class UpdateItemFamilyCommandHandler(IItemFamilyRepository itemFamilyRepository, IItemFamilyGroupRepository itemFamilyGroupRepository)

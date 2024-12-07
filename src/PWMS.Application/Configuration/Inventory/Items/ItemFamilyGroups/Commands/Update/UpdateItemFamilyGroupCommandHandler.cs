@@ -1,7 +1,7 @@
 ﻿using PWMS.Application.Configuration.Inventory.Items.ItemFamilyGroups.Models;
 using PWMS.Application.Configuration.Inventory.Items.ItemFamilyGroups.Repositories;
 using PWMS.Application.Configuration.Inventory.Items.ItemFamilyGroups.Specifications;
-using PWMS.Domain.Inventories.Items.Entities;
+using PWMS.Domain.Configuration.Inventory.Items.Entities;
 
 namespace PWMS.Application.Configuration.Inventory.Items.ItemFamilyGroups.Commands.Update;
 

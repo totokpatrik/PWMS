@@ -1,5 +1,4 @@
-﻿using PWMS.Persistence.PortgreSQL.Data;
-namespace My.Nkz.NewApp.Persistence.PostgreSQL;
+﻿namespace PWMS.Persistence.PortgreSQL.Data;
 [ExcludeFromCodeCoverage]
 public class ApplicationDbDesignTimeContextFactory : DesignTimeDbContextFactoryBase<ApplicationDbContext>
 {

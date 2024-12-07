@@ -1,6 +1,4 @@
-﻿using PWMS.Application.Auth.Commands.Register;
-
-namespace PWMS.Application.Auth.Commands.Login;
+﻿namespace PWMS.Application.Auth.Commands.Register;
 
 public sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {

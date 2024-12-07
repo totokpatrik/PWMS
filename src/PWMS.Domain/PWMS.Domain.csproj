@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Inventories\Items\Events\" />
+    <Folder Include="Configuration\Inventory\Items\Events\" />
     <Folder Include="Inventories\Events\" />
   </ItemGroup>
 

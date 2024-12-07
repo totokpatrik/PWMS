@@ -1,7 +1,7 @@
 ﻿using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Repositories;
 using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Specifications;
 using PWMS.Domain.Addresses.Entities;
-using PWMS.Domain.Inventories.Items.Entities;
+using PWMS.Domain.Configuration.Inventory.Items.Entities;
 
 namespace PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Commands.DeleteRange;
 

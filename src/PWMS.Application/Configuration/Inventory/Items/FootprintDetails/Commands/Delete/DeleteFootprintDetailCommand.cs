@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Commands.Delete;
+namespace PWMS.Application.Configuration.Inventory.Items.FootprintDetails.Commands.Delete;
 
 internal class DeleteFootprintDetailCommand
 {

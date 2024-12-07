@@ -1,5 +1,5 @@
 ﻿using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Models;
-using PWMS.Domain.Inventories.Items.Entities;
+using PWMS.Domain.Configuration.Inventory.Items.Entities;
 
 namespace PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Mappings;
 

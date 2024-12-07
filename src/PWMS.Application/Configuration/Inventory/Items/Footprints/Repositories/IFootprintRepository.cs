@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Castle.DynamicLinqQueryBuilder;
+using PWMS.Domain.Configuration.Inventory.Items.Entities;
 
-namespace PWMS.Application.Configuration.Inventory.Items.Footprints.Repositories
+namespace PWMS.Application.Configuration.Inventory.Items.Footprints.Repositories;
+public interface IFootprintRepository : IRepositoryBase<Footprint>
 {
-    internal interface IFootprintRepository
-    {
-    }
+    Task<List<Footprint>> GetAllFootprints(
+        ISpecification<Footprint> specification,
+        CancellationToken cancellationToken,
+        QueryBuilderFilterRule filter);
 }

@@ -31,10 +31,9 @@
     <Folder Include="Configuration\Inventory\Items\Footprints\EventHandlers\" />
     <Folder Include="Configuration\Inventory\Items\Footprints\Queries\" />
     <Folder Include="Inventories\AlternateItems\EventHandlers\" />
-    <Folder Include="Inventories\Footprints\EventHandlers\" />
     <Folder Include="Configuration\Inventory\Items\ItemFamilies\EventHandlers\" />
     <Folder Include="Configuration\Inventory\Items\ItemFamilyGroups\EventHandlers\" />
-    <Folder Include="Inventories\Items\EventHandlers\" />
+    <Folder Include="Configuration\Inventory\Items\Items\EventHandlers\" />
     <Folder Include="Inventories\UnitOfMeasures\" />
   </ItemGroup>
 

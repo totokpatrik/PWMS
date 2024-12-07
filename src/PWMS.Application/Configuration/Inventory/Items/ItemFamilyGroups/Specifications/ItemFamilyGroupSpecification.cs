@@ -1,5 +1,5 @@
 ﻿using PWMS.Application.Common.Paging;
-using PWMS.Domain.Inventories.Items.Entities;
+using PWMS.Domain.Configuration.Inventory.Items.Entities;
 using System.Collections.Frozen;
 using System.Linq.Expressions;
 

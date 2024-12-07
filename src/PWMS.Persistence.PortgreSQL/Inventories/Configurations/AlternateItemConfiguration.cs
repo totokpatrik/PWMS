@@ -1,4 +1,4 @@
-﻿using PWMS.Domain.Inventories.Items.Entities;
+﻿using PWMS.Domain.Configuration.Inventory.Items.Entities;
 using PWMS.Persistence.PortgreSQL.Common.Configurations;
 
 namespace PWMS.Persistence.PortgreSQL.Inventories.Configurations;

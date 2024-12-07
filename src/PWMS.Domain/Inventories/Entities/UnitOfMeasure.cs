@@ -1,5 +1,5 @@
 ﻿using PWMS.Domain.Common;
-using PWMS.Domain.Inventories.Items.Entities;
+using PWMS.Domain.Configuration.Inventory.Items.Entities;
 
 namespace PWMS.Domain.Inventories.Entities;
 

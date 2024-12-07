@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Commands.Create;
+namespace PWMS.Application.Configuration.Inventory.Items.FootprintDetails.Commands.Create;
 
 internal class CreateFootprintDetailCommandValidator
 {

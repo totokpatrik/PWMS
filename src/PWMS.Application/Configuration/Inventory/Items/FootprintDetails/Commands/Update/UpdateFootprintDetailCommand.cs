@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PWMS.Application.Inventories.Footprints.Commands.Update;
+namespace PWMS.Application.Configuration.Inventory.Items.FootprintDetails.Commands.Update;
 
 internal class UpdateFootprintDetailCommand
 {
