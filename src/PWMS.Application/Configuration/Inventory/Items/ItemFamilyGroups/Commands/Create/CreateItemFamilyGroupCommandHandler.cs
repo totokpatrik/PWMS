@@ -2,7 +2,7 @@
 using PWMS.Application.Addresses.Repositories;
 using PWMS.Application.Configuration.Inventory.Items.ItemFamilyGroups.Repositories;
 using PWMS.Domain.Addresses.Entities;
-using PWMS.Domain.Inventories.Items.Entities;
+using PWMS.Domain.Configuration.Inventory.Items.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
