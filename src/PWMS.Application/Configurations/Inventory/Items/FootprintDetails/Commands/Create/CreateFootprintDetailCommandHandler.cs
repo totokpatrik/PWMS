@@ -32,8 +32,7 @@ public sealed class CreateFootprintDetailCommandHandler(IFootprintDetailReposito
                 cancellationToken)
             .ConfigureAwait(false) ?? throw new NotFoundException(nameof(Footprint));
 
-        var entity = new FootprintDetail(level: request.CreateFootprintDetailDto.Level,
-                                         unitOfMeasure: unitOfMeasure,
+        var entity = new FootprintDetail(unitOfMeasure: unitOfMeasure,
                                          unitQuantity: request.CreateFootprintDetailDto.UnitQuantity,
                                          grossWeight: request.CreateFootprintDetailDto.GrossWeight,
                                          netWeight: request.CreateFootprintDetailDto.NetWeight,
