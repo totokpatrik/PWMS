@@ -1,6 +1,6 @@
 ﻿using Castle.DynamicLinqQueryBuilder;
 using PWMS.Application.Common.Interfaces;
-using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Repositories;
+using PWMS.Application.Configurations.Inventory.Items.ItemFamilies.Repositories;
 using PWMS.Domain.Configuration.Inventory.Items.Entities;
 
 namespace PWMS.Persistence.PortgreSQL.Inventories.Repositories;

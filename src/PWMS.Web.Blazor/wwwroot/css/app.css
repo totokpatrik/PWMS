@@ -102,3 +102,7 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.mud-collapse-entering {
+    animation-duration: .2s !important
+}

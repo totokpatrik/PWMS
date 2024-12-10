@@ -1,0 +1,49 @@
+﻿<div class="64px">
+    <MudToolBar>
+        <div class="mud-table-pagination-spacer"></div>
+        <MudText Typo="Typo.body2" Class="mud-table-pagination-caption">
+            Rows per page:
+        </MudText>
+        <MudSelect T="int"
+                   Value="@PageSize"
+                   Class="mud-table-pagination-select"
+                   Underline="false"
+                   Dense="true"
+                   ValueChanged="PageSizeChangedAsync">
+            @foreach (var pageSize in _pageSizeOptions)
+            {
+                <MudSelectItem Value="pageSize">@pageSize</MudSelectItem>
+            }
+        </MudSelect>
+        <MudText Typo="Typo.body2" Class="mud-table-pagination-caption">
+            @if (TotalItems == 0)
+            {
+                @TotalItems
+            }
+            else if (@PageIndex == 1)
+            {
+                @PageIndex
+            }
+            else
+            {
+                @(((PageIndex - 1) * PageSize) + 1)
+            }
+            -
+            @if (PageIndex * PageSize > TotalItems)
+            {
+                @TotalItems
+            }
+            else
+            {
+                @(PageIndex * PageSize)
+            }
+            of @TotalItems
+        </MudText>
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.FirstPage" Disabled="@_firstPageButtonDisabled" @onclick="NavigateToFirstPageAsync" />
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.NavigateBefore" Disabled="@_navigateBeforeButtonDisabled" @onclick="NavigateToPreviousPage" />
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.NavigateNext" Disabled="@_navigateNextButtonDisabled" @onclick="NavigateToNextPage" />
+        <MudIconButton Class="mud-flip-x-rtl" Icon="@Icons.Material.Filled.LastPage" Disabled="@_lastPageButtonDisabled" @onclick="NavigateToLastPage" />
+    </MudToolBar>
+</div>
+
+

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.Filters;
-using My.Nkz.NewApp.Presentation.Rest.Filters.Results;
 using PWMS.Application.Common.Exceptions;
 using PWMS.Presentation.Rest.Filters.Results;
 using PWMS.Presentation.Rest.Models.Result;

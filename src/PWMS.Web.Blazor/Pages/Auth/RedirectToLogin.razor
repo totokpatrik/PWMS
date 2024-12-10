@@ -17,57 +17,57 @@ var asd = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
 if ((await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity!.IsAuthenticated)
 {
-    authenticated = true;
-    StateHasChanged();
+authenticated = true;
+StateHasChanged();
 
-    // Check if site or warehouse exists and redirect based on that
-    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+// Check if site or warehouse exists and redirect based on that
+var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
-    if (authState.User.Identity!.IsAuthenticated)
-    {
-        var user = authState.User;
+if (authState.User.Identity!.IsAuthenticated)
+{
+var user = authState.User;
 
-        string? warehouse = user.Claims.ToList()
-            .Where(s => s.Type == "WarehouseId")
-            .Select(s => s.Value)
-            .FirstOrDefault();
+string? warehouse = user.Claims.ToList()
+    .Where(s => s.Type == "WarehouseId")
+    .Select(s => s.Value)
+    .FirstOrDefault();
 
-        if (!string.IsNullOrEmpty(warehouse))
-        {
-            _warehouse = warehouse;
-        }
-        else
-        {
-            NavigationManager.NavigateTo("/warehouse");
-        }
-
-        string? site = user.Claims.ToList()
-            .Where(s => s.Type == "SiteId")
-            .Select(s => s.Value)
-            .FirstOrDefault();
-
-        if (!string.IsNullOrEmpty(site))
-        {
-            _site = site;
-        }
-        else
-        {
-            NavigationManager.NavigateTo("/site");
-        }
-    }
+if (!string.IsNullOrEmpty(warehouse))
+{
+    _warehouse = warehouse;
 }
 else
 {
-    var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+    NavigationManager.NavigateTo("/warehouse");
+}
 
-    if (returnUrl == "" || returnUrl == "logout")
-    {
-        NavigationManager.NavigateTo("/login", forceLoad: true);
-    }
-    else
-    {
-        NavigationManager.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(returnUrl)}", forceLoad: true);
-    }
+string? site = user.Claims.ToList()
+    .Where(s => s.Type == "SiteId")
+    .Select(s => s.Value)
+    .FirstOrDefault();
+
+if (!string.IsNullOrEmpty(site))
+{
+    _site = site;
+}
+else
+{
+    NavigationManager.NavigateTo("/site");
+}
+}
+}
+else
+{
+var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+
+if (returnUrl == "" || returnUrl == "logout")
+{
+NavigationManager.NavigateTo("/login", forceLoad: true);
+}
+else
+{
+NavigationManager.NavigateTo($"/login?returnUrl={Uri.EscapeDataString(returnUrl)}", forceLoad: true);
+}
 }
 }
 }

@@ -1,5 +1,4 @@
-﻿using PWMS.Application.Common.Interfaces;
-using PWMS.Application.Common.Paging;
+﻿using PWMS.Application.Common.Paging;
 using PWMS.Domain.Core.Warehouses.Entities;
 using System.Collections.Frozen;
 using System.Linq.Expressions;
@@ -13,7 +12,6 @@ internal sealed class WarehouseSpecification : Specification<Warehouse>
         {
             { nameof(Warehouse.Id), c => c.Id },
         }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
-    private readonly ICurrentWarehouseService _currentWarehouseService;
 
     private WarehouseSpecification()
     {

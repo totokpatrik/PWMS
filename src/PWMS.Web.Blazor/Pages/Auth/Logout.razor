@@ -17,16 +17,16 @@ var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
 if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("returnUrl", out var url))
 {
-    returnUrl = url!;
+returnUrl = url!;
 }
 
 if (string.IsNullOrWhiteSpace(returnUrl))
 {
-    NavigationManager.NavigateTo("/", true);
+NavigationManager.NavigateTo("/", true);
 }
 else
 {
-    NavigationManager.NavigateTo($"/{returnUrl}");
+NavigationManager.NavigateTo($"/{returnUrl}");
 }
 }
 }

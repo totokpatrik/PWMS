@@ -20,7 +20,7 @@ internal class DeleteSiteCommandHandler(ISiteRepository siteRepository,
     {
         // Check if current user exists
         var user = await _authRepository
-            .SingleOrDefaultAsync(new UserByIdSpecification(_currentUserService.GetCurrentUser().Id))
+            .SingleOrDefaultAsync(new UserByIdSpecification(_currentUserService.GetCurrentUser()!.Id!))
             .ConfigureAwait(false);
 
         if (user == null)

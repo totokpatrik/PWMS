@@ -25,12 +25,12 @@ public sealed class GetSiteQueryHandler
 
     public async override Task<Result<CollectionViewModel<SiteDto>>> Handle(GetSiteQuery request, CancellationToken cancellationToken)
     {
-        var specification = SiteSpecification.Create(request.PageContext, _currentUserService.GetCurrentUser().Id);
+        var specification = SiteSpecification.Create(request.PageContext, _currentUserService.GetCurrentUser()!.Id!);
 
         var entities = await _siteRepository
             .GetAllSites(specification, cancellationToken, request.PageContext.Filter);
 
-        var siteCountSpecification = new SiteCountSpecification(_currentUserService.GetCurrentUser().Id);
+        var siteCountSpecification = new SiteCountSpecification(_currentUserService.GetCurrentUser()!.Id!);
         var count = await _siteRepository.CountAsync(siteCountSpecification);
 
         var dtoSites = await entities

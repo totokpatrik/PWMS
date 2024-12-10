@@ -1,5 +1,4 @@
-﻿using PWMS.Application.Common.Interfaces;
-using PWMS.Application.Common.Paging;
+﻿using PWMS.Application.Common.Paging;
 using PWMS.Domain.Core.Sites.Entities;
 using System.Collections.Frozen;
 using System.Linq.Expressions;
@@ -13,7 +12,6 @@ internal sealed class SiteSpecification : Specification<Site>
         {
             { nameof(Site.Id), c => c.Id },
         }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
-    private readonly ICurrentWarehouseService _currentWarehouseService;
 
     private SiteSpecification()
     {

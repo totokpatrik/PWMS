@@ -24,7 +24,7 @@ public sealed class GetSiteByIdQueryHandler : HandlerDbQueryBase<GetSiteByIdQuer
     public async override Task<Result<SiteDto>> Handle(GetSiteByIdQuery request, CancellationToken cancellationToken)
     {
         var site = await _siteRepository
-            .SingleOrDefaultAsync(new SiteByIdSpecification(request.Id, _currentUserService.GetCurrentUser().Id), cancellationToken)
+            .SingleOrDefaultAsync(new SiteByIdSpecification(request.Id, _currentUserService.GetCurrentUser()!.Id!), cancellationToken)
             .ConfigureAwait(false);
 
         site.ThrowIfNull(new NotFoundException());

@@ -1,13 +1,13 @@
 ﻿using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using PWMS.Application.Common.Paging;
-using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Commands.Create;
-using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Commands.Delete;
-using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Commands.DeleteRange;
-using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Commands.Update;
-using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Models;
-using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Queries.Get;
-using PWMS.Application.Configuration.Inventory.Items.ItemFamilies.Queries.GetById;
+using PWMS.Application.Configurations.Inventory.Items.ItemFamilies.Commands.Create;
+using PWMS.Application.Configurations.Inventory.Items.ItemFamilies.Commands.Delete;
+using PWMS.Application.Configurations.Inventory.Items.ItemFamilies.Commands.DeleteRange;
+using PWMS.Application.Configurations.Inventory.Items.ItemFamilies.Commands.Update;
+using PWMS.Application.Configurations.Inventory.Items.ItemFamilies.Models;
+using PWMS.Application.Configurations.Inventory.Items.ItemFamilies.Queries.Get;
+using PWMS.Application.Configurations.Inventory.Items.ItemFamilies.Queries.GetById;
 using PWMS.Presentation.Rest.Models.Result;
 using System.ComponentModel.DataAnnotations;
 
