@@ -1,23 +1,77 @@
-﻿<MudNavMenu>
-    <MudTreeView T="string" ReadOnly ExpandOnClick="true">
-        <MudTreeViewItem Text="Configuration">
-            <MudTreeViewItem Text="Inventory">
-                <MudTreeViewItem Text="Items">
-                    <MudNavLink Href="/configuration/inventory/items/itemFamilyGroup">Item Family Groups</MudNavLink>
-                    <MudNavLink Href="/configuration/inventory/items/itemFamily">Item Family</MudNavLink>
-                    <MudNavLink Href="/configuration/inventory/items/footprint">Footprints</MudNavLink>
-                </MudTreeViewItem>
-            </MudTreeViewItem>
-        </MudTreeViewItem>
-        <MudTreeViewItem Text="Inventory">
-            <MudTreeViewItem Text="Inventory" />
-        </MudTreeViewItem>
-        <MudTreeViewItem Text="Inbound">
-            <MudTreeViewItem Text="Inbound Shipments" />
-            <MudTreeViewItem Text="Inbound Orders" />
-        </MudTreeViewItem>
+﻿@inject NavigationManager NavigationManager
+
+<MudNavMenu>
+    <MudTextField T="string" Label="Search" Adornment="Adornment.Start" TextChanged="OnTextChanged"
+        AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" Clearable="true" Class="m-2" />
+    <MudTreeView Items="@_treeItemData">
+        <ItemTemplate>
+            <MudTreeViewItem @bind-Expanded="@context.Expanded" Items="@context.Children" Value="@context.Value"
+                             Icon="@context.Icon" Text="@context.Text" Visible="@context.Visible" OnClick="() => NavigationManager.NavigateTo(context.Text)" />
+        </ItemTemplate>
     </MudTreeView>
 </MudNavMenu>
 
 @code {
+    private List<TreeItemData<string>> _treeItemData = [];
+
+    public class TreeItemPresenter : TreeItemData<string>
+    {
+        public string Navigation { get; set; } = string.Empty;
+        
+        public TreeItemPresenter(string text, string navigation) : base(text)
+        {
+            Text = text;
+            Navigation = navigation;
+        }
+
+        public TreeItemPresenter(string text, string navigation, string icon) : base(text)
+        {
+            Text = text;
+            Icon = icon;
+            Navigation = navigation;
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _treeItemData.Add(new TreeItemPresenter("All Mail", "navigationAddress"));
+        _treeItemData.Add(new TreeItemPresenter("Trash", "navigationAddress2", Icons.Material.Filled.Delete));
+        _treeItemData.Add(new TreeItemPresenter("Categories", Icons.Material.Filled.Label)
+            {
+                Expanded = true,
+                Children =
+                    [
+                        new TreeItemPresenter("Social", Icons.Material.Filled.Group),
+                        new TreeItemPresenter("Updates", Icons.Material.Filled.Info),
+                        new TreeItemPresenter("Forums", Icons.Material.Filled.QuestionAnswer),
+                        new TreeItemPresenter("Promotions", Icons.Material.Filled.LocalOffer)
+                    ]
+            });
+        _treeItemData.Add(new TreeItemPresenter("History", Icons.Material.Filled.Label));
+    }
+
+    private void OnTextChanged(string searchTerm) => Filter(_treeItemData, searchTerm);
+
+    private void Filter(IEnumerable<TreeItemData<string>> treeItemData, string text)
+    {
+        foreach (TreeItemData<string> itemData in treeItemData)
+        {
+            if (itemData.HasChildren)
+            {
+                Filter(itemData.Children, text);
+            }
+
+            itemData.Visible = IsVisible(itemData, text);
+        }
+    }
+
+    private bool IsVisible(TreeItemData<string> treeItemData, string searchTerm)
+    {
+        if (!treeItemData.HasChildren)
+        {
+            return treeItemData.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+        }
+
+        return treeItemData.Children.Any(i => i.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) || treeItemData.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+    }
 }

@@ -4,16 +4,13 @@ public sealed class CreateItemCommandValidator : AbstractValidator<CreateItemCom
 {
     public CreateItemCommandValidator()
     {
-        RuleFor(a => a.Name)
+        RuleFor(a => a.CreateItemDto.Name)
             .NotEmpty();
 
-        RuleFor(a => a.Description)
+        RuleFor(a => a.CreateItemDto.Description)
             .NotEmpty();
 
-        RuleFor(a => a.ShortDescription)
-            .NotEmpty();
-
-        RuleFor(a => a.ItemFamilyId)
+        RuleFor(a => a.CreateItemDto.ShortDescription)
             .NotEmpty();
     }
 }

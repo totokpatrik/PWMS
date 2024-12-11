@@ -1,7 +1,5 @@
-﻿namespace PWMS.Application.Configurations.Inventory.Items.Items.Commands.Create;
+﻿using PWMS.Application.Configurations.Inventory.Items.Items.Models;
 
-public sealed record CreateItemCommand(string Name,
-                                       string Description,
-                                       string ShortDescription,
-                                       bool ReceiveStatus,
-                                       Guid ItemFamilyId) : IRequest<Result<Guid>>;
+namespace PWMS.Application.Configurations.Inventory.Items.Items.Commands.Create;
+
+public sealed record CreateItemCommand(CreateItemDto CreateItemDto) : IRequest<Result<Guid>>;

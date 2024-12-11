@@ -4,16 +4,16 @@ public class UpdateItemCommandValidator : AbstractValidator<UpdateItemCommand>
 {
     public UpdateItemCommandValidator()
     {
-        RuleFor(a => a.Id)
+        RuleFor(a => a.UpdateItemDto.Id)
             .NotEmpty();
 
-        RuleFor(a => a.Name)
+        RuleFor(a => a.UpdateItemDto.Name)
             .NotEmpty();
 
-        RuleFor(a => a.Description)
+        RuleFor(a => a.UpdateItemDto.Description)
             .NotEmpty();
 
-        RuleFor(a => a.ShortDescription)
+        RuleFor(a => a.UpdateItemDto.ShortDescription)
             .NotEmpty();
     }
 }

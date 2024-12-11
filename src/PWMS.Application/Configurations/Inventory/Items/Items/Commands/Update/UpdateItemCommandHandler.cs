@@ -13,15 +13,15 @@ public sealed class UpdateItemCommandHandler(IItemRepository itemRepository)
     public async Task<Result<ItemDto>> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
     {
         var entity = await _itemRepository
-            .SingleOrDefaultAsync(new ItemByIdSpecification(request.Id), cancellationToken)
+            .SingleOrDefaultAsync(new ItemByIdSpecification(request.UpdateItemDto.Id), cancellationToken)
             .ConfigureAwait(false);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(Address), request.Id);
+            throw new NotFoundException(nameof(Address), request.UpdateItemDto.Id);
         }
 
-        entity.Update(request.Name, request.Description, request.ShortDescription, request.ReceiveStatus);
+        entity.Update(request.UpdateItemDto.Name, request.UpdateItemDto.Description, request.UpdateItemDto.ShortDescription, request.UpdateItemDto.ReceiveStatus);
 
         await _itemRepository.SaveChangesAsync(cancellationToken)
             .ConfigureAwait(false);
