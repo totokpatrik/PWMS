@@ -29,7 +29,7 @@ public class FootprintRepository : RepositoryBase<Footprint>, IFootprintReposito
 
         foreach (var footprint in footprints)
         {
-            footprint.Update(footprint.Name, false, footprint.ItemId);
+            footprint.Update(footprint.Name, false);
         }
 
         await SaveChangesAsync();

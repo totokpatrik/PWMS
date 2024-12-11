@@ -1,12 +1,7 @@
 ﻿using PWMS.Domain.Configuration.Inventory.Items.Entities;
 using PWMS.Persistence.PortgreSQL.Common.Configurations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PWMS.Persistence.PortgreSQL.Inventories.Configurations;
+namespace PWMS.Persistence.PortgreSQL.Configurations.Inventory.Items.FootprintDetails.Configurations;
 
 public class FootprintDetailConfiguration : AuditableWarehouseConfiguration<FootprintDetail>, IEntityTypeConfiguration<FootprintDetail>
 {

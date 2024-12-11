@@ -26,7 +26,7 @@ public sealed class UpdateFootprintCommandHandler(IFootprintRepository footprint
             await _footprintRepository.ResetDefaultToFalse();
         }
 
-        entity.Update(request.Name, request.Default, request.ItemId);
+        entity.Update(request.Name, request.Default);
 
         await _footprintRepository.SaveChangesAsync(cancellationToken)
             .ConfigureAwait(false);

@@ -27,10 +27,9 @@ public class Footprint : BaseAuditableWarehouseEntity<Guid, string>, IAggregateR
     public virtual Item Item { get; set; } = default!;
     public List<FootprintDetail>? FootprintDetails { get; set; }
 
-    public void Update(string name, bool @default, Guid itemId)
+    public void Update(string name, bool @default)
     {
         Name = name;
         Default = @default;
-        ItemId = itemId;
     }
 }

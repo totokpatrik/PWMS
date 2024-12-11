@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Configurations\Inventory\Items\Footprints\Configurations\" />
+    <Folder Include="Configurations\Inventory\UnitOfMeasures\Configurations\" />
     <Folder Include="Data\Migrations\" />
   </ItemGroup>
 

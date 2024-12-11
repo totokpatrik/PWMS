@@ -8,6 +8,4 @@ public interface IFootprintDetailRepository : IRepositoryBase<FootprintDetail>
         ISpecification<FootprintDetail> specification,
         CancellationToken cancellationToken,
         QueryBuilderFilterRule filter);
-
-    Task ResetDefaultToFalse();
 }
