@@ -2,59 +2,89 @@
 
 <MudNavMenu>
     <MudTextField T="string" Label="Search" Adornment="Adornment.Start" TextChanged="OnTextChanged"
-        AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" Clearable="true" Class="m-2" />
-    <MudTreeView Items="@_treeItemData">
+                  AdornmentIcon="@Icons.Material.Filled.Search" Immediate="true" Clearable="true" Class="m-2" />
+    <MudTreeView Items="@TreeItems" ExpandOnClick="true">
         <ItemTemplate>
+            @{
+                var customNavMenuItem = context.Value; // for convenient usage in the template
+            }
             <MudTreeViewItem @bind-Expanded="@context.Expanded" Items="@context.Children" Value="@context.Value"
-                             Icon="@context.Icon" Text="@context.Text" Visible="@context.Visible" OnClick="() => NavigationManager.NavigateTo(context.Text)" />
+                             Icon="@customNavMenuItem?.Icon" Text="@customNavMenuItem?.Name" Visible="@context.Visible" OnClick="@(() => Navigate(customNavMenuItem))" />
         </ItemTemplate>
     </MudTreeView>
 </MudNavMenu>
 
 @code {
-    private List<TreeItemData<string>> _treeItemData = [];
+    private List<TreeItemData<CustomNavMenuItem>> TreeItems { get; set; } = new();
 
-    public class TreeItemPresenter : TreeItemData<string>
+    public class CustomNavMenuItem : IEquatable<CustomNavMenuItem>
     {
-        public string Navigation { get; set; } = string.Empty;
-        
-        public TreeItemPresenter(string text, string navigation) : base(text)
+        public string Name { get; init; } = string.Empty;
+        public string? Icon { get; set; }
+        public string? NavigationUrl { get; set; }
+
+        public CustomNavMenuItem(string name, string? icon, string? navigationUrl)
         {
-            Text = text;
-            Navigation = navigation;
+            Name = name;
+            Icon = icon;
+            NavigationUrl = navigationUrl;
         }
 
-        public TreeItemPresenter(string text, string navigation, string icon) : base(text)
+        public bool Equals(CustomNavMenuItem other)
         {
-            Text = text;
-            Icon = icon;
-            Navigation = navigation;
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Name == other.Name;
         }
+
+        public override bool Equals(object obj) => ReferenceEquals(this, obj) || obj is CustomNavMenuItem other && Equals(other);
+
+        public override int GetHashCode() => Name?.GetHashCode() ?? 0;
     }
 
     protected override void OnInitialized()
     {
-        _treeItemData.Add(new TreeItemPresenter("All Mail", "navigationAddress"));
-        _treeItemData.Add(new TreeItemPresenter("Trash", "navigationAddress2", Icons.Material.Filled.Delete));
-        _treeItemData.Add(new TreeItemPresenter("Categories", Icons.Material.Filled.Label)
+        TreeItems.Add(new TreeItemData<CustomNavMenuItem>
             {
+                Value = new CustomNavMenuItem("Configuration", null, null),
                 Expanded = true,
-                Children =
-                    [
-                        new TreeItemPresenter("Social", Icons.Material.Filled.Group),
-                        new TreeItemPresenter("Updates", Icons.Material.Filled.Info),
-                        new TreeItemPresenter("Forums", Icons.Material.Filled.QuestionAnswer),
-                        new TreeItemPresenter("Promotions", Icons.Material.Filled.LocalOffer)
+                Children = [
+                        new TreeItemData<CustomNavMenuItem> {
+                        Value = new CustomNavMenuItem("Inventory", null, null),
+                        Children = [
+                            new TreeItemData<CustomNavMenuItem> {
+                                Value = new CustomNavMenuItem("Item", null, null),
+                                Children = [
+                                    new TreeItemData<CustomNavMenuItem> {
+                                        Value = new CustomNavMenuItem("Item Family Groups", null, "/configuration/inventory/item/itemFamilyGroup")
+                                    },
+                                    new TreeItemData<CustomNavMenuItem> {
+                                        Value = new CustomNavMenuItem("Item Families", null, "/configuration/inventory/item/itemFamily")
+                                    },
+                                    new TreeItemData<CustomNavMenuItem> {
+                                        Value = new CustomNavMenuItem("Footprints", null, "/configuration/inventory/item/footprint")
+                                    },
+                                    new TreeItemData<CustomNavMenuItem> {
+                                        Value = new CustomNavMenuItem("Items", null, "/configuration/inventory/item/item")
+                                    }
+                                ]
+                            }
+                        ]
+                    }
                     ]
             });
-        _treeItemData.Add(new TreeItemPresenter("History", Icons.Material.Filled.Label));
+
+        TreeItems.Add(new TreeItemData<CustomNavMenuItem>
+            {
+                Value = new CustomNavMenuItem("Inventories", null, null)
+            });
     }
 
-    private void OnTextChanged(string searchTerm) => Filter(_treeItemData, searchTerm);
+    private void OnTextChanged(string searchTerm) => Filter(TreeItems, searchTerm);
 
-    private void Filter(IEnumerable<TreeItemData<string>> treeItemData, string text)
+    private void Filter(IEnumerable<TreeItemData<CustomNavMenuItem>> treeItemData, string text)
     {
-        foreach (TreeItemData<string> itemData in treeItemData)
+        foreach (TreeItemData<CustomNavMenuItem> itemData in treeItemData)
         {
             if (itemData.HasChildren)
             {
@@ -62,16 +92,27 @@
             }
 
             itemData.Visible = IsVisible(itemData, text);
+
+            if (itemData.Visible)
+                itemData.Expanded = true;
         }
     }
 
-    private bool IsVisible(TreeItemData<string> treeItemData, string searchTerm)
+    private bool IsVisible(TreeItemData<CustomNavMenuItem> treeItemData, string searchTerm)
     {
         if (!treeItemData.HasChildren)
         {
-            return treeItemData.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+            return treeItemData.Value.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
         }
 
-        return treeItemData.Children.Any(i => i.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) || treeItemData.Text.Contains(searchTerm, StringComparison.OrdinalIgnoreCase);
+        return treeItemData.Children.Any(i => i.Visible);
+    }
+
+    private void Navigate(CustomNavMenuItem? customNavMenuItem)
+    {
+        if (!string.IsNullOrEmpty(customNavMenuItem?.NavigationUrl))
+        {
+            NavigationManager.NavigateTo(customNavMenuItem.NavigationUrl);
+        }
     }
 }

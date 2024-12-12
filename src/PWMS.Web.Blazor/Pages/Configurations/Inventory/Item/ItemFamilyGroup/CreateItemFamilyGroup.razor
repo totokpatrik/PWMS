@@ -1,0 +1,40 @@
+﻿@page "/configuration/inventory/item/itemFamilyGroup/create"
+@using PWMS.Application.Common.Identity.Roles
+@attribute [Authorize(Roles = $"{Role.SiteOwner}, {Role.SiteAdmin}, {Role.SiteUser}")]
+
+<PageTitle>Create Item Family Group</PageTitle>
+
+<MudContainer Class="p-1 m-0">
+    <MudText Typo="Typo.h6">Create Item Family Group</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="p-1">
+                <MudForm Model="_createItemFamilyGroupDto" @ref="_form" @bind-IsValid="@_success">
+                    <MudTextField @bind-Value="_createItemFamilyGroupDto.Name"
+                                  Immediate="true"
+                                  Label="Name"
+                                  OnKeyDown="FormKeyDownAsync"
+                                  Required />
+
+                    <MudTextField @bind-Value="_createItemFamilyGroupDto.Description"
+                                  Immediate="true"
+                                  Label="Description"
+                                  OnKeyDown="FormKeyDownAsync"
+                                  Required />
+
+                    <MudCardActions Class="gap-2">
+                        <MudSpacer />
+                        <MudLoadingButton Variant="Variant.Filled"
+                                          Color="Color.Primary"
+                                          Class="ml-auto"
+                                          Disabled="@(!_success)"
+                                          OnClick="Create"
+                                          @bind-Loading="_loading">Create</MudLoadingButton>
+                        <MudButton Color="Color.Warning"
+                                   OnClick="Cancel">Cancel</MudButton>
+                    </MudCardActions>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>

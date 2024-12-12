@@ -9,6 +9,9 @@ using PWMS.Web.Blazor;
 using PWMS.Web.Blazor.Identity;
 using PWMS.Web.Blazor.Services.AuthService;
 using PWMS.Web.Blazor.Services.Configuration;
+using PWMS.Web.Blazor.Services.Configurations.Inventory.Item;
+using PWMS.Web.Blazor.Services.Configurations.Inventory.Item.ItemFamily;
+using PWMS.Web.Blazor.Services.Configurations.Inventory.Item.ItemFamilyGroup;
 using PWMS.Web.Blazor.Services.Core;
 using PWMS.Web.Blazor.Services.HttpService;
 
@@ -37,6 +40,9 @@ builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<ISiteService, SiteService>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<IItemFamilyService, ItemFamilyService>();
+builder.Services.AddScoped<IItemFamilyGroupService, ItemFamilyGroupService>();
 
 // adding localstorage
 builder.Services.AddBlazoredLocalStorage();

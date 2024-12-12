@@ -1,0 +1,55 @@
+﻿@page "/configuration/inventory/item/itemFamily"
+@using PWMS.Application.Addresses.Models
+@using PWMS.Application.Common.Identity.Roles
+@using PWMS.Application.Configurations.Inventory.Items.ItemFamilies.Models
+@using PWMS.Application.Configurations.Inventory.Items.ItemFamilyGroups.Models
+@attribute [Authorize(Roles = $"{Role.SiteOwner}, {Role.SiteAdmin}, {Role.SiteUser}")]
+
+<PageTitle>Item Families</PageTitle>
+
+<MudContainer Style="width: 100%; min-width: 100%; max-height: calc(100vh - 64px - var(--mud-appbar-height)); min-height: calc(100vh - 64px - var(--mud-appbar-height));"
+              Fixed="true"
+              Class="p-1">
+    <div style="height: 128px">
+        <div class="d-flex flex-grow-1 flex-column gap-4">
+            <MudText Typo="Typo.h6">Item Families</MudText>
+            <MudSpacer />
+            <div class="d-flex flex-grow-1 flex-row gap-1">
+                <MudButton Variant="Variant.Outlined" OnClick="Add">Add</MudButton>
+                <MudButton Variant="Variant.Outlined" Disabled="@_deleteDisabled" OnClick="Delete">Delete</MudButton>
+                <MudSpacer />
+                <MudIcon Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Default" />
+            </div>
+        </div>
+    </div>
+    <MudDataGrid @ref="_dataGrid"
+                 MultiSelection="true"
+                 T="ItemFamilyDto"
+                 ServerData="ServerReload"
+                 Filterable="false"
+                 ColumnResizeMode="MudBlazor.ResizeMode.Column"
+                 Loading="@_loading"
+                 RowClass="no-borders"
+                 Elevation="0"
+                 Style="min-width: 100%" FixedHeader Height="calc(100vh - 64px - 128px - var(--mud-appbar-height))"
+                 @bind-SelectedItems="@_selected">
+        <Columns>
+            <SelectColumn T="ItemFamilyDto" />
+            <TemplateColumn Title="Id">
+                <CellTemplate>
+                    <MudLink Href="@($"/configuration/inventory/item/itemFamily/{@context.Item.Id}")">@context.Item.Name</MudLink>
+                </CellTemplate>
+            </TemplateColumn>
+            <PropertyColumn Property="x => x.Description" />
+        </Columns>
+        <NoRecordsContent>
+            <MudText>No matching records found</MudText>
+        </NoRecordsContent>
+    </MudDataGrid>
+</MudContainer>
+<PWMS.Web.Blazor.Pages.Common.GridToolBar @bind-PageSize="_pageSize"
+                                          @bind-PageIndex="_pageIndex"
+                                          TotalItems="@_totalItems"
+                                          RefreshGrid=@RefreshGrid />
+
+

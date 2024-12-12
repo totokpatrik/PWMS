@@ -20,7 +20,7 @@ public sealed record PageContext : IPageContext
 
     public int PageSize { get; }
 
-    public QueryBuilderFilterRule Filter { get; }
+    public QueryBuilderFilterRule Filter { get; set; }
 
     public IEnumerable<SortDescriptor> ListSort { get; }
 }

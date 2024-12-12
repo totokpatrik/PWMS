@@ -1,0 +1,58 @@
+﻿@page "/configuration/inventory/item/itemFamily/create"
+@using PWMS.Application.Common.Identity.Roles
+@using PWMS.Application.Configurations.Inventory.Items.ItemFamilyGroups.Models
+@attribute [Authorize(Roles = $"{Role.SiteOwner}, {Role.SiteAdmin}, {Role.SiteUser}")]
+
+<PageTitle>Create Item Family</PageTitle>
+
+<MudContainer Class="p-1 m-0">
+    <MudText Typo="Typo.h6">Create Item Family</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="p-1">
+                <MudForm Model="_createItemFamilyDto" @ref="_form" @bind-IsValid="@_success">
+                    <MudTextField @bind-Value="_createItemFamilyDto.Name"
+                                  Immediate="true"
+                                  Label="Name"
+                                  OnKeyDown="FormKeyDownAsync"
+                                  Required />
+
+                    <MudTextField @bind-Value="_createItemFamilyDto.Description"
+                                  Immediate="true"
+                                  Label="Description"
+                                  OnKeyDown="FormKeyDownAsync"
+                                  Required />
+
+                    <MudAutocomplete @bind-Value="_itemFamilyGroupDto"
+                                     T="ItemFamilyGroupDto"
+                                     ToStringFunc="@(ifg => ifg.Name)"
+                                     Label="Item Family Group"
+                                     SearchFunc="@Search"
+                                     Variant="Variant.Outlined"
+                                     ShowProgressIndicator="true"
+                                     Required>
+                        <NoItemsTemplate>
+                            <MudText Align="Align.Center" Class="px-4 py-1">
+                                No items found
+                            </MudText>
+                        </NoItemsTemplate>
+                    </MudAutocomplete>
+
+                    <MudCardActions Class="gap-2">
+                        <MudSpacer />
+                        <MudLoadingButton Variant="Variant.Filled"
+                                          Color="Color.Primary"
+                                          Class="ml-auto"
+                                          Disabled="@(!_success)"
+                                          OnClick="Create"
+                                          @bind-Loading="_loading">Create</MudLoadingButton>
+                        <MudButton Color="Color.Warning"
+                                   OnClick="Cancel">Cancel</MudButton>
+                    </MudCardActions>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+

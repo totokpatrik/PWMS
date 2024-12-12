@@ -5,7 +5,7 @@ using PWMS.Application.Common.Paging;
 using PWMS.Web.Blazor.Models;
 using PWMS.Web.Blazor.Services.Configuration;
 
-namespace PWMS.Web.Blazor.Pages.Configurations.Inventory.Items.Footprints;
+namespace PWMS.Web.Blazor.Pages.Configurations.Inventory.Item.Footprints;
 
 public partial class IndexFootprint
 {

@@ -1,0 +1,46 @@
+﻿@page "/configuration/inventory/item/itemFamilyGroup/{Id:guid}"
+@using PWMS.Application.Common.Identity.Roles
+@attribute [Authorize(Roles = $"{Role.SiteOwner}, {Role.SiteAdmin}, {Role.SiteUser}")]
+
+<PageTitle>Edit Address</PageTitle>
+
+<MudContainer Class="p-1 m-0">
+    <MudText Typo="Typo.h6">Edit Address</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="p-1">
+                <MudForm Model="_updateItemFamilyGroupDto" @ref="_form" @bind-IsValid="@_success">
+                    <MudTextField @bind-Value="_updateItemFamilyGroupDto.Id"
+                                  Label="Id"
+                                  ReadOnly="true"
+                                  Disabled="true"
+                                  Variant="Variant.Text" />
+
+                    <MudTextField @bind-Value="_updateItemFamilyGroupDto.Name"
+                                  Immediate="true"
+                                  Label="Name"
+                                  OnKeyDown="FormKeyDownAsync"
+                                  Required />
+
+                    <MudTextField @bind-Value="_updateItemFamilyGroupDto.Description"
+                                  Immediate="true"
+                                  Label="Description"
+                                  OnKeyDown="FormKeyDownAsync"
+                                  Required />
+
+                    <MudCardActions Class="gap-2">
+                        <MudSpacer />
+                        <MudLoadingButton Variant="Variant.Filled"
+                                          Color="Color.Primary"
+                                          Class="ml-auto"
+                                          Disabled="@(!_success)"
+                                          OnClick="UpdateAsync"
+                                          @bind-Loading="_loading">Update</MudLoadingButton>
+                        <MudButton Color="Color.Warning"
+                                   OnClick="Cancel">Cancel</MudButton>
+                    </MudCardActions>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>

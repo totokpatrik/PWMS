@@ -14,8 +14,12 @@ internal class ItemRepository : RepositoryBase<Item>, IItemRepository
         _dbContext = dbContext;
     }
 
-    public Task<List<Item>> GetAllItems(ISpecification<Item> specification, CancellationToken cancellationToken, QueryBuilderFilterRule filter)
+    public async Task<List<Item>> GetAllItems(ISpecification<Item> specification, CancellationToken cancellationToken, QueryBuilderFilterRule filter)
     {
-        throw new NotImplementedException();
+        var queryResult = SpecificationEvaluator.Default.GetQuery(
+            query: _dbContext.Set<Item>().AsQueryable().BuildQuery(filter),
+            specification: specification);
+
+        return await queryResult.ToListAsync(cancellationToken);
     }
 }

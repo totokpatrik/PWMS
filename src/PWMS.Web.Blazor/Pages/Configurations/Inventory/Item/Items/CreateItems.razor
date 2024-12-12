@@ -1,0 +1,30 @@
+﻿@page "/configuration/inventory/item/item/create"
+@attribute [Authorize]
+
+<PageTitle>Create Address</PageTitle>
+
+<MudContainer Class="p-1 m-0">
+    <MudText Typo="Typo.h6">Create Address</MudText>
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="p-1">
+                <MudForm Model="_createItemDto" @ref="_form" @bind-IsValid="@_success">
+
+
+                    <MudCardActions Class="gap-2">
+                        <MudSpacer />
+                        <MudLoadingButton Variant="Variant.Filled"
+                                          Color="Color.Primary"
+                                          Class="ml-auto"
+                                          Disabled="@(!_success)"
+                                          OnClick="Create"
+                                          @bind-Loading="_loading">Create</MudLoadingButton>
+                        <MudButton Color="Color.Warning"
+                                   OnClick="Cancel">Cancel</MudButton>
+                    </MudCardActions>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+

@@ -1,0 +1,54 @@
+﻿@page "/configuration/inventory/item/item"
+@using PWMS.Application.Common.Identity.Roles
+@using PWMS.Application.Configurations.Inventory.Items.Items.Models
+@attribute [Authorize(Roles = $"{Role.SiteOwner}, {Role.SiteAdmin}, {Role.SiteUser}")]
+
+<PageTitle>Items</PageTitle>
+
+<MudContainer Style="width: 100%; min-width: 100%; max-height: calc(100vh - 64px - var(--mud-appbar-height)); min-height: calc(100vh - 64px - var(--mud-appbar-height));"
+              Fixed="true"
+              Class="p-1">
+    <div style="height: 128px">
+        <div class="d-flex flex-grow-1 flex-column gap-4">
+            <MudText Typo="Typo.h6">Items</MudText>
+            <MudSpacer />
+            <div class="d-flex flex-grow-1 flex-row gap-1">
+                <MudButton Variant="Variant.Outlined" OnClick="Add">Add</MudButton>
+                <MudButton Variant="Variant.Outlined" Disabled="@_deleteDisabled" OnClick="Delete">Delete</MudButton>
+                <MudSpacer />
+                <MudIcon Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Default" />
+            </div>
+        </div>
+    </div>
+    <MudDataGrid @ref="_dataGrid"
+                 MultiSelection="true"
+                 T="ItemDto"
+                 ServerData="ServerReload"
+                 Filterable="false"
+                 ColumnResizeMode="MudBlazor.ResizeMode.Column"
+                 Loading="@_loading"
+                 RowClass="no-borders"
+                 Elevation="0"
+                 Style="min-width: 100%" FixedHeader Height="calc(100vh - 64px - 128px - var(--mud-appbar-height))"
+                 @bind-SelectedItems="@_selectedItems">
+        <Columns>
+            <SelectColumn T="ItemDto" />
+            <TemplateColumn Title="Id">
+                <CellTemplate>
+                    <MudLink Href="@($"/configuration/address/{@context.Item.Id}")">@context.Item.Id</MudLink>
+                </CellTemplate>
+            </TemplateColumn>
+            <PropertyColumn Property="x => x.Created" />
+            <PropertyColumn Property="x => x.CreatedBy" />
+            <PropertyColumn Property="x => x.Modified" />
+            <PropertyColumn Property="x => x.ModifiedBy" />
+        </Columns>
+        <NoRecordsContent>
+            <MudText>No matching records found</MudText>
+        </NoRecordsContent>
+    </MudDataGrid>
+</MudContainer>
+<PWMS.Web.Blazor.Pages.Common.GridToolBar @bind-PageSize="_pageSize"
+                                          @bind-PageIndex="_pageIndex"
+                                          TotalItems="@_totalItems"
+                                          RefreshGrid=@RefreshGrid />
